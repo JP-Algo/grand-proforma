@@ -1,0 +1,1554 @@
+<title>725 Grand Street - Proposed New Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EDF0EE; --paper:#F8FAF8; --ink:#172125; --ink-2:#4A575C; --rule:#C9D1CE;
+  --accent:#0D6A80; --accent-soft:#D6E8EC; --warn:#9A5B00; --street:#D9DEDC;
+  --m-base:#5E6E76; --m-transfer:#C98517; --m-bonus:#3A8656; --m-exist:#AEB8B5;
+  --t-res:#E9DFC9; --t-core:#56646B; --t-serv:#8D9A9F; --t-corr:#F2F4F2;
+  --t-lobby:#B9D3DA; --t-retail:#E7B78A; --t-amen:#C9C0E0; --t-terr:#7FB08F; --t-win:#0D6A80;
+  --z-res:#E3C99A; --z-ret:#E39E6B; --z-core:#B49B7C; --z-lobby-c:#D98F7A; --z-corr:#8ECFB0; --z-mech:#8DB6D9; --z-amen:#B6A6E2; --z-ref:#C4D98A;
+  --i-floor:#E6D9C3; --i-wall:#F4F2EC; --i-glass:#9CC3D0; --i-soft:#C9B9A6; --i-case:#8E7B66; --i-fix:#FFFFFF; --i-core:#9AA4A8; --i-tile:#D9DEDF;
+  --f-glass:#7FA3B0; --f-slab:#CFCBC2;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111719; --paper:#182023; --ink:#E4EAE8; --ink-2:#9AA8AC; --rule:#2E3A3E;
+    --accent:#5FB6CB; --accent-soft:#16333B; --warn:#E0A548; --street:#232C2F;
+    --m-base:#8A9CA4; --m-transfer:#E3A23A; --m-bonus:#5DB07B; --m-exist:#4B5659;
+    --t-res:#6B6250; --t-core:#A9B6BB; --t-serv:#5F6B70; --t-corr:#2A3438;
+    --t-lobby:#3B6571; --t-retail:#8C603A; --t-amen:#5E5580; --t-terr:#3F7050; --t-win:#7FD0E3;
+    --z-res:#7A6440; --z-ret:#8A5530; --z-core:#6B5A45; --z-lobby-c:#7F4A3C; --z-corr:#2F7258; --z-mech:#335C80; --z-amen:#55478A; --z-ref:#5D6E2E;
+    --i-floor:#6A5C49; --i-wall:#CFCBC2; --i-glass:#4E8496; --i-soft:#8C7C69; --i-case:#6B5A48; --i-fix:#E8E8E4; --i-core:#6C777B; --i-tile:#8C9496;
+    --f-glass:#3D5F6B; --f-slab:#8A877F;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111719; --paper:#182023; --ink:#E4EAE8; --ink-2:#9AA8AC; --rule:#2E3A3E;
+  --accent:#5FB6CB; --accent-soft:#16333B; --warn:#E0A548; --street:#232C2F;
+  --m-base:#8A9CA4; --m-transfer:#E3A23A; --m-bonus:#5DB07B; --m-exist:#4B5659;
+  --t-res:#6B6250; --t-core:#A9B6BB; --t-serv:#5F6B70; --t-corr:#2A3438;
+  --t-lobby:#3B6571; --t-retail:#8C603A; --t-amen:#5E5580; --t-terr:#3F7050; --t-win:#7FD0E3;
+    --z-res:#7A6440; --z-ret:#8A5530; --z-core:#6B5A45; --z-lobby-c:#7F4A3C; --z-corr:#2F7258; --z-mech:#335C80; --z-amen:#55478A; --z-ref:#5D6E2E;
+    --i-floor:#6A5C49; --i-wall:#CFCBC2; --i-glass:#4E8496; --i-soft:#8C7C69; --i-case:#6B5A48; --i-fix:#E8E8E4; --i-core:#6C777B; --i-tile:#8C9496;
+    --f-glass:#3D5F6B; --f-slab:#8A877F;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.6;padding:0 20px}
+.wrap{max-width:1440px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);font-stretch:78%;line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.2rem,5.4vw,3.9rem);font-weight:760;letter-spacing:-.01em}
+h2{font-size:clamp(1.55rem,3vw,2.15rem);font-weight:700}
+h3{font-size:1.12rem;font-weight:680;font-stretch:90%}
+p{margin:0;max-width:70ch}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-family:var(--mono);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
+a{color:var(--accent)}
+b{font-weight:600}
+
+.cover{display:grid;gap:22px;padding-block:8px 36px;border-bottom:2px solid var(--ink)}
+.cover .lede{font-size:1.12rem;color:var(--ink-2);max-width:68ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:.78rem;border:1px solid var(--rule);background:var(--paper);padding:3px 10px;border-radius:3px}
+
+.answer{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));border-bottom:1px solid var(--rule)}
+.answer div{padding:22px 20px 22px 0;display:grid;gap:4px;align-content:start}
+.answer div + div{padding-left:20px;border-left:1px solid var(--rule)}
+.answer .big{font-family:var(--display);font-stretch:75%;font-size:2.4rem;font-weight:720;line-height:1}
+.answer p{font-size:.9rem;color:var(--ink-2)}
+@media (max-width:560px){.answer div + div{border-left:0;padding-left:0;border-top:1px solid var(--rule)}}
+
+.sheet{display:grid;grid-template-columns:140px 1fr;gap:28px;padding-block:44px;border-bottom:1px solid var(--rule)}
+.sheet-tag{display:grid;align-content:start;gap:6px;position:sticky;top:16px;height:max-content}
+.sheet-tag .no{font-family:var(--mono);font-size:1.05rem;font-weight:500;color:var(--accent);border:1.5px solid var(--accent);padding:2px 8px;width:max-content;border-radius:2px}
+.sheet-body{display:grid;gap:22px;min-width:0}
+@media (max-width:760px){.sheet{grid-template-columns:1fr;gap:14px}.sheet-tag{position:static;grid-auto-flow:column;justify-content:start;align-items:center;gap:12px}}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+.panel{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:18px}
+ul.tight{margin:0;padding-left:1.1em;display:grid;gap:6px;max-width:72ch}
+.note{font-size:.86rem;color:var(--ink-2)}
+.verify{color:var(--warn);font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:8px 11px;text-align:right;border-bottom:1px solid var(--rule);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);font-weight:500;background:var(--ground)}
+tbody tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono)}
+tr.hi td{background:var(--accent-soft)}
+tr.tot td{font-weight:600;border-top:1.5px solid var(--ink)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;border:1px solid var(--rule)}
+.plan svg{width:100%;height:auto;display:block}
+.plan text{font-family:var(--mono);font-size:11px;fill:var(--ink-2)}
+.plan .strong{fill:var(--ink);font-weight:500}
+
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));border-top:2px solid var(--ink)}
+.rules > div{padding:14px 16px 14px 0;border-bottom:1px solid var(--rule);display:grid;gap:4px;align-content:start}
+.rules .cite{font-family:var(--mono);font-size:.72rem;color:var(--accent)}
+.tag-yes,.tag-no{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:2px;width:max-content;color:var(--ink)}
+.tag-yes{background:var(--t-terr)}
+.tag-no{background:var(--t-retail)}
+
+/* shared controls */
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{font:500 .84rem var(--body);padding:7px 12px;border:1px solid var(--rule);background:var(--ground);color:var(--ink);border-radius:3px;cursor:pointer;text-align:left;line-height:1.2}
+.tabs button b{font-family:var(--mono);color:var(--accent);margin-right:6px}
+.tabs button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.field{display:grid;gap:3px}
+.field input,.field select{font:500 .9rem var(--mono);color:var(--ink);background:var(--ground);border:1px solid var(--rule);border-radius:3px;padding:6px 8px;width:100%}
+.check{display:flex;gap:8px;align-items:center;font-size:.88rem;cursor:pointer}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* simple massing widget */
+.mini{display:grid;grid-template-columns:290px 1fr;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--paper)}
+@media (max-width:860px){.mini{grid-template-columns:1fr}}
+.mini .controls{padding:16px;display:grid;gap:12px;align-content:start;border-right:1px solid var(--rule)}
+@media (max-width:860px){.mini .controls{border-right:0;border-bottom:1px solid var(--rule)}}
+.mini .tabs{display:grid;grid-template-columns:1fr 1fr}
+.mini-view{position:relative;min-height:420px}
+#mini{display:block;width:100%;height:420px;cursor:grab;touch-action:none}
+.readout{position:absolute;right:14px;top:12px;text-align:right;display:grid}
+.readout .big{font-family:var(--display);font-stretch:75%;font-size:2rem;font-weight:720;line-height:1}
+
+/* studio */
+.bar{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:end;padding:14px 16px;background:var(--paper);border:1px solid var(--rule);border-radius:4px 4px 0 0;border-bottom:0}
+.bar .field input{width:110px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));background:var(--paper);border:1px solid var(--rule);border-bottom:0}
+.stats div{padding:12px 14px;display:grid;gap:2px;border-right:1px solid var(--rule)}
+.stats .v{font-family:var(--display);font-stretch:78%;font-size:1.5rem;font-weight:700;line-height:1.05}
+.studio{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);border:1px solid var(--rule);border-radius:0 0 4px 4px;background:var(--paper);overflow:hidden}
+@media (max-width:900px){.studio{grid-template-columns:1fr}}
+.viewer{position:relative;border-right:1px solid var(--rule);min-height:560px}
+@media (max-width:900px){.viewer{border-right:0;border-bottom:1px solid var(--rule)}}
+#massing{display:block;width:100%;height:560px;cursor:grab;touch-action:none}
+#massing:active,#mini:active{cursor:grabbing}
+.legend{position:absolute;left:12px;bottom:10px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.74rem;max-width:calc(100% - 24px);background:color-mix(in srgb,var(--paper) 88%,transparent);padding:6px 9px;border-radius:3px}
+.vtools{position:absolute;right:12px;top:10px;display:grid;gap:6px;justify-items:end}
+.hint{font-size:.72rem;color:var(--ink-2)}
+.side{display:grid;grid-template-rows:auto 1fr;min-width:0}
+.floors{display:flex;flex-wrap:wrap;gap:4px;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.floors button{font:500 .76rem var(--mono);padding:4px 8px;border:1px solid var(--rule);background:var(--ground);color:var(--ink);border-radius:3px;cursor:pointer}
+.floors button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.planbox{padding:12px 14px;display:grid;gap:8px;align-content:start}
+.planbox svg{width:100%;max-height:660px;height:auto;display:block}
+.below{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:22px}
+@media (max-width:900px){.below{grid-template-columns:1fr}}
+.ledger{display:grid}
+.ledger div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--rule);font-size:.9rem}
+.ledger div.sum{border-bottom:0;border-top:1.5px solid var(--ink);font-weight:600}
+
+.tools{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--ink)}
+.tools > div{padding:16px 18px 6px 0;display:grid;gap:8px;align-content:start}
+.tools > div + div{padding-left:18px;border-left:1px solid var(--rule)}
+@media (max-width:860px){.tools{grid-template-columns:1fr}.tools > div + div{border-left:0;padding-left:0;border-top:1px solid var(--rule)}}
+.pick{font-family:var(--display);font-stretch:80%;font-size:1.45rem;font-weight:700}
+.steps{counter-reset:s;display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:10px;max-width:76ch}
+.steps li::before{content:counter(s);font-family:var(--mono);color:var(--accent);border:1px solid var(--accent);border-radius:50%;width:26px;height:26px;display:grid;place-items:center;font-size:.8rem}
+.c3d{display:block;width:100%;height:560px;cursor:grab;touch-action:none}
+.c3d:active{cursor:grabbing}
+.zlay{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);border:1px solid var(--rule);border-radius:4px;background:var(--paper);overflow:hidden}
+@media (max-width:900px){.zlay{grid-template-columns:1fr}}
+.zlay > div{padding:14px;display:grid;gap:10px;align-content:start;min-width:0}
+.zlay > div + div{border-left:1px solid var(--rule)}
+@media (max-width:900px){.zlay > div + div{border-left:0;border-top:1px solid var(--rule)}}
+.zleg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:4px 12px;font-size:.8rem}
+.fac{display:grid;grid-template-columns:260px 1fr;border:1px solid var(--rule);border-radius:4px;background:var(--paper);overflow:hidden}
+@media (max-width:860px){.fac{grid-template-columns:1fr}}
+.fac .controls{padding:16px;display:grid;gap:12px;align-content:start;border-right:1px solid var(--rule)}
+@media (max-width:860px){.fac .controls{border-right:0;border-bottom:1px solid var(--rule)}}
+.field input[type="range"]{padding:0;accent-color:var(--accent)}
+.rel{position:relative;min-width:0}
+.titlebar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px 24px;flex-wrap:wrap}
+.scen{position:fixed;top:10px;right:12px;z-index:40;display:grid;grid-template-columns:auto auto;gap:2px 5px;align-items:center;padding:5px 6px 4px;background:color-mix(in srgb,var(--paper) 92%,transparent);border:1px solid var(--rule);border-radius:4px;box-shadow:0 2px 10px rgba(0,0,0,.08);backdrop-filter:blur(6px)}
+.scen > .field{display:block}
+.scen > .field .label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.scen > .field select{width:168px;min-width:0;padding:3px 6px;font-size:.76rem}
+.scen .btn{font:500 .74rem var(--body);padding:3px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:3px;cursor:pointer;white-space:nowrap}
+.scen .btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.scen .btn.danger{border-color:var(--warn);color:var(--warn)}
+.scen .btn:disabled{opacity:.45;cursor:not-allowed}
+.scen .status{grid-column:1 / -1;text-align:right;font-size:.64rem;line-height:1.2;color:var(--ink-2)}
+.scen .pop{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:min(280px,86vw);display:grid;gap:8px;padding:12px;font-size:.84rem;background:var(--paper);border:1px solid var(--rule);border-radius:4px;box-shadow:0 10px 30px rgba(0,0,0,.16)}
+.scen .pop .row{display:flex;gap:6px;flex-wrap:wrap}
+.scen .pop hr{border:0;border-top:1px solid var(--rule);margin:2px 0;width:100%}
+@media (max-width:640px){.scen{position:static;width:max-content;box-shadow:none}.scen .status{text-align:left}.scen .pop{left:0;right:auto}}
+#interiors{grid-template-columns:1fr;gap:14px}
+#interiors .sheet-tag{position:static;grid-auto-flow:column;justify-content:start;align-items:center;gap:12px}
+.iviewer{position:relative;border:1px solid var(--rule);border-radius:4px;background:var(--paper);overflow:hidden}
+.iviewer .c3d{height:min(78vh,780px);min-height:460px}
+.iviewer .viewbtns{left:12px;transform:none}
+.unitpanel{position:absolute;right:12px;bottom:12px;width:min(300px,42%);max-height:48%;display:grid;grid-template-rows:auto 1fr;background:color-mix(in srgb,var(--paper) 94%,transparent);border:1px solid var(--rule);border-radius:4px;box-shadow:0 4px 18px rgba(0,0,0,.12);overflow:hidden}
+.unitpanel summary{cursor:pointer;padding:8px 12px;display:flex;justify-content:space-between;gap:8px;align-items:baseline;list-style:none}
+.unitpanel summary::-webkit-details-marker{display:none}
+.unitpanel summary h3{font-size:1rem}
+.unitpanel .scroll{overflow:auto;border-top:1px solid var(--rule)}
+.unitpanel table{font-size:.8rem}
+.unitpanel th,.unitpanel td{padding:5px 10px}
+@media (max-width:760px){.unitpanel{position:static;width:auto;max-height:none;box-shadow:none;border-width:1px 0 0;border-radius:0}.iviewer .viewbtns{top:auto}}
+.unit-toggle{all:unset;cursor:pointer;display:inline-flex;gap:6px;align-items:center;font-weight:600}
+.unit-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.unit-toggle .caret{display:inline-block;width:12px;color:var(--accent)}
+.viewbtns{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:6px;background:color-mix(in srgb,var(--paper) 90%,transparent);padding:5px;border-radius:4px;border:1px solid var(--rule)}
+.viewbtns button{font:500 .82rem var(--body);padding:6px 12px;border:1px solid var(--rule);background:var(--ground);color:var(--ink);border-radius:3px;cursor:pointer}
+.viewbtns button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* finance */
+.fbar{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;justify-content:space-between}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 14px;padding:14px 16px;background:var(--paper);border:1px solid var(--rule);border-radius:4px}
+.fgrid .field input{width:100%}
+.fgrid .field .label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:2px solid var(--ink)}
+.tiles div{padding:14px 16px 14px 0;display:grid;gap:2px;border-bottom:1px solid var(--rule)}
+.tiles .v{font-family:var(--display);font-stretch:76%;font-size:2rem;font-weight:720;line-height:1}
+.tiles .v.neg{color:var(--warn)}
+.su{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media (max-width:760px){.su{grid-template-columns:1fr}}
+td.neg{color:var(--warn)}
+.cellgood{background:color-mix(in srgb,var(--t-terr) 30%,transparent)}
+.cellbad{background:color-mix(in srgb,var(--t-retail) 35%,transparent)}
+footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
+</style>
+
+<div class="wrap">
+
+<header class="cover">
+  <span class="label">725 Grand Street, Brooklyn · Block 2783 Lot 43 · C4-4A (R7A) · former IH designated area</span>
+  <div class="titlebar">
+  <h1>725 Grand Street - Proposed New Development</h1>
+  <div class="scen" id="scenarios" aria-label="Scenarios">
+    <label class="field"><span class="label">Scenario</span><select id="sc-list" disabled><option value="">Working draft</option></select></label>
+    <button type="button" class="btn" id="sc-menu" aria-expanded="false" aria-controls="sc-pop" disabled>Save ▾</button>
+    <span class="status" id="sc-status" role="status">Connecting…</span>
+    <div class="pop" id="sc-pop" hidden>
+      <label class="field"><span class="label">Save current values as</span><input id="sc-name" type="text" maxlength="60" placeholder="e.g. D compact · $1,650/sf"></label>
+      <div class="row"><button type="button" class="btn primary" id="sc-save">Save as new scenario</button></div>
+      <hr>
+      <div class="row"><button type="button" class="btn" id="sc-update" disabled>Update scenario</button><button type="button" class="btn danger" id="sc-delete" disabled>Delete</button></div>
+    </div>
+  </div>
+  </div>
+  <p class="lede">Zoning analysis and four test-fit buildings for the corner of Grand Street and Graham Avenue. The ground floor is full commercial. Residential floors above have recessed loggias on every level. Extra floor area comes from a merger with 727 Grand Street and from Inclusionary Housing certificates, so no affordable units are built on this site.</p>
+  <div class="facts">
+    <span class="chip">Lot 3,034 sf · 25.17 × 100 ft + 25.83 × 20 ft rear arm</span>
+    <span class="chip">Grand St 80 ft wide · Graham Ave 80 ft wide</span>
+    <span class="chip">FAR 4.0 std · 5.01 with certificates</span>
+    <span class="chip">E-designation E-232</span>
+    <span class="chip">Inner Transit Zone</span>
+  </div>
+</header>
+
+<section class="answer" aria-label="Headline answers">
+  <div><span class="label">Buy from 727 Grand</span><span class="big num" id="a-neighbor">—</span><p id="a-neighbor-p">—</p></div>
+  <div><span class="label">IH certificates (merged)</span><span class="big num" id="a-bonus">—</span><p id="a-bonus-p">—</p></div>
+  <div><span class="label">Scheme D building</span><span class="big num" id="a-total">—</span><p id="a-total-p">—</p></div>
+</section>
+
+<section class="sheet" id="site">
+  <div class="sheet-tag"><span class="no">Z-001</span><span class="label">Site</span></div>
+  <div class="sheet-body">
+    <h2>North side of Grand Street, east corner of Graham Avenue</h2>
+    <div class="two">
+      <div class="plan panel">
+        <svg viewBox="0 0 310 410" role="img" aria-label="Plan of 725 Grand Street: L-shaped corner lot on Grand Street and Graham Avenue, with 727 Grand Street filling the notch to the east">
+          <rect x="0" y="0" width="310" height="410" style="fill:var(--paper)"/>
+          <rect x="0" y="0" width="310" height="56" style="fill:var(--street)"/>
+          <rect x="217" y="0" width="93" height="410" style="fill:var(--street)"/>
+          <text x="14" y="33" class="strong">GRAND STREET · 80'</text>
+          <text x="268" y="360" class="strong" transform="rotate(-90 268 360)">GRAHAM AVENUE · 80'</text>
+          <path d="M142.3 60 H212.8 V340 H70 V284 H142.3 Z" style="fill:var(--m-base);fill-opacity:.28;stroke:var(--ink)" stroke-width="2"/>
+          <rect x="70" y="60" width="72.3" height="224" style="fill:var(--m-transfer);fill-opacity:.22;stroke:var(--m-transfer)" stroke-width="2" stroke-dasharray="6 4"/>
+          <rect x="70" y="60" width="72.3" height="112" style="fill:none;stroke:var(--m-transfer)" stroke-width="1" stroke-dasharray="2 3"/>
+          <text x="77" y="110" class="strong">727 GRAND</text>
+          <text x="77" y="126">25.83 × 80</text>
+          <text x="77" y="142">2,067 sf</text>
+          <text x="75" y="218" style="font-size:9.5px">3 st. to 40'</text>
+          <text x="75" y="230" style="font-size:9.5px">1 st. to 80'</text>
+          <text x="160" y="250" class="strong" transform="rotate(-90 178 250)">725 GRAND · 3,034 sf</text>
+          <g style="stroke:var(--ink-2)" stroke-width="1">
+            <line x1="70" y1="358" x2="212.8" y2="358"/><line x1="70" y1="352" x2="70" y2="364"/><line x1="212.8" y1="352" x2="212.8" y2="364"/>
+            <line x1="40" y1="60" x2="40" y2="340"/><line x1="34" y1="60" x2="46" y2="60"/><line x1="34" y1="340" x2="46" y2="340"/>
+            <line x1="56" y1="60" x2="56" y2="284"/><line x1="50" y1="60" x2="62" y2="60"/><line x1="50" y1="284" x2="62" y2="284"/>
+          </g>
+          <text x="112" y="376">51' merged</text>
+          <text x="10" y="205">100'</text>
+          <text x="22" y="176" style="font-size:10px">80'</text>
+          <text x="80" y="316">core arm 25.83×20</text>
+          <g transform="translate(34 388)"><line x1="0" y1="-14" x2="0" y2="8" style="stroke:var(--ink)" stroke-width="1.5"/><path d="M-5 2 L0 12 L5 2 Z" style="fill:var(--ink)"/><text x="9" y="10" class="strong">N</text></g>
+        </svg>
+      </div>
+      <div style="display:grid;gap:14px;align-content:start">
+        <p><b>725 Grand St</b> is a 3,034 sf irregular corner lot, 25.17 ft on Grand and 100 ft along Graham. Its rear arm (25.83 × 20 ft) runs behind <b>727 Grand St</b>, a 25.83 × 80 ft interior lot. Together they form a <b>51 × 100 ft</b> rectangle of 5,101 sf. The plan is drawn with Grand Street at the top, so north points down.</p>
+        <p><b>Both streets are wide (80 ft)</b> on the city's street map, so every setback above the base height is <b>10 ft</b> (ZR 23-433). The whole merged lot is within 100 ft of the corner, so it's all corner lot: 100% coverage and no rear yard.</p>
+        <p><b>Neighbor's floor area.</b> Your field measurement is a full 25.83 × 80 ft ground floor plus two floors of 25.83 × 40 ft, about <span class="num">4,133 sf</span>, which leaves a <span class="num">4,135 sf</span> transfer. PLUTO lists <span class="num">6,042 sf</span> (3 floors × 2,014 sf), which would cut the transfer to about 2,226 sf. The CO or a survey will settle it. You can switch between the two below.</p>
+        <p class="note"><b>E-232</b> (2009 rezoning): Phase I/II hazardous materials testing, plus window-wall noise attenuation with alternate ventilation. Expect DEP/OER sign-off and a closed-window design with mechanical ventilation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="far">
+  <div class="sheet-tag"><span class="no">Z-002</span><span class="label">Floor area</span></div>
+  <div class="sheet-body">
+    <h2>Four ways to stack the floor area</h2>
+    <p>Each block is colored by where its floor area comes from: your lot at FAR 4.0, rights bought from 727 Grand, or IH certificates. This simple model assumes a 15 ft ground floor and 10 ft floors on the full 3,034 sf footprint. The detailed studies further down carve and stretch it.</p>
+    <div class="mini">
+      <div class="controls">
+        <div class="field"><span class="label">Scenario</span>
+          <div class="tabs" id="mtabs" role="group" aria-label="Scenario">
+            <button type="button" id="ms-A" data-s="A" aria-pressed="false"><b>A</b>As-of-right</button>
+            <button type="button" id="ms-B" data-s="B" aria-pressed="false"><b>B</b>+ certificates</button>
+            <button type="button" id="ms-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
+            <button type="button" id="ms-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
+          </div>
+        </div>
+        <label class="field"><span class="label">727 Grand existing zoning sf</span>
+          <select id="in-exist"><option value="4133" selected>4,133 · field measurement</option><option value="6042">6,042 · PLUTO</option></select></label>
+        <label class="field"><span class="label">Neighbor rights $/sf</span><input id="in-p1" type="number" min="0" step="5" value="150"></label>
+        <label class="field"><span class="label">IH certificate $/sf of bonus</span><input id="in-p2" type="number" min="0" step="5" value="100"></label>
+        <p class="note">Prices are placeholders, not market data.</p>
+        <div class="tbl" style="border:0;background:transparent"><table><tbody>
+          <tr><td>Neighbor rights</td><td class="num" id="c-1">—</td></tr>
+          <tr><td>IH certificates</td><td class="num" id="c-2">—</td></tr>
+          <tr><td><b>Acquisition total</b></td><td class="num"><b id="c-t">—</b></td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="mini-view">
+        <canvas id="mini" aria-label="Simple 3D massing by floor-area source, drag to rotate"></canvas>
+        <div class="readout"><span class="label" id="mr-name">—</span><span class="big num" id="mr-sf">—</span><span class="note num" id="mr-ht">—</span></div>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--m-base)"></i>Own lot, FAR 4.0</span>
+          <span><i class="sw" style="background:var(--m-transfer)"></i>From 727 Grand</span>
+          <span><i class="sw" style="background:var(--m-bonus)"></i>IH certificates</span>
+          <span><i class="sw" style="background:var(--m-exist)"></i>727 Grand existing</span>
+        </div>
+      </div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Scenario</th><th>Lot sf</th><th>FAR</th><th>Max ZFA</th><th>Less 727 existing</th><th>New building cap</th><th>From neighbor</th><th>Certificates</th></tr></thead>
+      <tbody id="scen-body"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="sheet" id="rights">
+  <div class="sheet-tag"><span class="no">Z-003</span><span class="label">Rights</span></div>
+  <div class="sheet-body">
+    <h2>Where the extra floor area comes from</h2>
+    <div class="two">
+      <div style="display:grid;gap:10px;align-content:start">
+        <h3>727 Grand: zoning lot merger + light and air easement</h3>
+        <ul class="tight">
+          <li>Transfer = 2,067 sf × 4.0 − existing building = <b class="num" id="m-transfer">—</b>.</li>
+          <li>Recorded as a zoning lot description plus a development rights agreement, with waivers from the neighbor's lender and other interest holders.</li>
+          <li><b>The light and air easement starts at 30 ft.</b> Above that height the stem's east wall (facing 727) can have windows and loggias. In C and D the corner unit becomes a 3BR, and the corridor ending at it is fully exempt. Lot-line openings also need Building Code sign-off on fire separation distance <span class="verify">verify with expediter</span>.</li>
+        </ul>
+      </div>
+      <div style="display:grid;gap:10px;align-content:start">
+        <h3>Certificates: the UAP off-site option</h3>
+        <ul class="tight">
+          <li>The site is in the <b>former Greenpoint/Williamsburg IH designated area</b> (adopted 2009), which ZR 27-111 makes a <b>UAP off-site option area</b>. A UAP development there can go above FAR 4.0 "by utilizing affordable housing provided on a generating site," at the pre-2024 rate in ZR 23-154, as long as the generating site vested under ZR 27-132.</li>
+          <li>A UAP development counts as "qualifying affordable housing" (ZR 12-10), so as I read it the <b>85 ft base and 115 ft maximum</b> of ZR 23-432 apply even with no affordable units on site. <span class="verify">Confirm with land-use counsel</span></li>
+          <li>Bonus needed: <b class="num" id="m-bonus">—</b>. At the old IH designated area ratio of 1.25 sf of bonus per sf of affordable housing, that's about <b class="num" id="m-aff">—</b> of generating-site affordable floor area. Supply is limited, and the off-site option ends around Dec 2034.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="rules">
+  <div class="sheet-tag"><span class="no">Z-004</span><span class="label">Deductions</span></div>
+  <div class="sheet-body">
+    <h2>What counts toward FAR, and what doesn't</h2>
+    <div class="rules">
+      <div><span class="tag-yes">Exempt</span><h3>Recessed loggias</h3><p class="note">A balcony or terrace is excluded if no more than 67% of its perimeter is enclosed. For a recess open on one side, that means width at least equal to depth. The studies use 6 × 10 ft loggias and 8 × 12 ft corner loggias. At 8 ft deep or less they also stay within the 8 ft street wall tolerance.</p><span class="cite">ZR 12-10 floor area · 23-43</span></div>
+      <div><span class="tag-yes">Exempt</span><h3>Green building: 5% of floor area</h3><p class="note">For a fully electrified or ultra-low-energy building (15% better than the Energy Code, LL154, with commissioning).</p><span class="cite">ZR 12-10</span></div>
+      <div><span class="tag-yes">Exempt</span><h3>Amenities up to 5% of residential floor area</h3><p class="note">Roof lounge above grade. Fitness, packages and bikes go in the cellar, where they don't count against the 5%.</p><span class="cite">ZR 23-231 · 23-63</span></div>
+      <div><span class="tag-yes">Exempt</span><h3>Corridors: 50% or 100%</h3><p class="note">50% when the corridor is under 100 ft long. Another 50% when it ends at a 3BR or is daylit; C and D qualify above 30 ft.</p><span class="cite">ZR 23-232</span> <span class="verify">Confirm stacking</span></div>
+      <div><span class="tag-yes">Exempt</span><h3>Mechanical, cellar, bulkheads, refuse</h3><p class="note">Rooftop mechanical on the core arm (up to 30% of coverage, 35 ft above max height). Refuse rooms up to 3 sf per unit.</p><span class="cite">ZR 12-10 · 23-412 · 23-233</span></div>
+      <div><span class="tag-no">Counts*</span><h3>Lobby, retail, stairs, elevator</h3><p class="note">Read literally, ZR 12-10 and 23-232 exempt <b>corridors</b>, not lobbies. The studies default to your assumption that the lobby and elevator lobbies are 100% exempt. Switch "Circulation deduction" to code-literal to see the conservative case. <span class="verify">Get a DOB/expediter determination</span></p><span class="cite">ZR 12-10 · 23-232</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="studies">
+  <div class="sheet-tag"><span class="no">A-100</span><span class="label">Studies</span></div>
+  <div class="sheet-body">
+    <h2>Four buildings: commercial base, residential above, loggias on every floor</h2>
+    <p>Each scheme is generated from its floor-area cap. The ground floor is 100% built, with retail wrapping the corner and a small lobby on Graham. Floor-to-floor heights stretch so the roof lands on the envelope: 85 ft standard, 115 ft with certificates. The building stays at the street line through the 40 ft minimum base height, then sets back 10 ft from both streets, with a 40 ft dormer on Graham. Pick a floor to see its plan. Blue lines are windows and hatched areas are outdoor space.</p>
+    <div>
+      <div class="bar">
+        <div class="field"><span class="label">Scheme</span>
+          <div class="tabs" id="tabs" role="group" aria-label="Scheme">
+            <button type="button" id="tab-A" data-s="A" aria-pressed="false"><b>A</b>Own lot</button>
+            <button type="button" id="tab-B" data-s="B" aria-pressed="false"><b>B</b>Own lot + certificates</button>
+            <button type="button" id="tab-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
+            <button type="button" id="tab-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certificates</button>
+          </div>
+        </div>
+        <label class="field"><span class="label">Massing strategy</span>
+          <select id="in-strategy"><option value="eff" selected>Compact (fewest floors)</option><option value="height">Max height (fills envelope)</option></select></label>
+        <label class="field"><span class="label">Circulation deduction</span>
+          <select id="in-circ"><option value="100" selected>100% corridors + lobbies (owner)</option><option value="code">Code-literal (lobby counts)</option></select></label>
+        <label class="check"><input id="in-green" type="checkbox" checked> 5% green exemption</label>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="studio">
+        <div class="viewer">
+          <canvas id="massing" aria-label="3D model of the selected scheme, drag to rotate"></canvas>
+          <div class="vtools">
+            <label class="check" style="background:color-mix(in srgb,var(--paper) 88%,transparent);padding:4px 8px;border-radius:3px"><input id="in-cut" type="checkbox"> Cut at selected floor</label>
+            <span class="hint">Drag to rotate · scroll to zoom</span>
+          </div>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div class="side">
+          <div class="floors" id="floors" role="group" aria-label="Floor"></div>
+          <div class="planbox">
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap"><h3 id="plan-title">—</h3><span class="note num" id="plan-sub">—</span></div>
+            <div id="plan"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="below">
+      <div class="tbl"><table>
+        <thead><tr><th>Floor</th><th>Elev.</th><th>Program</th><th>Gross</th><th>Counts</th><th>Exempt</th><th>Units</th><th>Outdoor</th></tr></thead>
+        <tbody id="sched"></tbody>
+      </table></div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <span class="label">From gross area to zoning floor area</span>
+        <div class="ledger" id="ledger"></div>
+        <p class="note" id="scheme-note"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="compare">
+  <div class="sheet-tag"><span class="no">A-101</span><span class="label">Compare</span></div>
+  <div class="sheet-body">
+    <h2>The four schemes side by side</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Scheme</th><th>FAR cap</th><th>ZFA used</th><th>Gross above grade</th><th>Height · stories</th><th>Floor-to-floor</th><th>Units</th><th>Retail sf</th><th>Outdoor sf</th><th>Efficiency</th></tr></thead>
+      <tbody id="cmp"></tbody>
+    </table></div>
+    <ul class="tight">
+      <li><b>Every residential floor has private outdoor space.</b> There's a corner loggia at Grand and Graham, and 6 × 10 ft loggias on Graham. The first setback floor also gets the 10 ft setback terraces, and the roof has a deck. None of it counts as floor area.</li>
+      <li><b>The core stays in the 20 ft rear arm:</b> scissor stair against the rear lot line, one elevator, and mechanical/electrical space. The elevator lobby and refuse room spill into the back of the stem, so the ground-floor retail can run the full Graham frontage down to the lobby entry.</li>
+      <li><b>The certificate schemes (B, D) have all market-rate units.</b> The bonus is bought off-site, so the plans show no affordable units.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sheet" id="zplans">
+  <div class="sheet-tag"><span class="no">A-102</span><span class="label">Zoning plans</span></div>
+  <div class="sheet-body">
+    <h2>Floor plans colored by zoning floor area</h2>
+    <p>These are the same plans as A-100, colored by how each space is treated under the Zoning Resolution. Warm solid fills count toward FAR. Cool hatched fills are exempt. Green hatching is outdoor space that isn't floor area at all. The green 5% and refuse credits apply building-wide, so they appear in the ledger rather than on the plan. The scheme and circulation switches in A-100 control this section.</p>
+    <div class="floors" id="zfloors" role="group" aria-label="Floor for zoning plan" style="border:1px solid var(--rule);border-radius:4px;background:var(--paper)"></div>
+    <div class="zlay">
+      <div><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline"><h3 id="zplan-title">—</h3><span class="note num" id="zplan-sub">—</span></div><div id="zplan"></div></div>
+      <div>
+        <span class="label">This floor</span>
+        <div class="ledger" id="zledger"></div>
+        <span class="label">Whole building</span>
+        <div class="ledger" id="zbuilding"></div>
+        <div class="zleg" id="zlegend"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="facade">
+  <div class="sheet-tag"><span class="no">A-200</span><span class="label">Façade</span></div>
+  <div class="sheet-body">
+    <h2>A parametric façade study</h2>
+    <p>Vertical fins wrap every street-facing and terrace-facing wall of the selected scheme. Each fin's angle and depth come from a rule you can change: an attractor point at the Grand and Graham corner, a wave running across the elevation, or a gradient up the height. The fins are inaccessible sun-control devices, which ZR 12-10 excludes from floor area. The glass line sits behind them so they stay within the lot. The wall facing 727 Grand only gets fins above the 30 ft easement.</p>
+    <div class="fac">
+      <div class="controls">
+        <label class="field"><span class="label">Pattern</span><select id="fc-pattern"><option value="attractor" selected>Corner attractor</option><option value="wave">Wave</option><option value="gradient">Height gradient</option></select></label>
+        <label class="field"><span class="label">Fin depth · <span id="fc-depth-v">2.0 ft</span></span><input id="fc-depth" type="range" min="0.5" max="3.5" step="0.25" value="2"></label>
+        <label class="field"><span class="label">Fin spacing · <span id="fc-spacing-v">2.5 ft</span></span><input id="fc-spacing" type="range" min="1.5" max="6" step="0.25" value="2.5"></label>
+        <label class="field"><span class="label">Rotation · <span id="fc-amp-v">40°</span></span><input id="fc-amp" type="range" min="0" max="75" step="5" value="40"></label>
+        <label class="field"><span class="label">Frequency / reach · <span id="fc-freq-v">1.5</span></span><input id="fc-freq" type="range" min="0.5" max="4" step="0.25" value="1.5"></label>
+        <label class="field"><span class="label">Fin material</span><select id="fc-mat"><option value="#B5673F" selected>Terracotta</option><option value="#8C6A4A">Bronze</option><option value="#D8D0BE">Limestone GFRC</option><option value="#3A3F42">Charcoal metal</option></select></label>
+        <div class="ledger" id="fc-stats"></div>
+      </div>
+      <div class="rel">
+        <canvas id="facade3d" class="c3d" aria-label="Parametric façade model, drag to rotate"></canvas>
+        <div class="vtools"><span class="hint">Drag to rotate · scroll to zoom</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="interiors">
+  <div class="sheet-tag"><span class="no">A-300</span><span class="label">Interiors</span></div>
+  <div class="sheet-body">
+    <h2>Interior layouts</h2>
+    <p>A furnished cutaway of each floor in the selected scheme. Base floors have a 3BR corner unit at Grand and Graham and two 1BRs along Graham, each opening onto a loggia. Setback floors have a through-unit with bedrooms along the Graham setback terrace, plus a rear studio or primary suite. Walls are 9 ft tall, and glass marks legal window walls.</p>
+    <div class="floors" id="ifloors" role="group" aria-label="Floor for interior view" style="border:1px solid var(--rule);border-radius:4px;background:var(--paper)"></div>
+    <div class="iviewer">
+        <canvas id="interior3d" class="c3d" aria-label="Furnished interior cutaway, drag to rotate"></canvas>
+        <div class="vtools"><label class="check" style="background:color-mix(in srgb,var(--paper) 88%,transparent);padding:4px 8px;border-radius:3px"><input id="in-labels" type="checkbox"> Room labels</label><label class="check" style="background:color-mix(in srgb,var(--paper) 88%,transparent);padding:4px 8px;border-radius:3px"><input id="in-units" type="checkbox" checked> Unit labels</label><span class="hint" id="int-hint">Drag to rotate · scroll to zoom</span></div>
+        <div class="viewbtns" role="group" aria-label="View mode"><button type="button" id="iv-plan" aria-pressed="false">Floor plan view</button><button type="button" id="iv-orbit" aria-pressed="true">Orbit view</button></div>
+        <details class="unitpanel" id="unitpanel" open>
+          <summary><h3 id="int-title">—</h3><span class="note num" id="int-sub" style="font-size:.72rem">—</span></summary>
+          <div class="scroll"><table><thead><tr><th>Unit / room</th><th>sf</th><th>Price</th></tr></thead><tbody id="int-body"></tbody></table></div>
+        </details>
+    </div>  </div>
+</section>
+
+<section class="sheet" id="sellout">
+  <div class="sheet-tag"><span class="no">F-100</span><span class="label">Sell-out</span></div>
+  <div class="sheet-body">
+    <div class="fbar">
+      <h2>Projected sell-out</h2>
+      <div class="tabs" id="ftabs" role="group" aria-label="Scheme for financials">
+        <button type="button" id="ft-A" data-s="A" aria-pressed="false"><b>A</b>Own lot</button>
+        <button type="button" id="ft-B" data-s="B" aria-pressed="false"><b>B</b>+ certs</button>
+        <button type="button" id="ft-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
+        <button type="button" id="ft-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
+      </div>
+    </div>
+    <p>Residential condos are priced per sellable sf, taken as unit area from the plans (core, corridors, lobby and amenities excluded). The ground-floor retail is valued as a commercial condo: rent, less vacancy and landlord costs, divided by the cap rate. The lease is assumed triple-net, and <b>ICAP</b> is assumed to keep real estate taxes low, which supports the rent. Changing the scheme here also changes the studies above.</p>
+    <div class="fgrid">
+      <label class="field"><span class="label">Condo $/sf</span><input id="f-res" type="number" step="25" value="1500"></label>
+      <label class="field"><span class="label">Private outdoor $/sf</span><input id="f-out" type="number" step="25" value="0"></label>
+      <label class="field"><span class="label">Condo sales costs %</span><input id="f-scres" type="number" step="0.5" value="6"></label>
+      <label class="field"><span class="label">Retail rent $/sf/yr</span><input id="f-rent" type="number" step="5" value="80"></label>
+      <label class="field"><span class="label">Vacancy + credit %</span><input id="f-vac" type="number" step="0.5" value="5"></label>
+      <label class="field"><span class="label">Non-reimbursed opex %</span><input id="f-opex" type="number" step="0.5" value="3"></label>
+      <label class="field"><span class="label">Retail cap rate %</span><input id="f-cap" type="number" step="0.25" value="5"></label>
+      <label class="field"><span class="label">Retail sale costs %</span><input id="f-scret" type="number" step="0.5" value="2"></label>
+    </div>
+    <div class="tiles" id="rev-tiles"></div>
+    <div class="below">
+      <div class="tbl" style="max-height:440px;overflow:auto"><table>
+        <thead><tr><th>Floor</th><th>Unit</th><th>Sellable sf</th><th>Price</th><th>$/sf</th></tr></thead>
+        <tbody id="unit-body"></tbody>
+      </table></div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <span class="label">Ground-floor retail condo</span>
+        <div class="ledger" id="retail-ledger"></div>
+        <p class="note">Commercial condos sell to investors on in-place income, so a signed lease before sale supports the 5% cap rate. ICAP (Industrial & Commercial Abatement Program) phases in the tax increase from new construction; apply before permits are pulled <span class="verify">verify eligibility</span>.</p>
+      </div>
+    </div>
+    <p class="note">Condo sales costs cover brokerage, marketing, closing costs and the sponsor-paid NYC/NYS transfer taxes. Loggias and terraces are priced at $0 by default, so $1,500/sf applies to interior area only. Enter an outdoor premium to value them.</p>
+  </div>
+</section>
+
+<section class="sheet" id="costs">
+  <div class="sheet-tag"><span class="no">F-200</span><span class="label">Costs</span></div>
+  <div class="sheet-body">
+    <h2>Estimated construction and project costs</h2>
+    <p>Hard costs use the gross areas from each scheme's plans. The defaults are planning-level placeholders for a non-union Brooklyn mid-rise condo, not bids. Swap in a GC's budget, your land basis and your acquisition prices when you have them.</p>
+    <div class="fgrid">
+      <label class="field"><span class="label">Hard $/gsf above grade</span><input id="f-hard" type="number" step="25" value="450"></label>
+      <label class="field"><span class="label">Cellar $/sf</span><input id="f-cellar" type="number" step="25" value="325"></label>
+      <label class="field"><span class="label">Terraces $/sf</span><input id="f-outc" type="number" step="5" value="75"></label>
+      <label class="field"><span class="label">Core cost per level $</span><input id="f-story" type="number" step="5000" value="85000"></label>
+      <label class="field"><span class="label">Demolition $/sf (5,534 sf)</span><input id="f-demo" type="number" step="5" value="30"></label>
+      <label class="field"><span class="label">E-232 remediation $</span><input id="f-edes" type="number" step="25000" value="200000"></label>
+      <label class="field"><span class="label">Green / ULE premium %</span><input id="f-green" type="number" step="0.5" value="3"></label>
+      <label class="field"><span class="label">Hard contingency %</span><input id="f-cont" type="number" step="0.5" value="7.5"></label>
+      <label class="field"><span class="label">Soft costs % of hard</span><input id="f-soft" type="number" step="1" value="20"></label>
+      <label class="field"><span class="label">Land basis, 725 Grand $</span><input id="f-land" type="number" step="100000" value="3500000"></label>
+    </div>
+    <div class="below">
+      <div class="tbl"><table>
+        <thead><tr><th>Cost item</th><th>Basis</th><th>Total</th><th>$/gsf</th></tr></thead>
+        <tbody id="cost-body"></tbody>
+      </table></div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <span class="label">What the soft cost % covers</span>
+        <ul class="tight note">
+          <li>Architecture, engineering, expediting, DOB and utility fees</li>
+          <li>Builder's risk and general liability insurance, construction-period property taxes</li>
+          <li>Legal, the condo offering plan (AG filing), title, and zoning lot merger and easement documents</li>
+          <li>Development fee and pre-sale marketing setup</li>
+        </ul>
+        <p class="note">Neighbor rights and certificate prices come from the placeholder inputs in Z-002. The land basis is a placeholder too; replace it with your actual cost.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="returns">
+  <div class="sheet-tag"><span class="no">F-300</span><span class="label">Returns</span></div>
+  <div class="sheet-body">
+    <h2>Return on investment at 70% loan-to-cost</h2>
+    <p>The bank funds 70% of total project cost, including land, acquisitions and its own interest reserve. Equity covers the other 30%. The loan is repaid from sales, and profit is what remains after the loan and every cost. Interest is estimated on the average drawn balance over the full project period.</p>
+    <div class="fgrid">
+      <label class="field"><span class="label">Loan-to-cost %</span><input id="f-ltc" type="number" step="5" value="70"></label>
+      <label class="field"><span class="label">Interest rate %</span><input id="f-rate" type="number" step="0.25" value="9"></label>
+      <label class="field"><span class="label">Origination fee %</span><input id="f-fee" type="number" step="0.25" value="1"></label>
+      <label class="field"><span class="label">Project length, months</span><input id="f-months" type="number" step="1" value="36"></label>
+      <label class="field"><span class="label">Avg loan drawn %</span><input id="f-util" type="number" step="5" value="55"></label>
+    </div>
+    <div class="tiles" id="ret-tiles"></div>
+    <div class="su">
+      <div class="tbl"><table><thead><tr><th>Sources</th><th>$</th><th>%</th></tr></thead><tbody id="src-body"></tbody></table></div>
+      <div class="tbl"><table><thead><tr><th>Uses</th><th>$</th><th>%</th></tr></thead><tbody id="use-body"></tbody></table></div>
+    </div>
+    <h3>Profit margin on cost: condo price vs. hard cost</h3>
+    <div class="tbl"><table>
+      <thead id="sens-head"></thead><tbody id="sens-body"></tbody>
+    </table></div>
+    <h3>All four schemes</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Scheme</th><th>Net revenue</th><th>Total cost</th><th>Loan</th><th>Equity</th><th>Profit</th><th>Margin on cost</th><th>Equity multiple</th><th>Annualized</th></tr></thead>
+      <tbody id="fin-cmp"></tbody>
+    </table></div>
+    <p class="note">Annualized return is simplified: all equity goes in on day one and comes out at the end. A monthly cash-flow model with a draw schedule and presale deposits will usually show a higher IRR and a lower peak equity need. This is a planning model, not investment advice.</p>
+  </div>
+</section>
+
+<section class="sheet" id="tools">
+  <div class="sheet-tag"><span class="no">G-001</span><span class="label">Software</span></div>
+  <div class="sheet-body">
+    <h2>three.js for showing it, Rhino for designing it</h2>
+    <div class="tools">
+      <div><span class="label">Keep in three.js</span><span class="pick">This page</span><p class="note">Zoning logic, FAR ledgers and fast what-ifs across schemes. It runs in any browser. It can also show furnished interiors: walls, doors and fixtures as simple blocks.</p></div>
+      <div><span class="label">Move to Rhino 8</span><span class="pick">Design authoring</span><p class="note">Dimensioned plans with real wall thickness, a structural grid, stair and elevator geometry checked against code, section cuts, and DWG export an architect can use. Rhino MCP lets me model directly in your file.</p></div>
+      <div><span class="label">Bridge</span><span class="pick">glTF → web</span><p class="note">Export the Rhino model as glTF and it loads into this viewer, so the presentation stays web-based while the design lives in real CAD.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="next">
+  <div class="sheet-tag"><span class="no">G-002</span><span class="label">Next steps</span></div>
+  <div class="sheet-body">
+    <h2>What would firm up these numbers</h2>
+    <ol class="steps">
+      <li><span><b>727 Grand CO or survey</b> to settle 4,133 vs 6,042 sf, which moves the transfer by about 1,900 sf.</span></li>
+      <li><span><b>Land-use counsel</b> to confirm the certificate path gets 5.01 FAR and 115 ft, and to find vested generating sites in CD 1 or within ½ mile.</span></li>
+      <li><span><b>Expediter</b> to check the easement-side windows, the corridor exemption stacking, the loggia exemption, and the E-232 requirements.</span></li>
+      <li><span><b>Pick a scheme</b>, then do interior layouts in Rhino and publish them back to this page.</span></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <span>Preliminary test fits, not legal, zoning or code advice. Areas are measured to exterior lines with no wall thickness. Lot data from NYC PLUTO 26v2, the DCP zoning map and the Digital City Map. Confirm with a NY-licensed architect and land-use counsel.</span>
+  <span>Sources: <a href="https://zr.planning.nyc.gov/article-i/chapter-2/12-10">ZR 12-10</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-7/27-111">27-111</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-7/27-132">27-132</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-3/23-231">23-231</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-3/23-232">23-232</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-3/23-233">23-233</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-3/23-412">23-412</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-3/23-413">23-413</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-3/23-432">23-432</a> · <a href="https://zr.planning.nyc.gov/article-ii/chapter-3/23-433">23-433</a> · <a href="https://data.cityofnewyork.us/City-Government/Primary-Land-Use-Tax-Lot-Output-PLUTO-/64uk-42ks">PLUTO</a> · <a href="https://zola.planning.nyc.gov/">ZoLa</a></span>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+const LOT=3034, NEIGH=2067, STD=4, MAXF=5.01, S0=25.83, S1=51, SB=41; // stem x S0..S1, Graham setback line x=SB
+const $=id=>document.getElementById(id);
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const ft=v=>{const f=Math.floor(v+1e-6), i=Math.round((v-f)*12); return i===12?`${f+1}'-0"`:`${f}'-${i}"`;};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const st={scheme:'D',mini:'D',floor:null,green:true,exist:4133,cut:false,strategy:'eff',circ:'100',openUnits:new Set(),ifit:true};
+
+/* ---------- scenario caps ---------- */
+function defs(){
+  const transfer=Math.max(0,NEIGH*STD-st.exist), merged=LOT+NEIGH;
+  return {
+    A:{k:'A',name:'Own lot, as-of-right',merged:false,bonus:false,lot:LOT,far:STD,maxz:LOT*STD,less:0,base:LOT*STD,tr:0,cert:0},
+    B:{k:'B',name:'Own lot + certificates',merged:false,bonus:true,lot:LOT,far:MAXF,maxz:LOT*MAXF,less:0,base:LOT*STD,tr:0,cert:LOT*(MAXF-STD)},
+    C:{k:'C',name:'Merged with 727 Grand',merged:true,bonus:false,lot:merged,far:STD,maxz:merged*STD,less:st.exist,base:LOT*STD,tr:transfer,cert:0},
+    D:{k:'D',name:'Merged + certificates',merged:true,bonus:true,lot:merged,far:MAXF,maxz:merged*MAXF,less:st.exist,base:LOT*STD,tr:transfer,cert:merged*(MAXF-STD)}
+  };
+}
+let D0=defs(); for(const k in D0) D0[k].cap=D0[k].base+D0[k].tr+D0[k].cert;
+
+/* ---------- common 3D helpers ---------- */
+function makeViewer(canvas,opts){
+  const v={theta:opts.theta,phi:opts.phi,radius:opts.radius,target:new THREE.Vector3(26,40,50)};
+  v.renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  v.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+  v.scene=new THREE.Scene(); v.camera=new THREE.PerspectiveCamera(35,1,1,4000);
+  v.scene.add(new THREE.HemisphereLight(0xffffff,0x7a8084,.8));
+  const sun=new THREE.DirectionalLight(0xffffff,.5); sun.position.set(160,260,-120); v.scene.add(sun);
+  v.group=new THREE.Group(); v.scene.add(v.group);
+  v.draw=()=>{const w=canvas.clientWidth,h=canvas.clientHeight; v.renderer.setSize(w,h,false); v.camera.aspect=w/h; v.camera.updateProjectionMatrix();
+    v.camera.position.set(v.target.x+v.radius*Math.sin(v.phi)*Math.cos(v.theta),v.target.y+v.radius*Math.cos(v.phi),v.target.z+v.radius*Math.sin(v.phi)*Math.sin(v.theta));
+    v.camera.lookAt(v.target); v.renderer.render(v.scene,v.camera);};
+  v.reset=()=>{v.scene.remove(v.group); v.group=new THREE.Group(); v.scene.add(v.group);};
+  v.box=(x0,z0,x1,z1,y0,y1,color,o={})=>{const w=x1-x0,d=z1-z0,h=Math.max(.05,y1-y0);
+    const g=new THREE.BoxGeometry(w,h,d); g.translate(x0+w/2,y0+h/2,z0+d/2);
+    v.group.add(new THREE.Mesh(g,new THREE.MeshLambertMaterial({color,transparent:o.op!=null,opacity:o.op==null?1:o.op,depthWrite:o.op==null||o.op>.5})));
+    if(o.edge!==0) v.group.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:css('--ink'),transparent:true,opacity:o.edge??.35})));};
+  v.wire=(pts,y0,y1,color)=>{const sh=new THREE.Shape(); pts.forEach(([x,z],i)=>i?sh.lineTo(x,-z):sh.moveTo(x,-z));
+    const g=new THREE.ExtrudeGeometry(sh,{depth:y1-y0,bevelEnabled:false}); g.rotateX(-Math.PI/2); g.translate(0,y0,0);
+    const l=new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineDashedMaterial({color,dashSize:3,gapSize:3})); l.computeLineDistances(); v.group.add(l);};
+  v.prism=(pts,y0,y1,color,o={})=>{const sh=new THREE.Shape(); pts.forEach(([x,z],i)=>i?sh.lineTo(x,-z):sh.moveTo(x,-z));
+    const g=new THREE.ExtrudeGeometry(sh,{depth:Math.max(.05,y1-y0),bevelEnabled:false}); g.rotateX(-Math.PI/2); g.translate(0,y0,0);
+    v.group.add(new THREE.Mesh(g,new THREE.MeshLambertMaterial({color})));
+    v.group.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:css('--ink'),transparent:true,opacity:o.edge??.5})));};
+  v.context=()=>{ // streets, lot pad, 727 Grand existing
+    const street=new THREE.Mesh(new THREE.PlaneGeometry(320,320),new THREE.MeshBasicMaterial({color:css('--street')}));
+    street.rotation.x=-Math.PI/2; street.position.set(40,-.4,50); v.group.add(street);
+    v.box(0,0,S1,100,-.35,0,css('--paper'),{edge:.2});
+    v.box(0,0,S0,80,0,15,css('--m-exist'),{op:.9,edge:.3}); v.box(0,0,S0,40,15,35,css('--m-exist'),{op:.9,edge:.3});
+  };
+  let drag=null;
+  canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener('pointermove',e=>{if(!drag)return; if(v.locked){ if(v.pan){v.pan(e.clientX-drag.x,e.clientY-drag.y);drag={x:e.clientX,y:e.clientY};v.draw();} return; }v.theta+=(e.clientX-drag.x)*.008;v.phi=Math.min(1.5,Math.max(.2,v.phi-(e.clientY-drag.y)*.006));drag={x:e.clientX,y:e.clientY};v.draw();});
+  canvas.addEventListener('pointerup',()=>drag=null);
+  if(opts.zoom) canvas.addEventListener('wheel',e=>{e.preventDefault();v.radius=Math.min(900,Math.max(opts.minR||140,v.radius*(1+Math.sign(e.deltaY)*.1)));v.draw();},{passive:false});
+  window.addEventListener('resize',v.draw);
+  return v;
+}
+const LFULL=[[0,80],[S0,80],[S0,0],[S1,0],[S1,100],[0,100]];
+const LSET=[[0,80],[S0,80],[S0,10],[SB,10],[SB,100],[0,100]];
+
+/* ---------- simple massing widget ---------- */
+let mini=null;
+function renderMini(){
+  const s=D0[st.mini];
+  document.querySelectorAll('#mtabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.mini));
+  const p1=+$('in-p1').value||0, p2=+$('in-p2').value||0;
+  $('c-1').textContent='$'+fmt(s.tr*p1); $('c-2').textContent='$'+fmt(s.cert*p2); $('c-t').textContent='$'+fmt(s.tr*p1+s.cert*p2);
+  const stories=Math.ceil(s.cap/LOT-1e-9), ht=15+(stories-1)*10;
+  $('mr-name').textContent=s.k+' · '+s.name; $('mr-sf').textContent=fmt(s.cap)+' sf'; $('mr-ht').textContent=`${stories} stories · ${ht} ft`;
+  $('scen-body').innerHTML=Object.values(D0).map(v=>`<tr class="${v.k===st.mini?'hi':''}"><td><b>${v.k}</b> · ${v.name}</td><td class="num">${fmt(v.lot)}</td><td class="num">${v.far.toFixed(2)}</td><td class="num">${fmt(v.maxz)}</td><td class="num">${v.less?'− '+fmt(v.less):'—'}</td><td class="num"><b>${fmt(v.cap)}</b></td><td class="num">${v.tr?fmt(v.tr):'—'}</td><td class="num">${v.cert?fmt(v.cert):'—'}</td></tr>`).join('');
+  if(!window.THREE) return;
+  if(!mini) mini=makeViewer($('mini'),{theta:-0.95,phi:1.05,radius:330});
+  mini.reset(); mini.context();
+  const hAt=sf=>sf<=LOT?15*sf/LOT:15+10*(sf-LOT)/LOT;
+  [[0,s.base,'--m-base'],[s.base,s.base+s.tr,'--m-transfer'],[s.base+s.tr,s.cap,'--m-bonus']].forEach(([a,b,c])=>{if(b-a>1) mini.prism(LFULL,hAt(a),hAt(b),css(c));});
+  const env=s.bonus?[85,115]:[75,85];
+  mini.wire(LFULL,0,env[0],css('--accent')); mini.wire(LSET,env[0],env[1],css('--accent'));
+  mini.target.set(26,38,50); mini.draw();
+}
+
+/* ---------- detailed studies ---------- */
+const TYPES={
+  res:{tok:'--t-res',counts:1}, stair:{tok:'--t-core',counts:1}, elev:{tok:'--t-core',counts:1},
+  trash:{tok:'--t-serv',counts:1}, mech:{tok:'--t-serv',counts:0}, corr:{tok:'--t-corr',counts:'corr'},
+  lobby:{tok:'--t-lobby',counts:'lobby'}, retail:{tok:'--t-retail',counts:1}, amen:{tok:'--t-amen',counts:0},
+  logg:{tok:'--t-terr',counts:0,open:true}
+};
+let uid=0;
+const R=(x0,z0,x1,z1,t,label,u)=>({x0,z0,x1,z1,t,label:label||'',u:u||null,area:(x1-x0)*(z1-z0)});
+const unitName=a=>a<560?'Studio':a<760?'1BR':a<1000?'2BR':'3BR';
+
+// core in the rear arm (x 0..S0, z 80..100); elevator lobby spills into stem x S0..31
+function core(ground){const v=ground?'lobby':'corr';const out=[
+  R(0,90,S0,100,'stair','Scissor stair'),R(0,80,15,90,'mech','MEP'),R(15,80,23,90,'elev','Elev'),
+  R(23,80,S0,90,v,''),R(S0,80,31,100,v,ground?'Lobby':'Elev lobby')];
+  if(!ground) out.push(R(31,94,36,100,'trash','Ref'));
+  return out;}
+const groundF=()=>core(true).concat([R(S0,0,S1,80,'retail','Retail'),R(31,80,S1,92,'retail',''),R(31,92,S1,100,'lobby','Entry')]);
+const cellarF=()=>core(false).concat([R(S0,0,S1,45,'retail','Retail storage'),R(S0,45,S1,70,'amen','Fitness · pkgs'),R(S0,70,31,80,'amen','Bikes'),R(31,70,S1,94,'mech','MEP · meters'),R(36,94,S1,100,'mech','')]);
+// base floor without easement windows: 3 units, corridor along the 727 Grand lot line
+function baseAB(){const k=++uid;return core(false).concat([
+  R(S0,0,43,36,'res','2BR','a'+k),R(43,12,S1,36,'res','','a'+k),R(43,0,S1,12,'logg',''),
+  R(S0,36,31,80,'corr',''),
+  R(31,36,45,64,'res','1BR','b'+k),R(45,36,S1,45,'res','','b'+k),R(45,55,S1,64,'res','','b'+k),R(45,45,S1,55,'logg',''),
+  R(31,64,45,94,'res','1BR','c'+k),R(45,64,S1,72,'res','','c'+k),R(45,82,S1,94,'res','','c'+k),R(36,94,S1,100,'res','','c'+k),R(45,72,S1,82,'logg','')]);}
+// base floor with easement windows (>=30 ft): 3BR corner unit, corridor ends at the 3BR (100% exempt)
+function baseCD(){const k=++uid;return core(false).concat([
+  R(S0,0,43,45,'res','3BR','a'+k),R(43,12,S1,45,'res','','a'+k),R(43,0,S1,12,'logg',''),
+  R(S0,45,31,80,'corr',''),
+  R(31,45,45,72,'res','1BR','b'+k),R(45,45,S1,53,'res','','b'+k),R(45,63,S1,72,'res','','b'+k),R(45,53,S1,63,'logg',''),
+  R(31,72,45,94,'res','1BR','c'+k),R(45,72,S1,76,'res','','c'+k),R(45,86,S1,94,'res','','c'+k),R(36,94,S1,100,'res','','c'+k),R(45,76,S1,86,'logg','')]);}
+const UPMAX=813.4+15.17*50;
+function upperF(Au){
+  const k=++uid, out=core(false); Au=Math.max(0,Math.min(UPMAX,Au));
+  if(Au<=813.4){
+    const ex=Math.max(0,Au-370);
+    out.push(R(31,80,S1,94,'res',unitName(Au),'a'+k),R(36,94,S1,100,'res','','a'+k));
+    if(ex>1) out.push(R(S0,80-ex/25.17,S1,80,'res','','a'+k));
+    return out;
+  }
+  const len=(Au-813.4)/15.17, two=Au>1150;
+  const fr=two?Au-370:Au;
+  out.push(R(31,80,S1,94,'res',two?'Studio':'',two?'b'+k:'a'+k),R(36,94,S1,100,'res','',two?'b'+k:'a'+k));
+  out.push(R(S0,60,45,80,'res',unitName(fr),'a'+k),R(45,60,S1,70,'res','','a'+k),R(45,70,S1,80,'logg',''));
+  if(len>.2) out.push(R(S0,60-len,SB,60,'res','','a'+k));
+  return out;
+}
+function topF(L){const out=core(false); if(L>=370){ out.push(R(31,80,S1,94,'amen','Lounge'),R(36,94,S1,100,'amen',''));
+  const ex=Math.min(L-370,25.17*20); if(ex>5) out.push(R(S0,80-ex/25.17,S1,80,'amen',''));} return out;}
+function counted(rects,corrFrac){let c=0;for(const r of rects){const k=TYPES[r.t].counts; c+= k==='corr'? r.area*corrFrac : k==='lobby'? (st.circ==='100'?0:r.area) : k? r.area:0;} return c;}
+const grossOf=rects=>rects.reduce((s,r)=>s+(TYPES[r.t].open?0:r.area),0);
+
+function generate(s){
+  const env=s.bonus?{maxBase:85,H:115}:{maxBase:75,H:85};
+  const gf=st.green?1.05:1, budget=s.cap*gf;
+  const ease=e=>s.merged&&e+3>=30;           // window sill above the 30 ft easement line
+  // every base floor ends its corridor at a 3BR and is <100 ft long -> 100% exempt (ZR 23-232 a+b)
+  const fracUp=st.circ==='100'?0:.5, frac=e=>0;
+  const G=counted(groundF(),0);
+  const baseRects=e=>baseCD();
+  let best=null;
+  const eff=st.strategy==='eff';
+  for(const g of eff?[15]:[15,18,20]){
+    for(let N=4;N<=16;N++){
+      const typ=eff?10:(env.H-g)/(N-1);
+      if(eff){ if(g+(N-1)*typ>env.H+1e-6) break; } else if(typ<10-1e-6||typ>12.5+1e-6) continue;
+      const Rn=eff?N-1:N-2, topElev=g+(N-2)*typ, Ttop=eff?0:counted(topF(0),fracUp);
+      let sum=0, cand=null;
+      for(let nb=1;nb<=Rn;nb++){
+        const e=g+(nb-1)*typ; sum+=counted(baseRects(e),frac(e));
+        const baseTop=g+nb*typ;
+        if(baseTop<40-1e-6) continue;
+        if(baseTop>env.maxBase+1e-6) break;
+        const upper=Rn-nb, remain=budget-G-Ttop-sum;
+        if(upper===0){ if(remain>=-60&&(!eff||remain<150)) cand={g,N,typ,nb,Au:null,unused:Math.max(0,remain)}; break; }
+        const coreU=counted(core(false),fracUp), Au=remain/upper-coreU;
+        if(Au>UPMAX){ if(g+(nb+1)*typ>env.maxBase+1e-6||nb+1>Rn){cand={g,N,typ,nb,Au:UPMAX,unused:remain-upper*(UPMAX+coreU)};break;} continue; }
+        if(Au<0) break;
+        cand={g,N,typ,nb,Au,unused:0}; break;
+      }
+      if(!cand) continue;
+      if(eff&&cand.unused>150) continue;
+      const ok=cand.Au===null||cand.Au>=(eff?300:850);
+      const score=[ok?1:0, ok?(eff?-N:N):(cand.Au||0), -Math.abs(typ-10.5)];
+      if(!best||score[0]>best.score[0]||(score[0]===best.score[0]&&(score[1]>best.score[1]||(score[1]===best.score[1]&&score[2]>best.score[2])))) best={...cand,score};
+    }
+  }
+  if(!best) return null;
+  const {g,N,typ,nb,Au}=best;
+  const floors=[];
+  floors.push({n:'C',elev:-12,h:12,rects:cellarF(),frac:0,cellar:true,prog:'MEP · fitness · packages · bikes · retail storage'});
+  floors.push({n:1,elev:0,h:g,rects:groundF(),frac:0,prog:'Retail (100% built) · Graham Ave entry'});
+  for(let i=0;i<nb;i++){const e=g+i*typ; floors.push({n:i+2,elev:e,h:typ,rects:baseRects(e),frac:frac(e),prog:ease(e)?'Base · 3 units · easement windows':'Base · 3 units'});}
+  for(let i=nb;i<(eff?N-1:N-2);i++){const e=g+i*typ; floors.push({n:i+2,elev:e,h:typ,rects:upperF(Au),frac:fracUp,prog:'Setback + Graham dormer',setback:true});}
+  const topE=g+(N-2)*typ, retailSf=2254, L=.05*(s.cap-retailSf);
+  if(!eff) floors.push({n:N,elev:topE,h:typ,rects:topF(L),frac:fracUp,prog:'Roof lounge · deck',setback:true,top:true});
+
+  let gross=0,cnt=0,corrEx=0,amenEx=0,mechEx=0,trash=0,net=0,units=new Set(),cellar=0,outdoor=0,retail=0;
+  const occ=f=>{const a=new Uint8Array(S1*100);for(const r of f.rects){if(TYPES[r.t].open)continue;for(let z=Math.floor(r.z0);z<Math.ceil(r.z1);z++)for(let x=Math.floor(r.x0);x<Math.ceil(r.x1);x++){if(x+.5>r.x0&&x+.5<r.x1&&z+.5>r.z0&&z+.5<r.z1)a[z*S1+x]=1;}}return a;};
+  const loggOcc=f=>{const a=new Uint8Array(S1*100);for(const r of f.rects){if(r.t!=='logg')continue;for(let z=Math.floor(r.z0);z<Math.ceil(r.z1);z++)for(let x=Math.floor(r.x0);x<Math.ceil(r.x1);x++){if(x+.5>r.x0&&x+.5<r.x1&&z+.5>r.z0&&z+.5<r.z1)a[z*S1+x]=1;}}return a;};
+  let prevOcc=null;
+  for(const f of floors){
+    f.gross=grossOf(f.rects); f.counts=counted(f.rects,f.frac);
+    f.logg=f.rects.filter(r=>r.t==='logg').reduce((s,r)=>s+r.area,0);
+    f.corrEx=f.rects.filter(r=>r.t==='corr').reduce((s,r)=>s+r.area*(1-f.frac),0)+(st.circ==='100'?f.rects.filter(r=>r.t==='lobby').reduce((s,r)=>s+r.area,0):0);
+    f.exempt=f.gross-f.counts;
+    f.units=new Set(f.rects.filter(r=>r.t==='res'&&r.u).map(r=>r.u)).size;
+    f.occ=occ(f);
+    if(f.cellar){cellar=f.gross; f.terr=[]; f.outdoor=0; continue;}
+    gross+=f.gross; cnt+=f.counts; corrEx+=f.corrEx;
+    f.rects.forEach(r=>{if(r.t==='amen')amenEx+=r.area; if(r.t==='mech')mechEx+=r.area; if(r.t==='trash')trash+=r.area; if(r.t==='res')net+=r.area; if(r.t==='retail')retail+=r.area; if(r.u&&r.t==='res')units.add(r.u);});
+    f.terr=[]; let terr=0;
+    if(prevOcc){ const lo=loggOcc(f);
+      for(let z=0;z<100;z++){let x=0;while(x<S1){const c=z*S1+x; if(prevOcc[c]&&!f.occ[c]&&!lo[c]){let x1=x;while(x1<S1&&prevOcc[z*S1+x1]&&!f.occ[z*S1+x1]&&!lo[z*S1+x1])x1++;f.terr.push([x,z,x1,z+1]);terr+=x1-x;x=x1;}else x++;}}
+    }
+    f.outdoor=terr+f.logg; outdoor+=f.outdoor; prevOcc=f.occ;
+  }
+  const lounge=floors[floors.length-1].rects.filter(r=>r.t==='amen').reduce((s,r)=>s+r.area,0);
+  outdoor+=lounge;
+  if(eff){ const last=floors[floors.length-1]; outdoor+=Math.max(0,last.gross-517); } // common roof deck over the top floor
+  const refuse=Math.min(trash,3*units.size);
+  const pre=cnt-refuse, zfa=pre/gf, greenEx=pre-zfa;
+  return {s,env,g,N,typ,nb,Au,floors,gross,cellar,cnt,corrEx,amenEx,mechEx,refuse,greenEx,zfa,units:units.size,net,outdoor,retail,height:g+(N-1)*typ,unused:best.unused};
+}
+
+let plans={};
+function regen(){D0=defs(); for(const k in D0) D0[k].cap=D0[k].base+D0[k].tr+D0[k].cert; plans={}; for(const k in D0) plans[k]=generate(D0[k]);}
+
+function renderStudies(keepFloor){
+  const p=plans[st.scheme]; if(!p) return;
+  if(!keepFloor||!p.floors.some(f=>f.n===st.floor)){ const sb=p.floors.find(f=>f.setback&&!f.top); st.floor=(sb||p.floors[3]||p.floors[2]).n; }
+  document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
+  $('a-neighbor').textContent=fmt(D0.C.tr)+' sf';
+  $('a-neighbor-p').textContent=`2,067 sf × 4.0 − ${fmt(st.exist)} sf existing (${st.exist===4133?'field measurement':'PLUTO'}), merged via a zoning lot merger.`;
+  $('a-bonus').textContent=fmt(D0.D.cert)+' sf';
+  $('a-bonus-p').textContent=`Bonus to FAR 5.01 on 5,101 sf, bought from vested generating sites. About ${fmt(D0.D.cert/1.25)} sf of affordable floor area at the 1.25 ratio.`;
+  $('m-transfer').textContent=fmt(D0.C.tr)+' sf'; $('m-bonus').textContent=fmt(D0.D.cert)+' sf'; $('m-aff').textContent=fmt(D0.D.cert/1.25)+' sf';
+  const pd=plans.D; if(pd){$('a-total').textContent=`${pd.N} st · ${Math.round(pd.height)} ft`; $('a-total-p').textContent=`${fmt(pd.zfa)} zoning sf, ${fmt(pd.gross)} sf gross above grade, ${pd.units} units, ${fmt(pd.retail)} sf retail, ${fmt(pd.outdoor)} sf outdoor.`;}
+  const s=p.s;
+  $('stats').innerHTML=[
+    ['Height',`${Math.round(p.height)} ft`],['Stories',p.N],['Floor-to-floor',`${ft(p.g)} / ${ft(p.typ)}`],['Units',p.units],
+    ['ZFA / cap',`${fmt(p.zfa)} / ${fmt(s.cap)}`],['Gross above grade',fmt(p.gross)],['Outdoor sf',fmt(p.outdoor)],['Efficiency',Math.round(p.net/p.gross*100)+'%']
+  ].map(([l,v])=>`<div><span class="label">${l}</span><span class="v num">${v}</span></div>`).join('');
+  $('floors').innerHTML=p.floors.slice().reverse().map(f=>`<button type="button" id="fl-${st.scheme}-${f.n}" data-f="${f.n}" aria-pressed="${f.n===st.floor}">${f.n==='C'?'Cellar':f.n===1?'Ground':'Fl '+f.n}</button>`).join('');
+  $('floors').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{st.floor=b.dataset.f==='C'?'C':+b.dataset.f; renderStudies(true);}));
+  $('sched').innerHTML=p.floors.slice().reverse().map(f=>`<tr class="${f.n===st.floor?'hi':''}"><td>${f.n==='C'?'Cellar':f.n===1?'Ground':f.n}</td><td class="num">${f.cellar?"−12'":Math.round(f.elev)+"'"}</td><td>${f.prog}</td><td class="num">${fmt(f.gross)}</td><td class="num">${f.cellar?'0':fmt(f.counts)}</td><td class="num">${fmt(f.cellar?f.gross:f.exempt)}</td><td class="num">${f.units||'—'}</td><td class="num">${f.outdoor?fmt(f.outdoor):'—'}</td></tr>`).join('')
+    +`<tr class="tot"><td colspan="3">Above grade</td><td class="num">${fmt(p.gross)}</td><td class="num">${fmt(p.cnt)}</td><td class="num">${fmt(p.gross-p.cnt)}</td><td class="num">${p.units}</td><td class="num">${fmt(p.outdoor)}</td></tr>`;
+  const rows=[['Gross above grade',p.gross],[st.circ==='100'?'− Corridors + lobbies (23-232*)':'− Corridors (ZR 23-232)',-p.corrEx],['− Amenities (23-231)',-p.amenEx],['− Mechanical (12-10)',-p.mechEx],['− Refuse, 3 sf/unit (23-233)',-p.refuse]];
+  if(st.green) rows.push(['− Green building 5% (12-10)',-p.greenEx]);
+  $('ledger').innerHTML=rows.map(([l,v])=>`<div><span>${l}</span><span class="num">${v<0?'−'+fmt(-v):fmt(v)}</span></div>`).join('')
+    +`<div class="sum"><span>Zoning floor area</span><span class="num">${fmt(p.zfa)}</span></div><div><span>Cap for scheme ${s.k}</span><span class="num">${fmt(s.cap)}</span></div><div><span>Loggias + terraces (not floor area)</span><span class="num">${fmt(p.outdoor)}</span></div><div><span>Cellar, excluded</span><span class="num">${fmt(p.cellar)}</span></div>`;
+  const notes={
+    A:'The smallest building. Floors stretch to reach 85 ft, so the setback floors hold one generous unit each.',
+    B:'Certificates add 3,064 sf of bonus floor area and the 115 ft envelope. The extra height goes into setback floors under the Graham dormer.',
+    C:'The easement from 30 ft up turns base floors into 3BR corner layouts with a fully exempt corridor.',
+    D:'The largest scheme: 115 ft, certificate bonus, easement windows, loggias on every floor, and a roof lounge and deck.'
+  };
+  $('scheme-note').textContent=notes[s.k]+(p.unused>50?` About ${fmt(p.unused/(st.green?1.05:1))} sf doesn't fit inside the envelope.`:'');
+  $('cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${fmt(q.s.cap)}</td><td class="num">${fmt(q.zfa)}</td><td class="num">${fmt(q.gross)}</td><td class="num">${Math.round(q.height)}' · ${q.N}</td><td class="num">${ft(q.typ)}</td><td class="num">${q.units}</td><td class="num">${fmt(q.retail)}</td><td class="num">${fmt(q.outdoor)}</td><td class="num">${Math.round(q.net/q.gross*100)}%</td></tr>`;}).join('');
+  renderPlan(p); build3D(p); renderFinance(); renderZPlan(); renderFacade(); renderInterior();
+}
+
+/* ---------- financials ---------- */
+const money=n=>(n<0?'−$':'$')+Math.round(Math.abs(n)).toLocaleString('en-US');
+const mm=n=>(n<0?'−$':'$')+(Math.abs(n)/1e6).toFixed(2)+'M';
+const pct=n=>(n*100).toFixed(1)+'%';
+function unitsOf(p){
+  const out=[];
+  for(const f of p.floors){ if(typeof f.n!=='number'||f.n<2) continue;
+    const g={}; f.rects.forEach(r=>{if(r.t==='res'&&r.u){(g[r.u]=g[r.u]||{sf:0,label:''}); g[r.u].sf+=r.area; if(r.label) g[r.u].label=r.label;}});
+    Object.values(g).forEach(u=>out.push({floor:f.n,label:u.label||unitName(u.sf),sf:u.sf}));
+  }
+  return out;
+}
+function fin(p,o={}){
+  const v=id=>(o[id]!=null?o[id]:(+$(id).value||0));
+  const privOut=p.floors.filter(f=>typeof f.n==='number'&&f.n>1&&!f.top).reduce((s,f)=>s+f.outdoor,0);
+  const resGross=p.net*v('f-res')+privOut*v('f-out'), resNet=resGross*(1-v('f-scres')/100);
+  const rent=p.retail*v('f-rent'), noi=rent*(1-v('f-vac')/100-v('f-opex')/100), retVal=noi/(v('f-cap')/100), retNet=retVal*(1-v('f-scret')/100);
+  const revenue=resNet+retNet;
+  const items=[
+    ['Above-grade construction',`${fmt(p.gross)} gsf × $${v('f-hard')}`,p.gross*v('f-hard')],
+    ['Cellar',`${fmt(p.cellar)} sf × $${v('f-cellar')}`,p.cellar*v('f-cellar')],
+    ['Rooftop MEP penthouse',`625 sf × $${v('f-hard')}`,625*v('f-hard')],
+    ['Loggias, terraces, roof deck',`${fmt(p.outdoor)} sf × $${v('f-outc')}`,p.outdoor*v('f-outc')],
+    ['Elevator stops, stair flights, risers',`${p.N+1} levels × $${fmt(v('f-story'))}`,(p.N+1)*v('f-story')],
+    ['Demolition of existing building','5,534 sf × $'+v('f-demo'),5534*v('f-demo')],
+    ['E-232 testing and remediation','allowance',v('f-edes')]
+  ];
+  const sub=items.reduce((s,i)=>s+i[2],0);
+  const green=st.green?sub*v('f-green')/100:0; const cont=(sub+green)*v('f-cont')/100; const hard=sub+green+cont;
+  const soft=hard*v('f-soft')/100, land=v('f-land');
+  const nb=p.s.tr*v('in-p1'), certs=p.s.cert*v('in-p2');
+  const costEx=hard+soft+land+nb+certs;
+  const ltc=v('f-ltc')/100, k=v('f-rate')/100*(v('f-months')/12)*(v('f-util')/100)+v('f-fee')/100;
+  const financing=ltc*k*costEx/(1-ltc*k), total=costEx+financing, loan=ltc*total, equity=total-loan;
+  const profit=revenue-total, em=(equity+profit)/equity;
+  const sc=1-v('f-scres')/100, c=1/(1-ltc*k);
+  const bePsf=(total-retNet-privOut*v('f-out')*sc)/(Math.max(1,p.net)*sc);
+  const target=.15, residual=revenue/((1+target)*c)-(costEx-land);
+  return {bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
+    margin:profit/total, roe:profit/equity, em, irr:em>0?Math.pow(em,12/Math.max(1,v('f-months')))-1:-1};
+}
+function renderFinance(){
+  const p=plans[st.scheme]; if(!p||!$('f-res')) return;
+  document.querySelectorAll('#ftabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
+  const F=fin(p), units=unitsOf(p), psf=+$('f-res').value||0;
+  $('rev-tiles').innerHTML=[
+    ['Condo sellable sf',fmt(p.net)],['Gross condo sales',mm(F.resGross)],['Retail condo value',mm(F.retVal)],['Net revenue after sales costs',mm(F.revenue)]
+  ].map(([l,x])=>`<div><span class="label">${l}</span><span class="v num">${x}</span></div>`).join('');
+  $('unit-body').innerHTML=units.slice().reverse().map(u=>`<tr><td class="num">${u.floor}</td><td>${u.label}</td><td class="num">${fmt(u.sf)}</td><td class="num">${money(u.sf*psf)}</td><td class="num">$${fmt(psf)}</td></tr>`).join('')
+    +`<tr class="tot"><td colspan="2">${units.length} units</td><td class="num">${fmt(p.net)}</td><td class="num">${money(p.net*psf)}</td><td class="num">avg ${money(p.net*psf/Math.max(1,units.length))}</td></tr>`;
+  $('retail-ledger').innerHTML=[
+    ['Retail area',fmt(p.retail)+' sf'],['Gross rent @ $'+$('f-rent').value,money(F.rent)],['Less vacancy + non-reimbursed opex',money(F.noi-F.rent)],
+  ].map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('')
+    +`<div class="sum"><span>NOI</span><span class="num">${money(F.noi)}</span></div><div><span>Value @ ${$('f-cap').value}% cap</span><span class="num">${money(F.retVal)}</span></div><div><span>Net of sale costs</span><span class="num">${money(F.retNet)}</span></div><div><span>Value per sf</span><span class="num">$${fmt(F.retVal/p.retail)}</span></div>`;
+  const allG=p.gross+p.cellar;
+  const row=(l,b,t,cls='')=>`<tr class="${cls}"><td>${l}</td><td>${b}</td><td class="num">${money(t)}</td><td class="num">$${fmt(t/p.gross)}</td></tr>`;
+  $('cost-body').innerHTML=F.items.map(i=>row(i[0],i[1],i[2])).join('')
+    +(st.green?row('Green / ultra-low-energy premium',$('f-green').value+'% of above',F.green):'')
+    +row('Hard cost contingency',$('f-cont').value+'%',F.cont)
+    +row('Total hard costs',`${fmt(allG)} sf incl. cellar`,F.hard,'tot')
+    +row('Soft costs',$('f-soft').value+'% of hard',F.soft)
+    +row('Land basis, 725 Grand','placeholder',F.land)
+    +(p.s.tr?row('Air rights from 727 Grand',`${fmt(p.s.tr)} sf × $${$('in-p1').value}`,F.nb):'')
+    +(p.s.cert?row('IH certificates',`${fmt(p.s.cert)} sf × $${$('in-p2').value}`,F.certs):'')
+    +row('Financing: interest reserve + fees',`${$('f-rate').value}% · ${$('f-months').value} mo`,F.financing)
+    +row('Total project cost','',F.total,'tot');
+  const neg=F.profit<0?' neg':'';
+  $('ret-tiles').innerHTML=[
+    ['Total project cost',mm(F.total),''],['Bank loan ('+$('f-ltc').value+'% LTC)',mm(F.loan),''],['Equity required',mm(F.equity),''],
+    ['Profit',mm(F.profit),neg],['Margin on cost',pct(F.margin),neg],['Return on equity',pct(F.roe),neg],['Equity multiple',F.em.toFixed(2)+'×',neg],['Annualized (simplified)',pct(F.irr),neg],
+    ['Break-even condo $/sf','$'+fmt(F.bePsf),''],['Land value for 15% margin',mm(F.residual),F.residual<0?' neg':''],['Sellable ÷ gross',Math.round(p.net/p.gross*100)+'%','']
+  ].map(([l,x,c])=>`<div><span class="label">${l}</span><span class="v num${c}">${x}</span></div>`).join('');
+  const T=F.total;
+  $('src-body').innerHTML=`<tr><td>Construction loan</td><td class="num">${money(F.loan)}</td><td class="num">${pct(F.loan/T)}</td></tr><tr><td>Equity</td><td class="num">${money(F.equity)}</td><td class="num">${pct(F.equity/T)}</td></tr><tr class="tot"><td>Total</td><td class="num">${money(T)}</td><td class="num">100%</td></tr>`;
+  const uses=[['Land',F.land],['Air rights + certificates',F.nb+F.certs],['Hard costs',F.hard],['Soft costs',F.soft],['Financing',F.financing]];
+  $('use-body').innerHTML=uses.map(([l,x])=>`<tr><td>${l}</td><td class="num">${money(x)}</td><td class="num">${pct(x/T)}</td></tr>`).join('')+`<tr class="tot"><td>Total</td><td class="num">${money(T)}</td><td class="num">100%</td></tr>`;
+  const hb=+$('f-hard').value||0, prices=[-200,-100,0,100,200].map(d=>psf+d), hards=[-50,0,50,100].map(d=>hb+d);
+  $('sens-head').innerHTML=`<tr><th>Condo $/sf ↓ · hard $/gsf →</th>${hards.map(h=>`<th>$${fmt(h)}</th>`).join('')}</tr>`;
+  $('sens-body').innerHTML=prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${hards.map(h=>{const m=fin(p,{'f-res':pr,'f-hard':h}).margin;return `<td class="num ${m<0?'cellbad':m>=.15?'cellgood':''}"${pr===psf&&h===hb?' style="font-weight:700;outline:1.5px solid var(--ink);outline-offset:-2px"':''}>${pct(m)}</td>`;}).join('')}</tr>`).join('');
+  $('fin-cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; const G=fin(q); const c=G.profit<0?'neg':'';
+    return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${mm(G.revenue)}</td><td class="num">${mm(G.total)}</td><td class="num">${mm(G.loan)}</td><td class="num">${mm(G.equity)}</td><td class="num ${c}">${mm(G.profit)}</td><td class="num ${c}">${pct(G.margin)}</td><td class="num ${c}">${G.em.toFixed(2)}×</td><td class="num ${c}">${pct(G.irr)}</td></tr>`;}).join('');
+}
+
+function renderPlan(p){
+  const f=p.floors.find(x=>x.n===st.floor); const S=5, OX=14, OZ=74;
+  const X=x=>OX+x*S, Z=z=>OZ+z*S, W=OX+(S1+15)*S, H=OZ+106*S;
+  $('plan-title').textContent=f.n==='C'?'Cellar':f.n===1?'Ground floor':f.top?`Floor ${f.n} · roof lounge`:`Floor ${f.n}`;
+  $('plan-sub').textContent=`${f.cellar?'cellar':'+'+Math.round(f.elev)+"'"} · gross ${fmt(f.gross)} · counts ${f.cellar?0:fmt(f.counts)}${f.units?` · ${f.units} units`:''}${f.outdoor?` · outdoor ${fmt(f.outdoor)}`:''}`;
+  const ease=p.s.merged&&f.elev+3>=30&&!f.cellar;
+  let o=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Floor plan">`;
+  o+=`<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" style="fill:var(--t-terr);fill-opacity:.35"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--t-terr)" stroke-width="2"/></pattern></defs>`;
+  o+=`<rect x="0" y="0" width="${W}" height="${H}" style="fill:var(--paper)"/>`;
+  o+=`<rect x="0" y="${Z(-12)}" width="${W}" height="${12*S-4}" style="fill:var(--street)"/><text x="${X(1)}" y="${Z(-4)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)">GRAND STREET · 80'</text>`;
+  o+=`<rect x="${X(S1)+4}" y="${Z(-12)}" width="${W-X(S1)-4}" height="${H-Z(-12)}" style="fill:var(--street)"/><text x="${X(S1+8)}" y="${Z(92)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)" transform="rotate(-90 ${X(S1+8)} ${Z(92)})">GRAHAM AVENUE · 80'</text>`;
+  o+=`<rect x="${X(0)}" y="${Z(0)}" width="${S0*S}" height="${80*S}" style="fill:var(--m-exist);fill-opacity:.25;stroke:var(--ink-2)" stroke-dasharray="4 3"/>`;
+  o+=`<text x="${X(2)}" y="${Z(6)}" font-size="10" style="fill:var(--ink-2);font-family:var(--mono)">727 GRAND</text><text x="${X(2)}" y="${Z(9.5)}" font-size="9" style="fill:var(--ink-2);font-family:var(--mono)">${p.s.merged?(ease?'easement: windows OK':'easement starts 30\''):'separate lot'}</text>`;
+  o+=`<path d="M${X(S0)} ${Z(0)} H${X(S1)} V${Z(100)} H${X(0)} V${Z(80)} H${X(S0)} Z" style="fill:none;stroke:var(--ink)" stroke-width="2"/>`;
+  if(f.setback){
+    o+=`<line x1="${X(S0)}" y1="${Z(10)}" x2="${X(S1)}" y2="${Z(10)}" style="stroke:var(--warn)" stroke-dasharray="5 4"/><line x1="${X(SB)}" y1="${Z(0)}" x2="${X(SB)}" y2="${Z(100)}" style="stroke:var(--warn)" stroke-dasharray="5 4"/>`;
+    o+=`<text x="${X(SB+1)}" y="${Z(5)}" font-size="9" style="fill:var(--warn);font-family:var(--mono)">10' setbacks</text>`;
+    o+=`<line x1="${X(S1)+2}" y1="${Z(60)}" x2="${X(S1)+2}" y2="${Z(100)}" style="stroke:var(--warn)" stroke-width="3"/><text x="${X(S1)-4}" y="${Z(58.5)}" text-anchor="end" font-size="9" style="fill:var(--warn);font-family:var(--mono)">dormer 40'</text>`;
+  }
+  for(const [x0,z0,x1,z1] of f.terr) o+=`<rect x="${X(x0)}" y="${Z(z0)}" width="${(x1-x0)*S+.4}" height="${(z1-z0)*S+.4}" fill="url(#hatch)"/>`;
+  for(const r of f.rects){
+    if(r.t==='logg'){o+=`<rect x="${X(r.x0)}" y="${Z(r.z0)}" width="${(r.x1-r.x0)*S}" height="${(r.z1-r.z0)*S}" fill="url(#hatch)" style="stroke:var(--t-terr)" stroke-width="1"/>`;continue;}
+    o+=`<rect x="${X(r.x0)}" y="${Z(r.z0)}" width="${(r.x1-r.x0)*S}" height="${(r.z1-r.z0)*S}" style="fill:var(${TYPES[r.t].tok});stroke:var(--ink)" stroke-width="${r.t==='stair'||r.t==='elev'?1.4:.7}"/>`;
+    if(r.t==='stair') o+=`<line x1="${X(r.x0+1)}" y1="${Z(r.z1-1)}" x2="${X(r.x1-1)}" y2="${Z(r.z0+1)}" style="stroke:var(--paper)"/><line x1="${X(r.x0+1)}" y1="${Z(r.z0+1)}" x2="${X(r.x1-1)}" y2="${Z(r.z1-1)}" style="stroke:var(--paper)"/>`;
+  }
+  // hide seams inside a unit made of several rects
+  const byU={}; f.rects.forEach(r=>{if(r.u)(byU[r.u]=byU[r.u]||[]).push(r);});
+  // windows
+  const solid=f.rects.filter(r=>!TYPES[r.t].open);
+  const inRect=(x,z)=>solid.some(r=>x>r.x0&&x<r.x1&&z>r.z0&&z<r.z1);
+  const lotLine=(x,z)=>x<0||z>100||(x<S0&&z<80);
+  const neighborSide=(x,z)=>x>0&&x<S0&&z<80;
+  if(!f.cellar) for(const r of f.rects){
+    if(!['res','amen','retail','lobby'].includes(r.t)) continue;
+    const edges=[[r.x0,r.z0,r.x1,r.z0,0,-.5],[r.x0,r.z1,r.x1,r.z1,0,.5],[r.x0,r.z0,r.x0,r.z1,-.5,0],[r.x1,r.z0,r.x1,r.z1,.5,0]];
+    for(const [ax,az,bx,bz,dx,dz] of edges){
+      const len=Math.max(1,Math.round(Math.max(Math.abs(bx-ax),Math.abs(bz-az)))); let run=null;
+      const flush=()=>{if(run){o+=`<line x1="${X(run[0])}" y1="${Z(run[1])}" x2="${X(run[2])}" y2="${Z(run[3])}" style="stroke:var(--t-win)" stroke-width="3.2"/>`;run=null;}};
+      for(let i=0;i<len;i++){
+        const t0=i/len,t1=(i+1)/len, mx=ax+(bx-ax)*(t0+t1)/2+dx, mz=az+(bz-az)*(t0+t1)/2+dz;
+        let ok=!inRect(mx,mz);
+        if(ok&&lotLine(mx,mz)) ok=ease&&neighborSide(mx,mz)&&r.t!=='retail';
+        if(ok&&r.t==='retail'&&mz>0&&mx<S1) ok=false; // storefront only on the two streets
+        const p0=[ax+(bx-ax)*t0,az+(bz-az)*t0], p1=[ax+(bx-ax)*t1,az+(bz-az)*t1];
+        if(ok){ if(!run) run=[p0[0],p0[1],p1[0],p1[1]]; else {run[2]=p1[0];run[3]=p1[1];} } else flush();
+      }
+      flush();
+    }
+  }
+  for(const r of f.rects){
+    if(!r.label) continue;
+    const cx=X((r.x0+r.x1)/2), cz=Z((r.z0+r.z1)/2), w=(r.x1-r.x0)*S, h=(r.z1-r.z0)*S;
+    const group=r.u?byU[r.u].reduce((s,q)=>s+q.area,0):r.area;
+    if(r.t==='stair'){o+=`<text x="${cx}" y="${cz+3}" text-anchor="middle" font-size="9" style="fill:var(--paper);font-family:var(--mono);font-weight:500">SCISSOR STAIR</text>`;continue;}
+    if(w<34||h<26){o+=`<text x="${cx}" y="${cz+3}" text-anchor="middle" font-size="7.5" style="fill:var(--ink);font-family:var(--mono)">${r.label}</text>`;continue;}
+    const tf=h>w*1.6&&w<80?` transform="rotate(-90 ${cx} ${cz})"`:'';
+    o+=`<text x="${cx}" y="${cz-2}" text-anchor="middle" font-size="11" style="fill:var(--ink);font-family:var(--mono);font-weight:500"${tf}>${r.label}</text>`;
+    o+=`<text x="${cx}" y="${cz+10}" text-anchor="middle" font-size="9" style="fill:var(--ink-2);font-family:var(--mono)"${tf}>${fmt(group)} sf</text>`;
+  }
+  o+=`<line x1="${X(0)}" y1="${H-8}" x2="${X(20)}" y2="${H-8}" style="stroke:var(--ink)" stroke-width="2"/><text x="${X(21)}" y="${H-5}" font-size="9" style="fill:var(--ink-2);font-family:var(--mono)">20 ft</text>`;
+  o+=`<g transform="translate(${X(36)} ${H-14})"><line x1="0" y1="-8" x2="0" y2="6" style="stroke:var(--ink)" stroke-width="1.4"/><path d="M-4 1 L0 9 L4 1 Z" style="fill:var(--ink)"/><text x="7" y="8" font-size="9" style="fill:var(--ink);font-family:var(--mono)">N</text></g>`;
+  $('plan').innerHTML=o+'</svg>';
+}
+
+$('legend').innerHTML=[['res','Residential'],['stair','Core'],['mech','MEP / refuse'],['corr','Corridor'],['lobby','Lobby'],['retail','Retail'],['amen','Amenity'],['logg','Loggia / terrace']].map(([t,l])=>`<span><i class="sw" style="background:var(${TYPES[t].tok})"></i>${l}</span>`).join('')+`<span><i class="sw" style="background:var(--m-exist)"></i>727 Grand</span>`;
+
+let viewer=null;
+function build3D(p){
+  if(!window.THREE) return;
+  if(!viewer) viewer=makeViewer($('massing'),{theta:-0.95,phi:1.08,radius:370,zoom:true});
+  const v=viewer; v.reset(); v.context();
+  const selIdx=p.floors.findIndex(f=>f.n===st.floor);
+  p.floors.forEach((f,i)=>{
+    if(f.cellar) return;
+    const above=st.cut&&i>selIdx, slab=.9;
+    for(const r of f.rects){
+      if(TYPES[r.t].open){ if(!above){ v.box(r.x0,r.z0,r.x1,r.z1,f.elev,f.elev+slab,css('--t-serv'),{edge:0}); v.box(r.x0,r.z0,r.x1,r.z1,f.elev+slab,f.elev+slab+.3,css('--t-terr'),{edge:0}); v.box(r.x1-.3,r.z0,r.x1,r.z1,f.elev+slab,f.elev+slab+3.5,css('--ink'),{op:.35,edge:0}); } continue; }
+      v.box(r.x0,r.z0,r.x1,r.z1,f.elev+slab,f.elev+f.h,css(TYPES[r.t].tok),above?{op:.07,edge:0}:{edge:.26});
+      v.box(r.x0,r.z0,r.x1,r.z1,f.elev,f.elev+slab,css('--t-serv'),above?{op:.05,edge:0}:{edge:0});
+    }
+    if(!above) for(const [x0,z0,x1,z1] of f.terr) v.box(x0,z0,x1,z1,f.elev,f.elev+.5,css('--t-terr'),{edge:0});
+  });
+  const top=p.height, lastIdx=p.floors.length-1;
+  if(!(st.cut&&selIdx<lastIdx)){
+    for(const r of p.floors[lastIdx].rects) if(!TYPES[r.t].open) v.box(r.x0,r.z0,r.x1,r.z1,top,top+1,css('--t-serv'),{edge:.3});
+    v.box(0,80,S0,100,top+1,top+15,css('--t-serv'),{edge:.4});
+  }
+  v.wire(LFULL,0,p.env.maxBase,css('--accent')); v.wire(LSET,p.env.maxBase,p.env.H,css('--accent'));
+  v.target.set(26,Math.min(60,top/2),50); v.draw();
+}
+
+/* ---------- A-102 zoning deduction plans ---------- */
+const ZC={
+  'c-res':['Counts · residential','--z-res',false],
+  'c-ret':['Counts · retail','--z-ret',false],
+  'c-core':['Counts · stair + elevator','--z-core',false],
+  'c-lobby':['Counts · lobby','--z-lobby-c',false],
+  'h-corr':['50% exempt · corridor','--z-corr',true],
+  'x-corr':['Exempt · corridor / lobby','--z-corr',true],
+  'x-mech':['Exempt · mechanical','--z-mech',true],
+  'x-amen':['Exempt · amenity','--z-amen',true],
+  'x-ref':['Exempt · refuse room','--z-ref',true],
+  'x-cellar':['Exempt · cellar space','--z-mech',true],
+  'open':['Not floor area · loggia / terrace','--t-terr',true]
+};
+function zcat(r,f){
+  if(f.cellar) return r.t==='logg'?'open':'x-cellar';
+  switch(r.t){
+    case 'res': return 'c-res'; case 'retail': return 'c-ret';
+    case 'stair': case 'elev': return 'c-core';
+    case 'lobby': return st.circ==='100'?'x-corr':'c-lobby';
+    case 'corr': return f.frac===0?'x-corr':'h-corr';
+    case 'mech': return 'x-mech'; case 'amen': return 'x-amen'; case 'trash': return 'x-ref';
+    default: return 'open';
+  }
+}
+function renderZPlan(){
+  const p=plans[st.scheme]; if(!p||!$('zplan')) return;
+  if(!p.floors.some(f=>f.n===st.zfloor)) st.zfloor=(p.floors.find(f=>f.n===3)||p.floors[1]).n;
+  $('zfloors').innerHTML=p.floors.slice().reverse().map(f=>`<button type="button" id="zf-${st.scheme}-${f.n}" data-f="${f.n}" aria-pressed="${f.n===st.zfloor}">${f.n==='C'?'Cellar':f.n===1?'Ground':'Fl '+f.n}</button>`).join('');
+  $('zfloors').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{st.zfloor=b.dataset.f==='C'?'C':+b.dataset.f;renderZPlan();}));
+  const f=p.floors.find(x=>x.n===st.zfloor); const S=5,OX=14,OZ=74, X=x=>OX+x*S, Z=z=>OZ+z*S, W=OX+(S1+15)*S, H=OZ+106*S;
+  $('zplan-title').textContent=f.n==='C'?'Cellar':f.n===1?'Ground floor':`Floor ${f.n}`;
+  $('zplan-sub').textContent=`gross ${fmt(f.gross)} · counts ${f.cellar?0:fmt(f.counts)} · exempt ${fmt(f.cellar?f.gross:f.exempt)}`;
+  let o=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Zoning floor area plan">`;
+  o+=`<defs><pattern id="zx" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" style="stroke:var(--paper);stroke-opacity:.75" stroke-width="1.6"/></pattern><pattern id="zo" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="6" height="6" style="fill:var(--t-terr);fill-opacity:.3"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--t-terr)" stroke-width="2"/></pattern></defs>`;
+  o+=`<rect x="0" y="0" width="${W}" height="${H}" style="fill:var(--paper)"/>`;
+  o+=`<rect x="0" y="${Z(-12)}" width="${W}" height="${12*S-4}" style="fill:var(--street)"/><text x="${X(1)}" y="${Z(-4)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)">GRAND STREET</text>`;
+  o+=`<rect x="${X(S1)+4}" y="${Z(-12)}" width="${W-X(S1)-4}" height="${H-Z(-12)}" style="fill:var(--street)"/><text x="${X(S1+8)}" y="${Z(80)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)" transform="rotate(-90 ${X(S1+8)} ${Z(80)})">GRAHAM AVENUE</text>`;
+  o+=`<rect x="${X(0)}" y="${Z(0)}" width="${S0*S}" height="${80*S}" style="fill:var(--m-exist);fill-opacity:.2;stroke:var(--ink-2)" stroke-dasharray="4 3"/>`;
+  o+=`<path d="M${X(S0)} ${Z(0)} H${X(S1)} V${Z(100)} H${X(0)} V${Z(80)} H${X(S0)} Z" style="fill:none;stroke:var(--ink)" stroke-width="2"/>`;
+  for(const [x0,z0,x1,z1] of (f.terr||[])) o+=`<rect x="${X(x0)}" y="${Z(z0)}" width="${(x1-x0)*S+.4}" height="${(z1-z0)*S+.4}" fill="url(#zo)"/>`;
+  const sums={};
+  for(const r of f.rects){
+    const c=zcat(r,f), [,tok,ex]=ZC[c];
+    sums[c]=(sums[c]||0)+r.area;
+    const xy=`x="${X(r.x0)}" y="${Z(r.z0)}" width="${(r.x1-r.x0)*S}" height="${(r.z1-r.z0)*S}"`;
+    if(c==='open'){o+=`<rect ${xy} fill="url(#zo)" style="stroke:var(--t-terr)"/>`;continue;}
+    o+=`<rect ${xy} style="fill:var(${tok});stroke:var(--ink)" stroke-width=".8"/>`;
+    if(ex) o+=`<rect ${xy} fill="url(#zx)"/>`;
+  }
+  // one label per unit / space
+  const seen=new Set();
+  for(const r of f.rects){
+    const c=zcat(r,f); if(c==='open'&&r.area<50) continue;
+    const key=r.u||(r.t+r.x0+'_'+r.z0); if(seen.has(key)) continue; seen.add(key);
+    const grp=r.u?f.rects.filter(q=>q.u===r.u):[r];
+    const big=grp.reduce((a,b)=>b.area>a.area?b:a), area=grp.reduce((s,q)=>s+q.area,0);
+    const w=(big.x1-big.x0)*S, h=(big.z1-big.z0)*S; if(w<26||h<22) continue;
+    const cx=X((big.x0+big.x1)/2), cz=Z((big.z0+big.z1)/2), tf=h>w*1.6&&w<80?` transform="rotate(-90 ${cx} ${cz})"`:'';
+    const tag=c==='h-corr'?'50% EXEMPT':ZC[c][2]?(c==='open'?'NOT FA':'EXEMPT'):'COUNTS';
+    o+=`<text x="${cx}" y="${cz-2}" text-anchor="middle" font-size="10" style="fill:var(--ink);font-family:var(--mono);font-weight:600;paint-order:stroke;stroke:var(--paper);stroke-width:3px"${tf}>${tag}</text><text x="${cx}" y="${cz+10}" text-anchor="middle" font-size="9" style="fill:var(--ink);font-family:var(--mono);paint-order:stroke;stroke:var(--paper);stroke-width:3px"${tf}>${fmt(area)} sf</text>`;
+  }
+  $('zplan').innerHTML=o+'</svg>';
+  const order=Object.keys(ZC).filter(k=>sums[k]);
+  const counts=order.filter(k=>!ZC[k][2]).reduce((s,k)=>s+sums[k],0)+(sums['h-corr']||0)*.5;
+  $('zledger').innerHTML=order.map(k=>`<div><span><i class="sw" style="background:var(${ZC[k][1]})"></i>${ZC[k][0]}</span><span class="num">${fmt(sums[k])}</span></div>`).join('')
+    +(f.terr&&f.terr.length?`<div><span><i class="sw" style="background:var(--t-terr)"></i>Setback terrace</span><span class="num">${fmt(f.outdoor-f.logg)}</span></div>`:'')
+    +`<div class="sum"><span>Counts toward FAR</span><span class="num">${f.cellar?0:fmt(counts)}</span></div>`;
+  $('zbuilding').innerHTML=[
+    ['Gross above grade',fmt(p.gross)],[st.circ==='100'?'Corridors + lobbies exempt':'Corridors exempt',fmt(p.corrEx)],['Mechanical exempt',fmt(p.mechEx)],['Amenity exempt',fmt(p.amenEx)],
+    ['Refuse credit (3 sf × '+p.units+' units)',fmt(p.refuse)],[st.green?'Green building 5%':'Green 5% (off)',fmt(p.greenEx)]
+  ].map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('')+`<div class="sum"><span>Zoning floor area / cap</span><span class="num">${fmt(p.zfa)} / ${fmt(p.s.cap)}</span></div>`;
+  $('zlegend').innerHTML=Object.keys(ZC).filter(k=>k!=='x-cellar').map(k=>`<span><i class="sw" style="background:var(${ZC[k][1]})"></i>${ZC[k][0]}</span>`).join('');
+}
+
+/* ---------- A-200 parametric façade ---------- */
+let fview=null;
+function renderFacade(){
+  const p=plans[st.scheme]; if(!p||!window.THREE||!$('facade3d')) return;
+  const val=id=>+$(id).value;
+  const depth=val('fc-depth'), spacing=val('fc-spacing'), amp=val('fc-amp')*Math.PI/180, freq=val('fc-freq'), pattern=$('fc-pattern').value, mat=$('fc-mat').value;
+  $('fc-depth-v').textContent=depth.toFixed(2)+' ft'; $('fc-spacing-v').textContent=spacing.toFixed(2)+' ft'; $('fc-amp-v').textContent=val('fc-amp')+'°'; $('fc-freq-v').textContent=freq.toFixed(2);
+  if(!fview) fview=makeViewer($('facade3d'),{theta:-0.85,phi:1.2,radius:300,zoom:true});
+  const v=fview; v.reset(); v.context();
+  const floors=p.floors.filter(f=>!f.cellar), top=p.height;
+  // glass volumes and slab edges
+  floors.forEach(f=>{
+    for(const r of f.rects){ if(TYPES[r.t].open){ v.box(r.x0,r.z0,r.x1,r.z1,f.elev,f.elev+1,css('--f-slab'),{edge:0}); continue; }
+      const core=['stair','elev','mech','trash'].includes(r.t);
+      v.box(r.x0,r.z0,r.x1,r.z1,f.elev+1,f.elev+f.h,core?css('--t-serv'):css('--f-glass'),{edge:0});
+      v.box(r.x0,r.z0,r.x1,r.z1,f.elev,f.elev+1,css('--f-slab'),{edge:0});
+    }
+  });
+  floors[floors.length-1].rects.forEach(r=>{ if(!TYPES[r.t].open) v.box(r.x0,r.z0,r.x1,r.z1,top,top+1.2,css('--f-slab'),{edge:0}); });
+  v.box(0,80,S0,100,top+1.2,top+14,css('--t-serv'),{edge:.25});
+  // façade segments from occupancy
+  const segs=[];
+  floors.forEach((f,fi)=>{
+    if(f.n===1) return;
+    const occ=f.occ, ease=p.s.merged&&f.elev+3>=30;
+    const lot=(x,z)=>x<0||z>100||(x<S0&&z<80&&!ease)||(x<S0&&z>=80);
+    const on=(x,z)=>x>=0&&x<S1&&z>=0&&z<100&&occ[z*S1+x];
+    const runs={};
+    const push=(key,pos,meta)=>{(runs[key]=runs[key]||{meta,list:[]}).list.push(pos);};
+    for(let z=0;z<100;z++)for(let x=0;x<S1;x++){ if(!on(x,z)) continue;
+      if(!on(x,z-1)&&!lot(x+.5,z-.5)) push('N'+z,x,{o:'N',line:z});
+      if(!on(x,z+1)&&!lot(x+.5,z+1.5)) push('S'+(z+1),x,{o:'S',line:z+1});
+      if(!on(x+1,z)&&!lot(x+1.5,z+.5)) push('E'+(x+1),z,{o:'E',line:x+1});
+      if(!on(x-1,z)&&!lot(x-.5,z+.5)) push('W'+x,z,{o:'W',line:x});
+    }
+    for(const k in runs){ const {meta,list}=runs[k]; list.sort((a,b)=>a-b);
+      let s0=list[0],prev=list[0];
+      const close=e=>{ if(e+1-s0>=3) segs.push({...meta,a:s0,b:e+1,f,fi}); };
+      for(let i=1;i<list.length;i++){ if(list[i]!==prev+1){close(prev);s0=list[i];} prev=list[i]; }
+      close(prev);
+    }
+  });
+  // instanced fins
+  const nF=floors.length;
+  const fins=[]; let linear=0;
+  const attractor=new THREE.Vector3(S1,45,0);
+  for(const sg of segs){
+    const L=sg.b-sg.a, n=Math.max(1,Math.floor(L/spacing)), h=sg.f.h-1.2, fl=sg.fi/Math.max(1,nF-1);
+    linear+=L;
+    for(let i=0;i<n;i++){
+      const s=sg.a+(i+.5)*L/n; let x,z,yaw,nx=0,nz=0;
+      if(sg.o==='N'){x=s;z=sg.line;nz=-1;yaw=0;} else if(sg.o==='S'){x=s;z=sg.line;nz=1;yaw=0;}
+      else if(sg.o==='E'){x=sg.line;z=s;nx=1;yaw=Math.PI/2;} else {x=sg.line;z=s;nx=-1;yaw=Math.PI/2;}
+      const y=sg.f.elev+1+h/2;
+      let d=depth, th;
+      if(pattern==='wave'){ th=amp*Math.sin(2*Math.PI*(freq*(x+z)/60)+sg.fi*0.55); }
+      else if(pattern==='gradient'){ th=amp*(2*fl-1); d=depth*(0.35+0.65*fl); }
+      else { const dist=attractor.distanceTo(new THREE.Vector3(x,y,z)); const w=Math.max(0,1-dist/(40*freq)); th=amp*w; d=depth*(0.45+0.55*w); }
+      fins.push({x:x+nx*d/2,y,z:z+nz*d/2,yaw:yaw+th,h,d});
+    }
+  }
+  const geo=new THREE.BoxGeometry(1,1,1);
+  const im=new THREE.InstancedMesh(geo,new THREE.MeshLambertMaterial({color:mat}),fins.length);
+  const m4=new THREE.Matrix4(), q=new THREE.Quaternion(), up=new THREE.Vector3(0,1,0);
+  fins.forEach((F,i)=>{ q.setFromAxisAngle(up,F.yaw); m4.compose(new THREE.Vector3(F.x,F.y,F.z),q,new THREE.Vector3(0.28,F.h,F.d)); im.setMatrixAt(i,m4); });
+  v.group.add(im);
+  // storefront canopy band on the two streets
+  v.box(S0,-1.5,S1,0,13,14.2,mat,{edge:0}); v.box(S1,0,S1+1.5,100,13,14.2,mat,{edge:0});
+  v.target.set(30,top*.45,45); v.draw();
+  $('fc-stats').innerHTML=[['Fins',fmt(fins.length)],['Fin wall length',fmt(linear)+' lf'],['Avg per floor',fmt(fins.length/Math.max(1,nF-1))],['Floor area impact','0 sf (ZR 12-10)']]
+    .map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('');
+}
+
+/* ---------- A-300 interiors ---------- */
+let iview=null;
+function interiorPlan(p,f){
+  const G=[], D=[];
+  const add=(id,name,kind,rects,extra)=>G.push({id,name,kind,rects,...(extra||{})});
+  const door=(x,z)=>D.push([x,z]);
+  const find=fn=>f.rects.find(fn);
+  // common + core
+  const circ=f.rects.filter(r=>r.t==='corr'||r.t==='lobby');
+  if(circ.length) add('common',f.n===1?'Lobby':'Corridor','hall',circ);
+  f.rects.forEach((r,i)=>{
+    if(r.t==='stair') add('stair','Scissor stair','stair',[r]);
+    if(r.t==='elev') add('elev','Elevator','elev',[r]);
+    if(r.t==='mech') add('mech'+i,'MEP','mech',[r]);
+    if(r.t==='trash') add('trash','Refuse','mech',[r]);
+  });
+  door(24.4,90); door(23,85); door(31,97); door(7.5,90);
+  const retail=f.rects.filter(r=>r.t==='retail'); if(retail.length){ add('retail','Retail','retail',retail); door(33.5,92); }
+  const amen=f.rects.filter(r=>r.t==='amen'); if(amen.length&&!f.cellar){ add('lounge','Resident lounge','lounge',amen); door(31,85); }
+  const a3=find(r=>r.t==='res'&&r.label==='3BR'&&r.x0===S0&&r.z0===0);
+  if(a3){
+    const uA=a3.u, uB=find(r=>r.t==='res'&&r.x0===31&&r.z0===45).u, uC=find(r=>r.t==='res'&&r.x0===31&&r.z0===72).u;
+    add(uA+':br3','Bedroom','br',[R(S0,0,36,11)],{unit:uA});
+    add(uA+':liv','Living · kitchen','liv',[R(36,0,43,11),R(S0,11,43,22),R(43,12,S1,22)],{unit:uA,kit:[S0,19.6,36,22]});
+    add(uA+':hall','Hall','hall',[R(31,22,36,45),R(S0,41,31,45)],{unit:uA});
+    add(uA+':br1','Primary bedroom','br',[R(36,22,S1,33)],{unit:uA});
+    add(uA+':br2','Bedroom','br',[R(36,33,S1,45)],{unit:uA});
+    add(uA+':b1','Bath','bath',[R(S0,22,31,30)],{unit:uA});
+    add(uA+':b2','Bath','bath',[R(S0,30,31,38)],{unit:uA});
+    add(uA+':cl','W/D · closet','cl',[R(S0,38,31,41)],{unit:uA});
+    [[28.4,45],[36,27.5],[36,39],[31,26],[31,34],[28.4,41],[33.5,22],[30,11]].forEach(d=>door(...d));
+    add(uB+':liv','Living · kitchen','liv',[R(31,45,36,57),R(36,45,S1,53),R(36,53,45,63)],{unit:uB,kit:[31,45,33,57]});
+    add(uB+':bath','Bath','bath',[R(31,57,36,65)],{unit:uB});
+    add(uB+':cl','Closet','cl',[R(31,65,36,72)],{unit:uB});
+    add(uB+':br','Bedroom','br',[R(36,63,S1,72)],{unit:uB});
+    [[31,50],[36,60],[40.5,63],[36,68.5]].forEach(d=>door(...d));
+    add(uC+':liv','Living · kitchen','liv',[R(31,72,S1,76),R(31,76,36,84),R(36,76,45,86)],{unit:uC,kit:[31,76,33,84]});
+    add(uC+':bath','Bath','bath',[R(31,84,36,94)],{unit:uC});
+    add(uC+':br','Bedroom','br',[R(36,86,S1,100)],{unit:uC});
+    [[31,82],[40.5,86],[36,90]].forEach(d=>door(...d));
+  } else {
+    const front=find(r=>r.t==='res'&&r.x0===S0&&r.z0===60), rear=find(r=>r.t==='res'&&r.x0===31&&r.z0===80);
+    if(front){
+      const ua=front.u, strip=find(r=>r.t==='res'&&r.x0===S0&&r.x1===SB);
+      const len=strip?60-strip.z0:0, nBR=len>=10?Math.max(1,Math.floor(len/11)):0;
+      const livR=[R(31,60,S1,70),R(31,70,45,80),R(S0,66,31,80)]; if(strip&&nBR===0) livR.push(strip);
+      add(ua+':liv','Living · kitchen','liv',livR,{unit:ua,kit:[S0,66,S0+2,80]});
+      add(ua+':bath','Bath','bath',[R(S0,60,31,66)],{unit:ua});
+      door(28,80); door(28,66);
+      if(nBR){ const seg=len/nBR; for(let i=0;i<nBR;i++){ const z1=60-i*seg, z0=z1-seg; add(ua+':br'+i,i===0?'Bedroom':'Bedroom','br',[R(S0,z0,SB,z1)],{unit:ua}); door(34,z1); } }
+      if(rear&&rear.u!==ua){
+        const ub=rear.u;
+        add(ub+':liv','Studio','liv',[R(36,80,S1,100),R(31,80,36,88)],{unit:ub,kit:[31,80,33,88]});
+        add(ub+':bath','Bath','bath',[R(31,88,36,94)],{unit:ub});
+        door(31,84); door(36,91);
+      } else if(rear){
+        add(ua+':br0','Primary suite','br',[R(36,80,S1,100)],{unit:ua});
+        add(ua+':dress','Dressing','cl',[R(31,80,36,88)],{unit:ua});
+        add(ua+':bath0','Primary bath','bath',[R(31,88,36,94)],{unit:ua});
+        door(40.5,80); door(36,91); door(36,84);
+      }
+    } else if(rear){
+      add(rear.u+':liv','Studio','liv',f.rects.filter(r=>r.u===rear.u),{unit:rear.u});
+    }
+  }
+  return {G,D};
+}
+const short$=v=>v>=1e6?'$'+(v/1e6).toFixed(2)+'m':'$'+Math.round(v/1e3)+'k';
+function renderInterior(){
+  const p=plans[st.scheme]; if(!p||!window.THREE||!$('interior3d')) return;
+  const choices=p.floors.filter(f=>!f.cellar);
+  if(!choices.some(f=>f.n===st.ifloor)) st.ifloor=(choices.find(f=>f.n===3)||choices[1]||choices[0]).n;
+  $('ifloors').innerHTML=choices.slice().reverse().map(f=>`<button type="button" id="if-${st.scheme}-${f.n}" data-f="${f.n}" aria-pressed="${f.n===st.ifloor}">${f.n===1?'Ground':'Fl '+f.n}</button>`).join('');
+  $('ifloors').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{st.ifloor=+b.dataset.f;renderInterior();}));
+  const f=p.floors.find(x=>x.n===st.ifloor);
+  const {G,D}=interiorPlan(p,f);
+  if(!iview){ iview=makeViewer($('interior3d'),{theta:-1.05,phi:.82,radius:150,zoom:true,minR:18});
+    iview.pan=(dx,dy)=>{ const c=$('interior3d'), s=2*iview.radius*Math.tan(17.5*Math.PI/180)/Math.max(1,c.clientHeight);
+      iview.target.z+=dx*s; iview.target.x-=dy*s; }; }
+  const v=iview; v.reset();
+  const street=new THREE.Mesh(new THREE.PlaneGeometry(240,240),new THREE.MeshBasicMaterial({color:css('--street')}));
+  street.rotation.x=-Math.PI/2; street.position.set(30,-1.2,50); v.group.add(street);
+  // raster groups at 0.5 ft
+  const RES=.5, GW=Math.round(S1/RES), GH=Math.round(100/RES), grid=new Int16Array(GW*GH);
+  G.forEach((g,gi)=>g.rects.forEach(r=>{
+    for(let j=Math.floor(r.z0/RES);j<Math.ceil(r.z1/RES);j++)for(let i=Math.floor(r.x0/RES);i<Math.ceil(r.x1/RES);i++){
+      const cx=(i+.5)*RES, cz=(j+.5)*RES; if(cx>r.x0&&cx<r.x1&&cz>r.z0&&cz<r.z1&&i>=0&&i<GW&&j>=0&&j<GH) grid[j*GW+i]=gi+1; }
+  }));
+  const at=(i,j)=>i<0||j<0||i>=GW||j>=GH?0:grid[j*GW+i];
+  const ease=p.s.merged&&f.elev+3>=30;
+  const lot=(x,z)=>x<0||z>100||(x<S0&&z<80&&!ease)||(x<S0&&z>=80);
+  const isDoor=(vert,line,pos)=>D.some(([dx,dz])=>vert?(Math.abs(dx-line)<.3&&Math.abs(dz-pos)<1.5):(Math.abs(dz-line)<.3&&Math.abs(dx-pos)<1.5));
+  const H=f.n===1?Math.min(14,f.h-1):9;
+  const glassKinds=['liv','br','lounge','retail','hall'];
+  const walls=[];
+  const scan=(vert)=>{
+    const outer=vert?GW:GH, inner=vert?GH:GW;
+    for(let a=0;a<=outer;a++){
+      let run=null;
+      const flush=()=>{ if(run){walls.push(run); run=null;} };
+      for(let b=0;b<inner;b++){
+        const i1=vert?a-1:b, j1=vert?b:a-1, i2=vert?a:b, j2=vert?b:a;
+        const g1=at(i1,j1), g2=at(i2,j2);
+        const line=a*RES, pos=(b+.5)*RES;
+        if(g1===g2||isDoor(vert,line,pos)){flush();continue;}
+        let type='int';
+        if(!g1||!g2){ const g=G[(g1||g2)-1]; const ox=vert?(g1?line+.25:line-.25):pos, oz=vert?pos:(g1?line+.25:line-.25);
+          type=glassKinds.includes(g.kind)&&!lot(ox,oz)?'glass':'ext'; }
+        if(run&&run.type===type) run.b=(b+1)*RES; else {flush(); run={vert,line,a:b*RES,b:(b+1)*RES,type};}
+      }
+      flush();
+    }
+  };
+  scan(true); scan(false);
+  const wallC=css('--i-wall'), glassC=css('--i-glass');
+  for(const w of walls){
+    const t=w.type==='int'?.35:.8;
+    const bx=(y0,y1,col,o)=> w.vert? v.box(w.line-t/2,w.a,w.line+t/2,w.b,y0,y1,col,o) : v.box(w.a,w.line-t/2,w.b,w.line+t/2,y0,y1,col,o);
+    if(w.type==='glass'){ bx(0,1.4,wallC,{edge:.15}); bx(1.4,H-.6,glassC,{op:.35,edge:0}); bx(H-.6,H,wallC,{edge:.15}); }
+    else bx(0,H,wallC,{edge:.18});
+  }
+  // floors + furniture
+  const floorC=css('--i-floor'), tile=css('--i-tile'), soft=css('--i-soft'), cas=css('--i-case'), fix=css('--i-fix'), coreC=css('--i-core');
+  const big=g=>g.rects.reduce((a,b)=>b.area>a.area?b:a);
+  for(const g of G){
+    const col=g.kind==='bath'?tile:['stair','elev','mech'].includes(g.kind)?coreC:g.kind==='hall'?tile:floorC;
+    g.rects.forEach(r=>v.box(r.x0,r.z0,r.x1,r.z1,-.6,0,col,{edge:0}));
+    const r=big(g), w=r.x1-r.x0, d=r.z1-r.z0, cx=(r.x0+r.x1)/2, cz=(r.z0+r.z1)/2;
+    const fb=(x0,z0,x1,z1,y1,c)=>v.box(Math.max(r.x0+.2,x0),Math.max(r.z0+.2,z0),Math.min(r.x1-.2,x1),Math.min(r.z1-.2,z1),0,y1,c,{edge:.2});
+    if(g.kind==='stair'){ for(let s=0;s<8;s++) v.box(r.x0+1+s*2.9,r.z0+.5,r.x0+3.9+s*2.9,r.z1-.5,0,1+s*1.05,coreC,{edge:.25}); }
+    else if(g.kind==='elev'||g.kind==='mech'){ v.box(r.x0+.3,r.z0+.3,r.x1-.3,r.z1-.3,0,H,coreC,{op:.55,edge:.3}); }
+    else if(g.kind==='br'){
+      const king=r.area>=150, bw=king?6.3:5, bl=6.8, eastWin=r.x1>=SB-.01;
+      if(eastWin&&w>=bl+3){ fb(r.x0+.4,cz-bw/2,r.x0+.4+bl,cz+bw/2,2,soft); fb(r.x0+.4,cz-bw/2,r.x0+1.4,cz+bw/2,3.2,cas); fb(r.x0+.4,cz-bw/2-1.8,r.x0+1.9,cz-bw/2-.3,2,cas); fb(r.x0+.4,cz+bw/2+.3,r.x0+1.9,cz+bw/2+1.8,2,cas); }
+      else { fb(cx-bw/2,r.z1-.4-bl,cx+bw/2,r.z1-.4,2,soft); fb(cx-bw/2,r.z1-1.4,cx+bw/2,r.z1-.4,3.2,cas); }
+      if(d>9&&w>8) fb(r.x1-2.2,r.z0+.4,r.x1-.4,r.z0+4.4,3,cas);
+    }
+    else if(g.kind==='liv'){
+      if(w>=d){ fb(cx-3.5,r.z1-3.4,cx+3.5,r.z1-.4,2.6,soft); fb(cx-2,r.z1-6.2,cx+2,r.z1-4.2,1.3,cas); if(w>14) { fb(r.x0+1.2,r.z0+1.2,r.x0+6.2,r.z0+4.2,2.5,cas); } }
+      else { fb(r.x0+.4,cz-3.5,r.x0+3.4,cz+3.5,2.6,soft); fb(r.x0+4.2,cz-2,r.x0+6.2,cz+2,1.3,cas); if(d>14) fb(cx-1.5,r.z0+1.2,cx+1.5,r.z0+6.2,2.5,cas); }
+      if(g.kit){ const [kx0,kz0,kx1,kz1]=g.kit; v.box(kx0+.1,kz0+.1,kx1,kz1-.1,0,3,cas,{edge:.25}); v.box(kx0+.1,kz1-2.6,kx1+.4,kz1-.1,0,6.8,fix,{edge:.25}); }
+    }
+    else if(g.kind==='bath'){
+      if(d>=w){ fb(r.x0+.2,r.z0+.2,r.x1-.2,r.z0+2.6,1.8,fix); fb(r.x0+.3,r.z1-2.3,r.x0+1.9,r.z1-.3,1.4,fix); fb(r.x1-2,r.z1-3.4,r.x1-.2,r.z1-.3,2.8,cas); }
+      else { fb(r.x0+.2,r.z0+.2,r.x0+2.6,r.z1-.2,1.8,fix); fb(r.x1-2.3,r.z0+.3,r.x1-.3,r.z0+1.9,1.4,fix); }
+    }
+    else if(g.kind==='cl'){ fb(r.x0+.2,r.z0+.2,r.x0+2,r.z1-.2,7,cas); }
+    else if(g.kind==='lounge'){ fb(cx-3.5,r.z1-3.4,cx+3.5,r.z1-.4,2.6,soft); fb(cx-3.5,r.z0+.4,cx+3.5,r.z0+3.4,2.6,soft); fb(cx-2,cz-1.5,cx+2,cz+1.5,1.3,cas); }
+    else if(g.kind==='retail'){ for(let k=0;k<4;k++) fb(cx-3,r.z0+8+k*16,cx+3,r.z0+11+k*16,3,cas); }
+  }
+  // loggias + terraces
+  f.rects.filter(r=>TYPES[r.t].open).forEach(r=>{ v.box(r.x0,r.z0,r.x1,r.z1,-.6,.1,css('--t-terr'),{edge:0}); v.box(r.x1-.15,r.z0,r.x1+.05,r.z1,.1,3.6,glassC,{op:.4,edge:0}); fbLounge(v,r); });
+  (f.terr||[]).forEach(([x0,z0,x1,z1])=>v.box(x0,z0,x1,z1,-.6,-.05,css('--t-terr'),{edge:0}));
+  // labels
+  if($('in-labels').checked){
+    const done=new Set();
+    for(const g of G){ if(['elev','mech'].includes(g.kind)) continue; const r=big(g); if(r.area<30) continue; if(done.has(g.id)) continue; done.add(g.id);
+      const area=g.rects.reduce((s,q)=>s+q.area,0);
+      v.group.add(labelSprite(g.name,fmt(area)+' sf',(r.x0+r.x1)/2,H+2.5,(r.z0+r.z1)/2)); }
+  }
+  // unit outlines + unit labels
+  if($('in-units').checked){
+    const UC=['#E4572E','#2E86AB','#7A5CC4','#3BA55C','#D4A017','#C2185B'];
+    const order=[]; G.forEach(g=>{ if(g.unit&&!order.includes(g.unit)) order.push(g.unit); });
+    order.forEach((u,ui)=>{
+      const cells=new Uint8Array(GW*GH); G.forEach((g,gi)=>{ if(g.unit!==u) return; for(let k=0;k<grid.length;k++) if(grid[k]===gi+1) cells[k]=1; });
+      const inU=(i,j)=>i>=0&&j>=0&&i<GW&&j<GH&&cells[j*GW+i];
+      const col=UC[ui%UC.length], y0=H+.2, y1=H+.9, w=.35;
+      for(let j=0;j<GH;j++){ let run=-1;
+        for(let i=0;i<=GW;i++){ const edge=i<GW&&inU(i,j)&&!inU(i,j-1); if(edge&&run<0) run=i; if(!edge&&run>=0){ v.box(run*RES,j*RES-w,i*RES,j*RES+w,y0,y1,col,{edge:0}); run=-1; } }
+        run=-1;
+        for(let i=0;i<=GW;i++){ const edge=i<GW&&inU(i,j)&&!inU(i,j+1); if(edge&&run<0) run=i; if(!edge&&run>=0){ v.box(run*RES,(j+1)*RES-w,i*RES,(j+1)*RES+w,y0,y1,col,{edge:0}); run=-1; } }
+      }
+      for(let i=0;i<GW;i++){ let run=-1;
+        for(let j=0;j<=GH;j++){ const edge=j<GH&&inU(i,j)&&!inU(i-1,j); if(edge&&run<0) run=j; if(!edge&&run>=0){ v.box(i*RES-w,run*RES,i*RES+w,j*RES,y0,y1,col,{edge:0}); run=-1; } }
+        run=-1;
+        for(let j=0;j<=GH;j++){ const edge=j<GH&&inU(i,j)&&!inU(i+1,j); if(edge&&run<0) run=j; if(!edge&&run>=0){ v.box((i+1)*RES-w,run*RES,(i+1)*RES+w,j*RES,y0,y1,col,{edge:0}); run=-1; } }
+      }
+      const rs=f.rects.filter(r=>r.u===u), area=rs.reduce((s,r)=>s+r.area,0), bigR=rs.reduce((a,b)=>b.area>a.area?b:a);
+      v.group.add(labelSprite(`Unit ${f.n}-${String.fromCharCode(65+ui)} · ${unitName(area)}`,fmt(area)+' sf',(bigR.x0+bigR.x1)/2,H+7,(bigR.z0+bigR.z1)/2,col));
+    });
+  }
+  if(st.iview==='plan'){
+    v.locked=true; v.theta=0; v.phi=.001;   // top-down, rotated 90° clockwise: Grand St on the right, Graham Ave at the bottom
+    if(st.ifit){ const c=$('interior3d'), asp=c.clientWidth/Math.max(1,c.clientHeight), k=2*Math.tan(17.5*Math.PI/180);
+      v.radius=Math.max(58/k,108/(k*asp)); v.target.set(26,0,50); st.ifit=false; }
+  } else { v.locked=false; if(st.ifit){ v.target.set(33,0,50); st.ifit=false; } }
+  v.draw();
+  // schedule
+  const units={};
+  G.filter(g=>g.unit).forEach(g=>{(units[g.unit]=units[g.unit]||[]).push(g);});
+  let rows='', ui=0;
+  for(const u in units){ ui++; const tot=units[u].reduce((s,g)=>s+g.rects.reduce((a,q)=>a+q.area,0),0);
+    const nm=unitName(f.rects.filter(r=>r.u===u).reduce((s,r)=>s+r.area,0));
+    const open=st.openUnits.has(u), rid='ur-'+u;
+    rows+=`<tr class="tot"><td><button type="button" class="unit-toggle" data-u="${u}" aria-expanded="${open}" aria-controls="${rid}-0"><span class="caret" aria-hidden="true">${open?'▾':'▸'}</span>Unit ${f.n}-${String.fromCharCode(64+ui)} · ${nm}</button></td><td class="num">${fmt(tot)}</td><td class="num">${short$(tot*(+$('f-res').value||0))}</td></tr>`;
+    rows+=units[u].map((g,gi)=>`<tr id="${rid}-${gi}"${open?'':' hidden'}><td style="padding-left:30px">${g.name}</td><td class="num">${fmt(g.rects.reduce((a,q)=>a+q.area,0))}</td><td></td></tr>`).join('');
+  }
+  G.filter(g=>!g.unit&&['hall','lounge','retail'].includes(g.kind)).forEach(g=>{rows+=`<tr><td>${g.name}</td><td class="num">${fmt(g.rects.reduce((a,q)=>a+q.area,0))}</td><td></td></tr>`;});
+  { const unitSf=f.rects.filter(r=>r.t==='res').reduce((s,r)=>s+r.area,0);
+    rows+=`<tr class="tot"><td>Floor ${f.n===1?'1 (ground)':f.n} total · gross</td><td class="num">${fmt(f.gross)}</td><td class="num">${unitSf?short$(unitSf*(+$('f-res').value||0)):''}</td></tr>`; }
+  $('int-body').innerHTML=rows;
+  $('int-body').querySelectorAll('.unit-toggle').forEach(b=>b.addEventListener('click',()=>{
+    const u=b.dataset.u, open=!st.openUnits.has(u); open?st.openUnits.add(u):st.openUnits.delete(u);
+    b.setAttribute('aria-expanded',open); b.querySelector('.caret').textContent=open?'▾':'▸';
+    $('int-body').querySelectorAll(`tr[id^="ur-${u}-"]`).forEach(r=>r.hidden=!open);
+  }));
+  $('int-title').textContent=f.n===1?'Ground floor':`Floor ${f.n}`;
+  $('int-sub').textContent=`${f.units||0} units · outdoor ${fmt(f.outdoor||0)} sf${ease?' · easement windows':''}`;
+}
+function fbLounge(v,r){ const w=r.x1-r.x0,d=r.z1-r.z0; if(w*d<40) return; const cx=(r.x0+r.x1)/2, cz=(r.z0+r.z1)/2;
+  v.box(cx-1.2,cz-1.2,cx+1.2,cz+1.2,.1,2.4,css('--i-case'),{edge:.2}); v.box(cx-1,cz+1.6,cx+1,cz+3.2,.1,1.6,css('--i-soft'),{edge:.2}); }
+function labelSprite(a,b,x,y,z,accent){
+  const c=document.createElement('canvas'); c.width=512; c.height=150; const g=c.getContext('2d');
+  g.fillStyle=css('--paper'); g.globalAlpha=.9; g.fillRect(0,20,512,110); g.globalAlpha=1;
+  if(accent){ g.fillStyle=accent; g.fillRect(0,20,512,10); }
+  g.fillStyle=css('--ink'); g.font='600 44px "Instrument Sans", sans-serif'; g.textAlign='center'; g.fillText(a,256,70);
+  g.fillStyle=css('--ink-2'); g.font='36px "IBM Plex Mono", monospace'; g.fillText(b,256,116);
+  const tex=new THREE.CanvasTexture(c); const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}));
+  s.scale.set(11,3.2,1); s.position.set(x,y,z); s.renderOrder=10; return s;
+}
+['fc-pattern','fc-depth','fc-spacing','fc-amp','fc-freq','fc-mat'].forEach(id=>$(id).addEventListener('input',renderFacade));
+$('in-labels').addEventListener('change',renderInterior);
+$('in-units').addEventListener('change',renderInterior);
+function setIView(mode){
+  st.iview=mode; $('iv-plan').setAttribute('aria-pressed',mode==='plan'); $('iv-orbit').setAttribute('aria-pressed',mode!=='plan');
+  $('int-hint').textContent=mode==='plan'?'Drag to pan · scroll to zoom':'Drag to rotate · scroll to zoom';
+  if(iview&&mode!=='plan'){ iview.theta=-1.05; iview.phi=.82; iview.radius=150; }
+  st.ifit=true;
+  renderInterior();
+}
+$('iv-plan').addEventListener('click',()=>setIView('plan'));
+$('iv-orbit').addEventListener('click',()=>setIView('orbit'));
+
+/* ---------- wiring ---------- */
+document.querySelectorAll('#tabs button').forEach(b=>b.addEventListener('click',()=>{st.scheme=b.dataset.s;renderStudies(false);}));
+document.querySelectorAll('#mtabs button').forEach(b=>b.addEventListener('click',()=>{st.mini=b.dataset.s;renderMini();}));
+$('in-exist').addEventListener('change',()=>{st.exist=+$('in-exist').value;regen();renderMini();renderStudies(true);});
+['in-p1','in-p2'].forEach(id=>$(id).addEventListener('input',()=>{renderMini();renderFinance();}));
+document.querySelectorAll('#ftabs button').forEach(b=>b.addEventListener('click',()=>{st.scheme=b.dataset.s;renderStudies(false);}));
+document.querySelectorAll('.fgrid input').forEach(i=>i.addEventListener('input',renderFinance));
+$('f-res').addEventListener('input',renderInterior);
+$('in-green').addEventListener('change',()=>{st.green=$('in-green').checked;regen();renderStudies(true);});
+$('in-strategy').addEventListener('change',()=>{st.strategy=$('in-strategy').value;regen();renderStudies(false);});
+$('in-circ').addEventListener('change',()=>{st.circ=$('in-circ').value;regen();renderStudies(true);});
+$('in-cut').addEventListener('change',()=>{st.cut=$('in-cut').checked;build3D(plans[st.scheme]);});
+const rethemed=()=>{renderMini();renderStudies(true);};
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
+new MutationObserver(rethemed).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+regen(); renderMini(); renderStudies(false);
+
+/* ---------- saved values + scenarios (db) ---------- */
+(function(){
+  const SKIP=new Set(['sc-list','sc-name','in-labels']);
+  const fields=()=>[...document.querySelectorAll('.wrap input[id], .wrap select[id]')].filter(el=>!SKIP.has(el.id)&&!el.closest('#scenarios'));
+  const collect=()=>{ const values={}; fields().forEach(el=>{ values[el.id]=el.type==='checkbox'?el.checked:el.value; }); return {values,scheme:st.scheme,mini:st.mini}; };
+  function apply(state){
+    if(!state||!state.values) return;
+    fields().forEach(el=>{ if(!(el.id in state.values)) return; const v=state.values[el.id]; if(el.type==='checkbox') el.checked=!!v; else el.value=String(v); });
+    st.exist=+$('in-exist').value; st.green=$('in-green').checked; st.strategy=$('in-strategy').value; st.circ=$('in-circ').value; st.cut=$('in-cut').checked;
+    if(['A','B','C','D'].includes(state.scheme)) st.scheme=state.scheme;
+    if(['A','B','C','D'].includes(state.mini)) st.mini=state.mini;
+    st.ifit=true; regen(); renderMini(); renderStudies(false);
+  }
+  const esc=s=>String(s).replace(/[<&"]/g,c=>({'<':'&lt;','&':'&amp;','"':'&quot;'}[c]));
+  const status=s=>{$('sc-status').textContent=s;};
+  const time=()=>new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+  let db=null, ready=false, saveTimer=null, saving=false, pending=false, scenarios=[], armDelete=false, current='', edited=false;
+  const curScen=()=>scenarios.find(s=>s.id===current);
+
+  async function saveWorking(){
+    if(!db) return;
+    if(saving){ pending=true; return; }
+    saving=true;
+    try{ await db.doc('state/working').set({...collect(),scenarioId:current,edited,updatedAt:new Date().toISOString()}); status((curScen()&&edited?'Edited · ':'')+'Saved '+time()); }
+    catch(e){ status(e&&e.code==='quota_exceeded'?'Storage full: delete a scenario':'Couldn\'t save; will retry'); }
+    saving=false;
+    if(pending){ pending=false; saveWorking(); }
+  }
+  const schedule=()=>{ if(!ready) return; clearTimeout(saveTimer); saveTimer=setTimeout(saveWorking,1200); };
+  const changed=()=>{ if(!ready) return; if(current&&!edited){ edited=true; renderList(); } status('Saving…'); schedule(); };
+  const wrap=document.querySelector('.wrap');
+  ['input','change'].forEach(ev=>wrap.addEventListener(ev,e=>{ const el=e.target; if(el.id&&!SKIP.has(el.id)&&!el.closest('#scenarios')) changed(); }));
+  ['tabs','mtabs','ftabs'].forEach(id=>$(id).addEventListener('click',e=>{ if(e.target.closest('button')) changed(); }));
+
+  function renderList(){
+    const sel=$('sc-list'), c=curScen();
+    sel.innerHTML=`<option value="">${current&&!c?'Working draft':'Working draft'}</option>`+scenarios.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.id===current&&edited?' (edited)':''}</option>`).join('');
+    sel.value=c?current:'';
+    sel.disabled=!ready;
+    $('sc-update').disabled=!c; $('sc-delete').disabled=!c;
+    $('sc-update').textContent=c?`Update "${c.name}"`:'Update scenario';
+    armDelete=false; $('sc-delete').textContent='Delete';
+  }
+  const closePop=()=>{ $('sc-pop').hidden=true; $('sc-menu').setAttribute('aria-expanded','false'); };
+  $('sc-menu').addEventListener('click',e=>{ e.stopPropagation(); const open=$('sc-pop').hidden; $('sc-pop').hidden=!open; $('sc-menu').setAttribute('aria-expanded',String(open)); if(open) $('sc-name').focus(); });
+  document.addEventListener('click',e=>{ if(!$('sc-pop').hidden&&!e.target.closest('#scenarios')) closePop(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('sc-pop').hidden){ closePop(); $('sc-menu').focus(); } });
+
+  $('sc-list').addEventListener('change',()=>{
+    const id=$('sc-list').value;
+    if(!id){ current=''; edited=false; renderList(); status('Working draft'); schedule(); return; }
+    const s=scenarios.find(x=>x.id===id); if(!s) return;
+    current=id; edited=false; apply(s); renderList(); status(`Loaded "${s.name}"`); schedule();
+  });
+  $('sc-save').addEventListener('click',async()=>{
+    const name=$('sc-name').value.trim(); if(!name){ status('Name the scenario first'); $('sc-name').focus(); return; }
+    $('sc-save').disabled=true;
+    try{ const ref=await db.collection('scenarios').add({name,...collect(),savedAt:new Date().toISOString()});
+      current=ref.id; edited=false; $('sc-name').value=''; closePop(); status(`Saved "${name}"`); schedule(); renderList(); }
+    catch(e){ status(e&&e.code==='quota_exceeded'?'Storage full: delete a scenario':'Couldn\'t save; try again'); }
+    $('sc-save').disabled=false;
+  });
+  $('sc-name').addEventListener('keydown',e=>{ if(e.key==='Enter') $('sc-save').click(); });
+  $('sc-update').addEventListener('click',async()=>{
+    const s=curScen(); if(!s) return;
+    try{ await db.doc('scenarios/'+s.id).set({name:s.name,...collect(),savedAt:new Date().toISOString()}); edited=false; closePop(); status(`Updated "${s.name}"`); schedule(); renderList(); }
+    catch(e){ status('Couldn\'t update; try again'); }
+  });
+  $('sc-delete').addEventListener('click',async()=>{
+    const s=curScen(); if(!s) return;
+    if(!armDelete){ armDelete=true; $('sc-delete').textContent=`Confirm delete`; return; }
+    try{ await db.doc('scenarios/'+s.id).delete(); current=''; edited=false; closePop(); status(`Deleted "${s.name}"`); schedule(); }
+    catch(e){ status('Couldn\'t delete; try again'); }
+  });
+
+  (async()=>{
+    db=window.claude&&window.claude.use?await window.claude.use('db'):null;
+    if(!db){ status('Saving unavailable in this view'); return; }
+    let resumed=false;
+    try{ const w=await db.doc('state/working').get(); if(w.exists){ const d=w.data(); apply(d); current=d.scenarioId||''; edited=!!d.edited; resumed=true; } }
+    catch(e){ status('Couldn\'t load last session'); }
+    ready=true; $('sc-menu').disabled=false; renderList();
+    status(resumed?'Resumed last session':'Changes save automatically');
+    db.collection('scenarios').orderBy('savedAt','desc').onSnapshot(snap=>{
+      scenarios=snap.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.values&&typeof s.name==='string');
+      renderList();
+    },e=>{ if(e.code!=='revoked') status('Scenario list stopped updating; reload'); });
+  })();
+})();
+})();
+</script>
