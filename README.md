@@ -1,17 +1,36 @@
 # 725 Grand Street — Proposed New Development
 
-Zoning feasibility, massing studies, floor plans, parametric façade, interiors and pro forma for
-725 Grand Street, Brooklyn (Block 2783 Lot 43, C4-4A, former IH designated area), including a
-zoning lot merger with 727 Grand Street and IH certificates.
+Zoning feasibility, massing studies A–D, floor plans, zoning deduction plans, parametric façade,
+furnished interiors and the pro forma (sell-out, costs, 70% LTC returns, investor and developer)
+for 725 Grand Street, Brooklyn — Block 2783 Lot 43, C4-4A, former Greenpoint/Williamsburg
+Inclusionary Housing designated area — including a zoning lot merger with 727 Grand Street and
+Inclusionary Housing certificates.
 
-- `site/index.html` — the whole presentation (single file; three.js from cdnjs).
-- Live working copy (with comments + saved scenarios): https://claude.ai/artifact/XEjoY4B3jVJkknZkYKCph7
-- Saved scenarios / autosave only work inside claude.ai (artifact db). Opened locally or on another
-  host the page shows "Saving unavailable" — plan: browser storage or Neon + Vercel function.
+## Layout
+- `public/index.html` — the whole presentation, one file (three.js from cdnjs).
+- `api/` — Vercel serverless functions: `scenarios` (list/save/delete), `state` (autosaved inputs), `auth` (edit-key check).
+- `scripts/init_db.mjs` — creates the `grand725` schema in Neon. Safe to re-run.
+
+## Where values are saved
+The page picks a backend at load:
+1. **claude.ai artifact** — the artifact's own database (what the shared link uses).
+2. **This site** — Neon Postgres through `/api`. Reads are public; writing needs the `x-edit-key` header, which the page asks for once and remembers.
+3. **Anywhere else** (opening `public/index.html` from disk) — the browser's local storage.
+
+## Environment variables (set in Vercel)
+| Name | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Neon connection string (same project as the CRM; separate `grand725` schema) |
+| `EDIT_KEY` | Shared secret needed to save scenarios. Without it the site is read-only. |
+
+## Setup
+```bash
+npm install
+node scripts/init_db.mjs ../CRM/.env   # create the grand725 schema
+```
+Deploy: push to Bitbucket, import the repo in Vercel (no build step; output is `public/`), add the two
+environment variables.
 
 ## Iterations
-Each milestone is a git tag (`git tag -l`). Restore one with `git checkout <tag> -- site/index.html`.
-
-## Later
-- Bitbucket repo (id3d-team) + static Vercel deploy (`vercel.json` → `site/`), same as st-nicks-ih-map.
-- Shared scenarios on Neon Postgres.
+Milestones are git tags (`git tag -l`); restore one with `git checkout <tag> -- public/index.html`.
+The live working copy with comments is the claude.ai artifact: https://claude.ai/artifact/XEjoY4B3jVJkknZkYKCph7

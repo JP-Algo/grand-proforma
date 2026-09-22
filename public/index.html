@@ -167,6 +167,17 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 @media (max-width:860px){.fac .controls{border-right:0;border-bottom:1px solid var(--rule)}}
 .field input[type="range"]{padding:0;accent-color:var(--accent)}
 .rel{position:relative;min-width:0}
+.tiles .tile{position:relative}
+.stats .sub{font-size:.7rem;color:var(--ink-2);line-height:1.25}
+.tiles .has-tip{cursor:help}
+.tiles .has-tip:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tiles .ti{display:inline-grid;place-items:center;width:13px;height:13px;border-radius:50%;border:1px solid var(--ink-2);font:600 9px/1 var(--body);text-transform:none;letter-spacing:0;vertical-align:1px;margin-left:3px}
+.tiles .tip{position:absolute;left:0;top:calc(100% - 6px);z-index:25;width:min(340px,86vw);padding:10px 12px;background:var(--ink);color:var(--paper);font:400 .8rem/1.45 var(--body);border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .12s,transform .12s,visibility .12s;pointer-events:none}
+.tiles .tip b{color:var(--paper)}
+.tiles .has-tip:hover .tip,.tiles .has-tip:focus .tip{opacity:1;visibility:visible;transform:none}
+@media (prefers-reduced-motion:reduce){.tiles .tip{transition:none}}
+.sticky-foot td{position:sticky;bottom:0;z-index:1;background:var(--paper);box-shadow:0 -1.5px 0 var(--ink)}
+#sellout thead th{position:sticky;top:0;z-index:1}
 .titlebar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px 24px;flex-wrap:wrap}
 .scen{position:fixed;top:10px;right:12px;z-index:40;display:grid;grid-template-columns:auto auto;gap:2px 5px;align-items:center;padding:5px 6px 4px;background:color-mix(in srgb,var(--paper) 92%,transparent);border:1px solid var(--rule);border-radius:4px;box-shadow:0 2px 10px rgba(0,0,0,.08);backdrop-filter:blur(6px)}
 .scen > .field{display:block}
@@ -437,7 +448,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   <div class="sheet-body">
     <h2>The four schemes side by side</h2>
     <div class="tbl"><table>
-      <thead><tr><th>Scheme</th><th>FAR cap</th><th>ZFA used</th><th>Gross above grade</th><th>Height · stories</th><th>Floor-to-floor</th><th>Units</th><th>Retail sf</th><th>Outdoor sf</th><th>Efficiency</th></tr></thead>
+      <thead><tr><th>Scheme</th><th>FAR cap</th><th>ZFA used</th><th>Gross above grade</th><th>Height · stories</th><th>Floor-to-floor</th><th>Units</th><th>Retail sf</th><th>Outdoor sf</th><th>Efficiency</th><th>Eff. + outdoor</th><th>Loss factor</th></tr></thead>
       <tbody id="cmp"></tbody>
     </table></div>
     <ul class="tight">
@@ -535,6 +546,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
       <div class="tbl" style="max-height:440px;overflow:auto"><table>
         <thead><tr><th>Floor</th><th>Unit</th><th>Sellable sf</th><th>Price</th><th>$/sf</th></tr></thead>
         <tbody id="unit-body"></tbody>
+        <tfoot id="unit-foot" class="sticky-foot"></tfoot>
       </table></div>
       <div class="panel" style="display:grid;gap:10px;align-content:start">
         <span class="label">Ground-floor retail condo</span>
@@ -612,10 +624,61 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   </div>
 </section>
 
+<section class="sheet" id="invest">
+  <div class="sheet-tag"><span class="no">F-400</span><span class="label">Investors</span></div>
+  <div class="sheet-body">
+    <h2>Investment opportunity</h2>
+    <p>What an outside investor receives for an equity check in the selected scheme, using the same revenue, cost and loan assumptions as F-100 to F-300 and a standard waterfall. First, all equity gets its capital back. Second, all equity earns a preferred return. Third, remaining profit is split, with the sponsor taking a promote on the investor's share. The investor ranks pari passu with the rest of the equity and after the construction loan.</p>
+    <div class="fgrid">
+      <label class="field"><span class="label">Investment $</span><input id="iv-amt" type="number" step="100000" value="2000000"></label>
+      <label class="field"><span class="label">Preferred return %/yr</span><input id="iv-pref" type="number" step="0.5" value="8"></label>
+      <label class="field"><span class="label">Sponsor promote above pref %</span><input id="iv-promote" type="number" step="5" value="30"></label>
+    </div>
+    <div class="tiles" id="iv-tiles"></div>
+    <div class="below">
+      <div class="tbl"><table>
+        <thead><tr><th>Waterfall step</th><th>Whole equity</th><th>This investor</th></tr></thead>
+        <tbody id="iv-water"></tbody>
+      </table></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Condo $/sf</th><th>Investor gets back</th><th>Profit</th><th>Multiple</th><th>Annualized</th></tr></thead>
+        <tbody id="iv-sens"></tbody>
+      </table></div>
+    </div>
+    <p class="note" id="iv-note"></p>
+    <p class="note">Illustrative only: this is not an offer to sell securities or investment advice. Any raise needs securities counsel, an operating agreement and a private placement memorandum. Annualized returns are simplified: capital in on day one, out at the end of the project period.</p>
+  </div>
+</section>
+
+<section class="sheet" id="developer">
+  <div class="sheet-tag"><span class="no">F-500</span><span class="label">Developer</span></div>
+  <div class="sheet-body">
+    <h2>What the developer makes</h2>
+    <p>The developer's income has three parts: a development fee (already inside soft costs), a share of the waterfall on the developer's own capital (no promote on it), and the promote on every outside investor's capital. The equity stack shows how much still has to be raised after the bank loan, the $2M investor, and the developer's cash and land.</p>
+    <div class="fgrid">
+      <label class="field"><span class="label">Developer cash $</span><input id="dv-cash" type="number" step="50000" value="500000"></label>
+      <label class="field"><span class="label">Development fee % of hard</span><input id="dv-fee" type="number" step="0.5" value="3"></label>
+      <label class="check" style="align-self:end;padding-bottom:6px"><input id="dv-land" type="checkbox" checked> Land contributed as equity</label>
+    </div>
+    <div class="tiles" id="dv-tiles"></div>
+    <div class="below">
+      <div class="tbl"><table>
+        <thead><tr><th>Capital stack</th><th>$</th><th>% of cost</th></tr></thead>
+        <tbody id="dv-stack"></tbody>
+      </table></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Condo $/sf</th><th>Dev. fee</th><th>On own capital</th><th>Promote</th><th>Total take</th><th>Profit</th></tr></thead>
+        <tbody id="dv-sens"></tbody>
+      </table></div>
+    </div>
+    <p class="note" id="dv-note"></p>
+  </div>
+</section>
+
 <section class="sheet" id="tools">
   <div class="sheet-tag"><span class="no">G-001</span><span class="label">Software</span></div>
   <div class="sheet-body">
-    <h2>three.js for showing it, Rhino for designing it</h2>
+    <h2>Placemark for additional architectural plans</h2>
     <div class="tools">
       <div><span class="label">Keep in three.js</span><span class="pick">This page</span><p class="note">Zoning logic, FAR ledgers and fast what-ifs across schemes. It runs in any browser. It can also show furnished interiors: walls, doors and fixtures as simple blocks.</p></div>
       <div><span class="label">Move to Rhino 8</span><span class="pick">Design authoring</span><p class="note">Dimensioned plans with real wall thickness, a structural grid, stair and elevator geometry checked against code, section cuts, and DWG export an architect can use. Rhino MCP lets me model directly in your file.</p></div>
@@ -630,6 +693,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <h2>What would firm up these numbers</h2>
     <ol class="steps">
       <li><span><b>727 Grand CO or survey</b> to settle 4,133 vs 6,042 sf, which moves the transfer by about 1,900 sf.</span></li>
+      <li><span><b>Inspect the basement and existing structure</b> at 725 Grand to find out how much it will cost to remove.</span></li>
       <li><span><b>Land-use counsel</b> to confirm the certificate path gets 5.01 FAR and 115 ft, and to find vested generating sites in CD 1 or within ½ mile.</span></li>
       <li><span><b>Expediter</b> to check the easement-side windows, the corridor exemption stacking, the loggia exemption, and the E-232 requirements.</span></li>
       <li><span><b>Pick a scheme</b>, then do interior layouts in Rhino and publish them back to this page.</span></li>
@@ -863,12 +927,12 @@ function renderStudies(keepFloor){
   $('a-bonus').textContent=fmt(D0.D.cert)+' sf';
   $('a-bonus-p').textContent=`Bonus to FAR 5.01 on 5,101 sf, bought from vested generating sites. About ${fmt(D0.D.cert/1.25)} sf of affordable floor area at the 1.25 ratio.`;
   $('m-transfer').textContent=fmt(D0.C.tr)+' sf'; $('m-bonus').textContent=fmt(D0.D.cert)+' sf'; $('m-aff').textContent=fmt(D0.D.cert/1.25)+' sf';
-  const pd=plans.D; if(pd){$('a-total').textContent=`${pd.N} st · ${Math.round(pd.height)} ft`; $('a-total-p').textContent=`${fmt(pd.zfa)} zoning sf, ${fmt(pd.gross)} sf gross above grade, ${pd.units} units, ${fmt(pd.retail)} sf retail, ${fmt(pd.outdoor)} sf outdoor.`;}
+  const pd=plans.D; if(pd){$('a-total').textContent=`${pd.N} story · ${Math.round(pd.height)} ft`; $('a-total-p').textContent=`${fmt(pd.zfa)} zoning sf, ${fmt(pd.gross)} sf gross above grade, ${pd.units} units, ${fmt(pd.retail)} sf retail, ${fmt(pd.outdoor)} sf outdoor.`;}
   const s=p.s;
   $('stats').innerHTML=[
     ['Height',`${Math.round(p.height)} ft`],['Stories',p.N],['Floor-to-floor',`${ft(p.g)} / ${ft(p.typ)}`],['Units',p.units],
-    ['ZFA / cap',`${fmt(p.zfa)} / ${fmt(s.cap)}`],['Gross above grade',fmt(p.gross)],['Outdoor sf',fmt(p.outdoor)],['Efficiency',Math.round(p.net/p.gross*100)+'%']
-  ].map(([l,v])=>`<div><span class="label">${l}</span><span class="v num">${v}</span></div>`).join('');
+    ['ZFA / cap',`${fmt(p.zfa)} / ${fmt(s.cap)}`],['Gross above grade',fmt(p.gross)],['Outdoor sf',fmt(p.outdoor)],['Efficiency',Math.round((p.net+p.retail)/p.gross*100)+'%',`+ outdoor ${Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)}% · loss factor ${Math.round((p.gross-p.net-p.retail)/p.gross*100)}%`]
+  ].map(([l,v,sub])=>`<div><span class="label">${l}</span><span class="v num">${v}</span>${sub?`<span class="sub num">${sub}</span>`:''}</div>`).join('');
   $('floors').innerHTML=p.floors.slice().reverse().map(f=>`<button type="button" id="fl-${st.scheme}-${f.n}" data-f="${f.n}" aria-pressed="${f.n===st.floor}">${f.n==='C'?'Cellar':f.n===1?'Ground':'Fl '+f.n}</button>`).join('');
   $('floors').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{st.floor=b.dataset.f==='C'?'C':+b.dataset.f; renderStudies(true);}));
   $('sched').innerHTML=p.floors.slice().reverse().map(f=>`<tr class="${f.n===st.floor?'hi':''}"><td>${f.n==='C'?'Cellar':f.n===1?'Ground':f.n}</td><td class="num">${f.cellar?"−12'":Math.round(f.elev)+"'"}</td><td>${f.prog}</td><td class="num">${fmt(f.gross)}</td><td class="num">${f.cellar?'0':fmt(f.counts)}</td><td class="num">${fmt(f.cellar?f.gross:f.exempt)}</td><td class="num">${f.units||'—'}</td><td class="num">${f.outdoor?fmt(f.outdoor):'—'}</td></tr>`).join('')
@@ -884,7 +948,7 @@ function renderStudies(keepFloor){
     D:'The largest scheme: 115 ft, certificate bonus, easement windows, loggias on every floor, and a roof lounge and deck.'
   };
   $('scheme-note').textContent=notes[s.k]+(p.unused>50?` About ${fmt(p.unused/(st.green?1.05:1))} sf doesn't fit inside the envelope.`:'');
-  $('cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${fmt(q.s.cap)}</td><td class="num">${fmt(q.zfa)}</td><td class="num">${fmt(q.gross)}</td><td class="num">${Math.round(q.height)}' · ${q.N}</td><td class="num">${ft(q.typ)}</td><td class="num">${q.units}</td><td class="num">${fmt(q.retail)}</td><td class="num">${fmt(q.outdoor)}</td><td class="num">${Math.round(q.net/q.gross*100)}%</td></tr>`;}).join('');
+  $('cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${fmt(q.s.cap)}</td><td class="num">${fmt(q.zfa)}</td><td class="num">${fmt(q.gross)}</td><td class="num">${Math.round(q.height)}' · ${q.N}</td><td class="num">${ft(q.typ)}</td><td class="num">${q.units}</td><td class="num">${fmt(q.retail)}</td><td class="num">${fmt(q.outdoor)}</td><td class="num">${Math.round((q.net+q.retail)/q.gross*100)}%</td><td class="num">${Math.round((q.net+q.retail+q.outdoor)/(q.gross+q.outdoor)*100)}%</td><td class="num">${Math.round((q.gross-q.net-q.retail)/q.gross*100)}%</td></tr>`;}).join('');
   renderPlan(p); build3D(p); renderFinance(); renderZPlan(); renderFacade(); renderInterior();
 }
 
@@ -929,15 +993,117 @@ function fin(p,o={}){
   return {bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
     margin:profit/total, roe:profit/equity, em, irr:em>0?Math.pow(em,12/Math.max(1,v('f-months')))-1:-1};
 }
+function investorOf(F,o={}){
+  const val=id=>(o[id]!=null?o[id]:(+$(id).value||0));
+  const I=Math.max(0,val('iv-amt')), E=F.equity, months=Math.max(1,+$('f-months').value||36);
+  const s=E>0?Math.min(1,I/E):0, invIn=E>0?Math.min(I,E):0;
+  const dist=Math.max(0,E+F.profit);
+  const capBack=Math.min(E,dist), invCap=s*capBack;
+  const prefAll=E*(Math.pow(1+val('iv-pref')/100,months/12)-1);
+  const afterCap=Math.max(0,dist-E), prefPaid=Math.min(afterCap,prefAll), invPref=s*prefPaid;
+  const resid=Math.max(0,afterCap-prefAll), promote=val('iv-promote')/100;
+  const invRes=s*resid*(1-promote), sponsorPromote=s*resid*promote;
+  const total=invCap+invPref+invRes, profit=total-invIn, em=invIn>0?total/invIn:0;
+  return {I,invIn,E,s,dist,capBack,invCap,prefAll,prefPaid,invPref,resid,invRes,sponsorPromote,total,profit,em,months,
+    irr:em>0?Math.pow(em,12/months)-1:-1};
+}
+function renderInvestor(p){
+  if(!$('iv-tiles')) return;
+  const F=fin(p), V=investorOf(F), neg=V.profit<0?' neg':'';
+  $('iv-tiles').innerHTML=[
+    ['Investment',mm(V.invIn),'',`The investor's equity check${V.I>V.E?`, capped at the project's total equity of ${mm(V.E)}`:''}.`],
+    ['Share of project equity',pct(V.s),'',`Investment ${mm(V.invIn)} ÷ total equity ${mm(V.E)} = <b>${pct(V.s)}</b>. The investor receives this share of each waterfall step.`],
+    ['Projected distributions',mm(V.total),neg,`<b>Step 0, cash to equity:</b> the project nets ${mm(F.revenue)} after sales costs. After repaying all costs (the bank loan included), what's left for equity is equity ${mm(V.E)} + profit ${mm(F.profit)} = <b>${mm(V.dist)}</b>.<br><b>1, capital back:</b> ${mm(V.capBack)} to all equity; investor share ${pct(V.s)} = <b>${mm(V.invCap)}</b>.<br><b>2, preferred return:</b> ${$('iv-pref').value}%/yr compounded over ${V.months} mo on ${mm(V.E)} = ${mm(V.prefAll)} owed; ${mm(V.prefPaid)} paid (limited to the ${mm(Math.max(0,V.dist-V.E))} left after capital). Investor share ${pct(V.s)} = <b>${mm(V.invPref)}</b>.<br><b>3, profit above the pref:</b> ${mm(V.dist)} − ${mm(V.capBack)} − ${mm(V.prefPaid)} = ${mm(V.resid)}. Investor share ${pct(V.s)} × ${100-(+$('iv-promote').value||0)}% after promote = <b>${mm(V.invRes)}</b>.<br><b>Total:</b> ${mm(V.invCap)} + ${mm(V.invPref)} + ${mm(V.invRes)} = <b>${mm(V.total)}</b>.`],
+    ['Investor profit',mm(V.profit),neg,`Distributions ${mm(V.total)} − investment ${mm(V.invIn)} = <b>${mm(V.profit)}</b>.`],
+    ['Equity multiple',V.em.toFixed(2)+'×',neg,`Distributions ${mm(V.total)} ÷ investment ${mm(V.invIn)} = <b>${V.em.toFixed(2)}×</b>.`],
+    ['Annualized (simplified)',pct(V.irr),neg,`${V.em.toFixed(2)}^(12/${V.months}) − 1 = <b>${pct(V.irr)}</b>/yr, assuming capital in at the start and out at the end of ${V.months} months.`],
+    ['Hold period',V.months+' months','',`The "Project length" input in F-300: predevelopment, construction and sell-out.`],
+    ['Sponsor promote on this capital',mm(V.sponsorPromote),'',`Profit above the preferred return = cash to equity ${mm(V.dist)} − capital back ${mm(V.capBack)} − pref paid ${mm(V.prefPaid)} = ${mm(V.resid)}. Investor's share ${pct(V.s)} × ${mm(V.resid)} = ${mm(V.s*V.resid)}; the sponsor takes ${$('iv-promote').value}% of that = <b>${mm(V.sponsorPromote)}</b>.`]
+  ].map(tileHTML).join('');
+  const row=(l,a,b,cls='')=>`<tr class="${cls}"><td>${l}</td><td class="num">${a}</td><td class="num">${b}</td></tr>`;
+  $('iv-water').innerHTML=
+    row('Equity invested',money(V.E),money(V.invIn))+
+    row('Cash available after loan repayment',money(V.dist),money(V.s*V.dist))+
+    row('1 · Return of capital',money(V.capBack),money(V.invCap))+
+    row(`2 · Preferred return (${$('iv-pref').value}%/yr, ${V.months} mo)`,money(V.prefPaid)+(V.prefPaid<V.prefAll-1?` of ${money(V.prefAll)}`:''),money(V.invPref))+
+    row(`3 · Profit above pref (investor ${100-(+$('iv-promote').value||0)}% / sponsor ${+$('iv-promote').value||0}%)`,money(V.resid),money(V.invRes))+
+    row('Total to investor','',money(V.total),'tot')+
+    row('Investor profit','',money(V.profit),'tot');
+  const psf=+$('f-res').value||0;
+  $('iv-sens').innerHTML=[-200,-100,0,100,200,300].map(d=>{
+    const pr=psf+d, G=fin(p,{'f-res':pr}), W=investorOf(G), c=W.profit<0?'neg':'';
+    return `<tr class="${d===0?'hi':''}"><td class="num">$${fmt(pr)}</td><td class="num ${c}">${mm(W.total)}</td><td class="num ${c}">${mm(W.profit)}</td><td class="num ${c}">${W.em.toFixed(2)}×</td><td class="num ${c}">${pct(W.irr)}</td></tr>`;
+  }).join('');
+  const notes=[];
+  if(V.I>V.E) notes.push(`The investment is larger than the project's total equity (${mm(V.E)}), so it's capped at that amount.`);
+  if(F.profit<0) notes.push(`At the current inputs the project loses money, so the investor gets back ${mm(V.total)} on ${mm(V.invIn)}. The sensitivity table shows the condo price needed for a positive return.`);
+  else if(V.prefPaid<V.prefAll-1) notes.push('Profit doesn\'t fully cover the preferred return, so there is no profit split and no sponsor promote.');
+  $('iv-note').textContent=notes.join(' ');
+  renderDeveloper(p);
+}
+function developerOf(F,o={}){
+  const val=id=>(o[id]!=null?o[id]:(+$(id).value||0));
+  const E=F.equity, months=Math.max(1,+$('f-months').value||36);
+  const land=$('dv-land').checked?F.land:0, cash=Math.max(0,val('dv-cash'));
+  const devCap=Math.min(E,cash+land), inv=Math.min(Math.max(0,val('iv-amt')),Math.max(0,E-devCap));
+  const gap=Math.max(0,E-devCap-inv), outside=inv+gap, sOut=E>0?outside/E:0, sDev=E>0?devCap/E:0;
+  const dist=Math.max(0,E+F.profit), capBack=Math.min(E,dist);
+  const prefAll=E*(Math.pow(1+val('iv-pref')/100,months/12)-1), afterCap=Math.max(0,dist-E);
+  const prefPaid=Math.min(afterCap,prefAll), resid=Math.max(0,afterCap-prefAll), promoteRate=val('iv-promote')/100;
+  const onOwn=sDev*(capBack+prefPaid+resid), promote=sOut*resid*promoteRate;
+  const fee=F.hard*val('dv-fee')/100;
+  const take=fee+onOwn+promote, profit=take-devCap;
+  return {E,land,cash,devCap,inv,gap,sDev,sOut,onOwn,promote,fee,take,profit,months};
+}
+function renderDeveloper(p){
+  if(!$('dv-tiles')) return;
+  const F=fin(p), V=developerOf(F), neg=V.profit<0?' neg':'';
+  const cashMultiple=V.devCap>0?(V.take/V.devCap):0;
+  $('dv-tiles').innerHTML=[
+    ['Developer cash in',mm(V.cash),'',`The developer's cash for the equity gap, legal documents and startup costs.`],
+    ['Land contributed',mm(V.land),'',V.land?`The land basis from F-200, credited as the developer's equity instead of being bought with investor cash.`:'The land isn\'t credited as equity, so it has to be bought with equity cash.'],
+    ['Outside equity still to raise',mm(V.gap),V.gap>0?' neg':'',`Total equity ${mm(V.E)} − developer capital ${mm(V.devCap)} − investor ${mm(V.inv)} = <b>${mm(V.gap)}</b> that still has to come from more LPs, preferred equity or mezzanine debt, or a higher loan-to-cost.`],
+    ['Development fee',mm(V.fee),'',`${$('dv-fee').value}% × hard costs ${mm(F.hard)} = <b>${mm(V.fee)}</b>. It's already counted inside soft costs and paid during construction.`],
+    ['Waterfall on own capital',mm(V.onOwn),'',`The developer's ${pct(V.sDev)} share of equity receives the same capital back, pref and profit as investors, with no promote: <b>${mm(V.onOwn)}</b>.`],
+    ['Promote on investors',mm(V.promote),'',`${$('iv-promote').value}% of profit above the pref on all outside capital (${pct(V.sOut)} of equity) = <b>${mm(V.promote)}</b>.`],
+    ['Total developer take',mm(V.take),neg,`Fee ${mm(V.fee)} + own-capital distributions ${mm(V.onOwn)} + promote ${mm(V.promote)} = <b>${mm(V.take)}</b>.`],
+    ['Profit over capital in',mm(V.profit),neg,`Total take ${mm(V.take)} − developer capital in (cash${V.land?' + land':''}) ${mm(V.devCap)} = <b>${mm(V.profit)}</b>.`],
+    ['Multiple on capital in',cashMultiple.toFixed(2)+'×',neg,`Total take ${mm(V.take)} ÷ capital in ${mm(V.devCap)} = <b>${cashMultiple.toFixed(2)}×</b>.`]
+  ].map(tileHTML).join('');
+  const T=F.total, r=(l,x,cls='')=>`<tr class="${cls}"><td>${l}</td><td class="num">${money(x)}</td><td class="num">${pct(x/T)}</td></tr>`;
+  $('dv-stack').innerHTML=r(`Construction loan (${$('f-ltc').value}% LTC)`,F.loan)+r('Equity investor',V.inv)+r('Additional outside equity needed',V.gap,V.gap>0?'hi':'')+r('Developer cash',Math.min(V.cash,V.devCap))+r('Developer land contribution',Math.max(0,V.devCap-Math.min(V.cash,V.devCap)))+r('Total project cost',T,'tot');
+  const psf=+$('f-res').value||0;
+  $('dv-sens').innerHTML=[-200,-100,0,100,200,300].map(d=>{
+    const pr=psf+d, G=fin(p,{'f-res':pr}), W=developerOf(G), c=W.profit<0?'neg':'';
+    return `<tr class="${d===0?'hi':''}"><td class="num">$${fmt(pr)}</td><td class="num">${mm(W.fee)}</td><td class="num">${mm(W.onOwn)}</td><td class="num">${mm(W.promote)}</td><td class="num ${c}">${mm(W.take)}</td><td class="num ${c}">${mm(W.profit)}</td></tr>`;
+  }).join('');
+  const n=[];
+  if(V.gap>0) n.push(`Total equity is ${mm(V.E)} (30% of cost). After the ${mm(V.inv)} investor and ${mm(V.devCap)} from the developer, ${mm(V.gap)} still has to come from more LPs on the same terms, preferred equity or mezzanine debt, or a higher loan-to-cost. That gap is modeled here as more LP capital earning the same pref and promote.`);
+  else n.push('The investor and developer capital fully cover the equity requirement.');
+  n.push('The development fee is already counted inside soft costs, so it isn\'t double-counted. Lenders often defer part of it until completion.');
+  $('dv-note').textContent=n.join(' ');
+}
+function tileHTML([l,x,c,tip]){
+  return `<div class="tile${tip?' has-tip':''}"${tip?' tabindex="0"':''}><span class="label">${l}${tip?' <span class="ti" aria-hidden="true">i</span>':''}</span><span class="v num${c||''}">${x}</span>${tip?`<span class="tip" role="tooltip">${tip}</span>`:''}</div>`;
+}
+['mouseover','focusin'].forEach(ev=>document.addEventListener(ev,e=>{
+  const host=e.target.closest&&e.target.closest('.has-tip'); if(!host) return;
+  const tip=host.querySelector('.tip'); if(!tip) return;
+  const r=host.getBoundingClientRect(), w=Math.min(340,window.innerWidth*.86);
+  if(r.left+w>window.innerWidth-12){ tip.style.left='auto'; tip.style.right='0'; } else { tip.style.left='0'; tip.style.right='auto'; }
+}));
 function renderFinance(){
   const p=plans[st.scheme]; if(!p||!$('f-res')) return;
   document.querySelectorAll('#ftabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
   const F=fin(p), units=unitsOf(p), psf=+$('f-res').value||0;
   $('rev-tiles').innerHTML=[
-    ['Condo sellable sf',fmt(p.net)],['Gross condo sales',mm(F.resGross)],['Retail condo value',mm(F.retVal)],['Net revenue after sales costs',mm(F.revenue)]
-  ].map(([l,x])=>`<div><span class="label">${l}</span><span class="v num">${x}</span></div>`).join('');
-  $('unit-body').innerHTML=units.slice().reverse().map(u=>`<tr><td class="num">${u.floor}</td><td>${u.label}</td><td class="num">${fmt(u.sf)}</td><td class="num">${money(u.sf*psf)}</td><td class="num">$${fmt(psf)}</td></tr>`).join('')
-    +`<tr class="tot"><td colspan="2">${units.length} units</td><td class="num">${fmt(p.net)}</td><td class="num">${money(p.net*psf)}</td><td class="num">avg ${money(p.net*psf/Math.max(1,units.length))}</td></tr>`;
+    ['Condo sellable sf',fmt(p.net),'',`The sum of every unit's area in scheme ${p.s.k}'s plans (${p.units} units), measured to exterior walls and unit centerlines. It excludes loggias, terraces, corridors, core, lobby, amenity and retail.`],
+    ['Gross condo sales',mm(F.resGross),'',`Sellable ${fmt(p.net)} sf × $${fmt(+$('f-res').value||0)}/sf${(+$('f-out').value||0)?` + private outdoor ${fmt(F.privOut)} sf × $${$('f-out').value}/sf`:''} = <b>${mm(F.resGross)}</b>.`],
+    ['Retail condo value',mm(F.retVal),'',`Rent ${fmt(p.retail)} sf × $${$('f-rent').value} = ${mm(F.rent)}. Less ${$('f-vac').value}% vacancy and ${$('f-opex').value}% non-reimbursed opex = NOI ${money(F.noi)}. ÷ ${$('f-cap').value}% cap rate = <b>${mm(F.retVal)}</b>.`],
+    ['Net revenue after sales costs',mm(F.revenue),'',`Condo sales ${mm(F.resGross)} × (1 − ${$('f-scres').value}%) = ${mm(F.resNet)}, plus retail ${mm(F.retVal)} × (1 − ${$('f-scret').value}%) = ${mm(F.retNet)}. Total <b>${mm(F.revenue)}</b>.`]
+  ].map(tileHTML).join('');
+  $('unit-body').innerHTML=units.slice().reverse().map(u=>`<tr><td class="num">${u.floor}</td><td>${u.label}</td><td class="num">${fmt(u.sf)}</td><td class="num">${money(u.sf*psf)}</td><td class="num">$${fmt(psf)}</td></tr>`).join('');
+  $('unit-foot').innerHTML=`<tr class="tot"><td colspan="2">${units.length} units · avg ${short$(p.net*psf/Math.max(1,units.length))}/unit</td><td class="num">${fmt(p.net)}</td><td class="num">${money(p.net*psf)}</td><td class="num">$${fmt(p.net>0?p.net*psf/p.net:0)}</td></tr>`;
   $('retail-ledger').innerHTML=[
     ['Retail area',fmt(p.retail)+' sf'],['Gross rent @ $'+$('f-rent').value,money(F.rent)],['Less vacancy + non-reimbursed opex',money(F.noi-F.rent)],
   ].map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('')
@@ -956,10 +1122,18 @@ function renderFinance(){
     +row('Total project cost','',F.total,'tot');
   const neg=F.profit<0?' neg':'';
   $('ret-tiles').innerHTML=[
-    ['Total project cost',mm(F.total),''],['Bank loan ('+$('f-ltc').value+'% LTC)',mm(F.loan),''],['Equity required',mm(F.equity),''],
-    ['Profit',mm(F.profit),neg],['Margin on cost',pct(F.margin),neg],['Return on equity',pct(F.roe),neg],['Equity multiple',F.em.toFixed(2)+'×',neg],['Annualized (simplified)',pct(F.irr),neg],
-    ['Break-even condo $/sf','$'+fmt(F.bePsf),''],['Land value for 15% margin',mm(F.residual),F.residual<0?' neg':''],['Sellable ÷ gross',Math.round(p.net/p.gross*100)+'%','']
-  ].map(([l,x,c])=>`<div><span class="label">${l}</span><span class="v num${c}">${x}</span></div>`).join('');
+    ['Total project cost',mm(F.total),'',`Hard costs <b>${mm(F.hard)}</b> + soft costs <b>${mm(F.soft)}</b> + land <b>${mm(F.land)}</b> + air rights &amp; certificates <b>${mm(F.nb+F.certs)}</b> + financing (interest reserve + fees) <b>${mm(F.financing)}</b> = <b>${mm(F.total)}</b>.`],
+    ['Bank loan ('+$('f-ltc').value+'% LTC)',mm(F.loan),'',`Loan-to-cost ${$('f-ltc').value}% × total project cost ${mm(F.total)} = <b>${mm(F.loan)}</b>. The interest reserve is inside the cost, so the loan also funds its own interest.`],
+    ['Equity required',mm(F.equity),'',`Total project cost ${mm(F.total)} − bank loan ${mm(F.loan)} = <b>${mm(F.equity)}</b>, the ${100-(+$('f-ltc').value||0)}% of cost the bank won't fund. It goes in first (land, predevelopment, early construction) before the loan starts drawing. F-500 shows who funds it.`],
+    ['Profit',mm(F.profit),neg,`Net revenue ${mm(F.revenue)} − total project cost ${mm(F.total)} = <b>${mm(F.profit)}</b>. Net revenue = condo sales ${mm(F.resGross)} less ${$('f-scres').value}% sales costs, plus the retail condo ${mm(F.retVal)} less ${$('f-scret').value}% sale costs.`],
+    ['Margin on cost',pct(F.margin),neg,`Profit ${mm(F.profit)} ÷ total project cost ${mm(F.total)} = <b>${pct(F.margin)}</b>. Condo lenders and investors usually look for 15–20%.`],
+    ['Return on equity',pct(F.roe),neg,`Profit ${mm(F.profit)} ÷ equity ${mm(F.equity)} = <b>${pct(F.roe)}</b> over the whole ${$('f-months').value}-month project, not per year.`],
+    ['Equity multiple',F.em.toFixed(2)+'×',neg,`(Equity ${mm(F.equity)} + profit ${mm(F.profit)}) ÷ equity ${mm(F.equity)} = <b>${F.em.toFixed(2)}×</b>. Every $1 of equity comes back as $${F.em.toFixed(2)}.`],
+    ['Annualized (simplified)',pct(F.irr),neg,`Multiple ${F.em.toFixed(2)}× spread over ${$('f-months').value} months: ${F.em.toFixed(2)}^(12/${$('f-months').value}) − 1 = <b>${pct(F.irr)}</b>/yr. Assumes all equity goes in on day one and comes out at the end, so a real IRR will be higher.`],
+    ['Break-even condo $/sf','$'+fmt(F.bePsf),'',`The condo price at which profit = $0: (total cost ${mm(F.total)} − net retail ${mm(F.retNet)}) ÷ (sellable ${fmt(p.net)} sf × (1 − ${$('f-scres').value}% sales costs)) = <b>$${fmt(F.bePsf)}/sf</b>.`],
+    ['Land value for 15% margin',mm(F.residual),F.residual<0?' neg':'',`The most you could pay for the land and still earn a 15% margin on cost: net revenue ${mm(F.revenue)} ÷ 1.15, less all non-land costs and the financing they carry = <b>${mm(F.residual)}</b>. Compare it with your land basis of ${mm(F.land)}.`],
+    ['Building efficiency',Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)+'%','',`(Condo sellable ${fmt(p.net)} sf + retail ${fmt(p.retail)} sf + occupiable outdoor ${fmt(p.outdoor)} sf) ÷ (gross above-grade ${fmt(p.gross)} sf + occupiable outdoor ${fmt(p.outdoor)} sf) = <b>${Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)}%</b>. Outdoor means loggias, setback terraces and roof decks; adding it to both sides keeps the ratio under 100%. Enclosed only: ${Math.round((p.net+p.retail)/p.gross*100)}%. Condo only: ${Math.round(p.net/p.gross*100)}%.`]
+  ].map(tileHTML).join('');
   const T=F.total;
   $('src-body').innerHTML=`<tr><td>Construction loan</td><td class="num">${money(F.loan)}</td><td class="num">${pct(F.loan/T)}</td></tr><tr><td>Equity</td><td class="num">${money(F.equity)}</td><td class="num">${pct(F.equity/T)}</td></tr><tr class="tot"><td>Total</td><td class="num">${money(T)}</td><td class="num">100%</td></tr>`;
   const uses=[['Land',F.land],['Air rights + certificates',F.nb+F.certs],['Hard costs',F.hard],['Soft costs',F.soft],['Financing',F.financing]];
@@ -969,6 +1143,7 @@ function renderFinance(){
   $('sens-body').innerHTML=prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${hards.map(h=>{const m=fin(p,{'f-res':pr,'f-hard':h}).margin;return `<td class="num ${m<0?'cellbad':m>=.15?'cellgood':''}"${pr===psf&&h===hb?' style="font-weight:700;outline:1.5px solid var(--ink);outline-offset:-2px"':''}>${pct(m)}</td>`;}).join('')}</tr>`).join('');
   $('fin-cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; const G=fin(q); const c=G.profit<0?'neg':'';
     return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${mm(G.revenue)}</td><td class="num">${mm(G.total)}</td><td class="num">${mm(G.loan)}</td><td class="num">${mm(G.equity)}</td><td class="num ${c}">${mm(G.profit)}</td><td class="num ${c}">${pct(G.margin)}</td><td class="num ${c}">${G.em.toFixed(2)}×</td><td class="num ${c}">${pct(G.irr)}</td></tr>`;}).join('');
+  renderInvestor(p);
 }
 
 function renderPlan(p){
@@ -1461,7 +1636,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',reth
 new MutationObserver(rethemed).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 regen(); renderMini(); renderStudies(false);
 
-/* ---------- saved values + scenarios (db) ---------- */
+/* ---------- saved values + scenarios (artifact db · Neon API · browser) ---------- */
 (function(){
   const SKIP=new Set(['sc-list','sc-name','in-labels']);
   const fields=()=>[...document.querySelectorAll('.wrap input[id], .wrap select[id]')].filter(el=>!SKIP.has(el.id)&&!el.closest('#scenarios'));
@@ -1477,15 +1652,73 @@ regen(); renderMini(); renderStudies(false);
   const esc=s=>String(s).replace(/[<&"]/g,c=>({'<':'&lt;','&':'&amp;','"':'&quot;'}[c]));
   const status=s=>{$('sc-status').textContent=s;};
   const time=()=>new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
-  let db=null, ready=false, saveTimer=null, saving=false, pending=false, scenarios=[], armDelete=false, current='', edited=false;
+  const ls=(k,v)=>{ try{ return v===undefined?localStorage.getItem(k):(v===null?localStorage.removeItem(k):localStorage.setItem(k,v)); }catch(e){ return null; } };
+
+  /* --- storage backends --- */
+  function browserStore(){
+    const K='g725-working', S='g725-scenarios';
+    const all=()=>{ try{ return JSON.parse(ls(S)||'[]'); }catch(e){ return []; } };
+    const put=l=>ls(S,JSON.stringify(l));
+    return {mode:'browser', where:'in this browser',
+      async getWorking(){ try{ return JSON.parse(ls(K)||'null'); }catch(e){ return null; } },
+      async setWorking(o){ ls(K,JSON.stringify(o)); },
+      async list(){ return all(); },
+      async add(name,o){ const id='sc_'+Date.now().toString(36); const l=all(); l.unshift({id,name,savedAt:new Date().toISOString(),...o}); put(l); return {id}; },
+      async update(id,name,o){ put(all().map(s=>s.id===id?{id,name,savedAt:new Date().toISOString(),...o}:s)); },
+      async remove(id){ put(all().filter(s=>s.id!==id)); }};
+  }
+  function apiStore(){
+    let key=ls('g725-key')||'';
+    const H=()=>{ const h={'content-type':'application/json'}; if(key) h['x-edit-key']=key; return h; };
+    async function askKey(){
+      const k=window.prompt('Enter the edit key to save changes on this site:');
+      if(!k) return false;
+      const trial=k.trim();
+      const ok=await fetch('/api/auth',{headers:{'x-edit-key':trial}}).then(r=>r.json()).then(j=>j.canWrite).catch(()=>false);
+      if(ok){ key=trial; ls('g725-key',trial); return true; }
+      status('That edit key was not accepted.'); return false;
+    }
+    async function write(run){
+      let r=await run();
+      if(r.status===401&&await askKey()) r=await run();
+      if(!r.ok){ const j=await r.json().catch(()=>({})); throw new Error(j.error||('Request failed ('+r.status+')')); }
+      return r.json().catch(()=>({}));
+    }
+    return {mode:'api', where:'to the database',
+      async getWorking(){ const j=await fetch('/api/state').then(r=>r.json()); return j.state; },
+      async setWorking(o){ return write(()=>fetch('/api/state',{method:'PUT',headers:H(),body:JSON.stringify(o)})); },
+      async list(){ const j=await fetch('/api/scenarios').then(r=>r.json()); return j.scenarios||[]; },
+      async add(name,o){ return write(()=>fetch('/api/scenarios',{method:'POST',headers:H(),body:JSON.stringify({name,...o})})); },
+      async update(id,name,o){ return write(()=>fetch('/api/scenarios',{method:'POST',headers:H(),body:JSON.stringify({id,name,...o})})); },
+      async remove(id){ return write(()=>fetch('/api/scenarios?id='+encodeURIComponent(id),{method:'DELETE',headers:H()})); }};
+  }
+  function artifactStore(db){
+    return {mode:'artifact', where:'',
+      async getWorking(){ const w=await db.doc('state/working').get(); return w.exists?w.data():null; },
+      async setWorking(o){ return db.doc('state/working').set(o); },
+      async list(){ const s=await db.collection('scenarios').orderBy('savedAt','desc').get(); return s.docs.map(d=>({id:d.id,...d.data()})); },
+      async add(name,o){ const ref=await db.collection('scenarios').add({name,...o,savedAt:new Date().toISOString()}); return {id:ref.id}; },
+      async update(id,name,o){ return db.doc('scenarios/'+id).set({name,...o,savedAt:new Date().toISOString()}); },
+      async remove(id){ return db.doc('scenarios/'+id).delete(); },
+      subscribe(cb){ return db.collection('scenarios').orderBy('savedAt','desc').onSnapshot(s=>cb(s.docs.map(d=>({id:d.id,...d.data()})))); }};
+  }
+  async function pickStore(){
+    const db=window.claude&&window.claude.use?await window.claude.use('db'):null;
+    if(db) return artifactStore(db);
+    try{ const r=await fetch('/api/state',{cache:'no-store'}); if(r.ok&&(r.headers.get('content-type')||'').includes('json')) return apiStore(); }catch(e){}
+    return browserStore();
+  }
+
+  /* --- UI --- */
+  let store=null, ready=false, saveTimer=null, saving=false, pending=false, scenarios=[], armDelete=false, current='', edited=false;
   const curScen=()=>scenarios.find(s=>s.id===current);
 
   async function saveWorking(){
-    if(!db) return;
+    if(!store) return;
     if(saving){ pending=true; return; }
     saving=true;
-    try{ await db.doc('state/working').set({...collect(),scenarioId:current,edited,updatedAt:new Date().toISOString()}); status((curScen()&&edited?'Edited · ':'')+'Saved '+time()); }
-    catch(e){ status(e&&e.code==='quota_exceeded'?'Storage full: delete a scenario':'Couldn\'t save; will retry'); }
+    try{ await store.setWorking({...collect(),scenarioId:current,edited,updatedAt:new Date().toISOString()}); status((curScen()&&edited?'Edited · ':'')+'Saved '+time()); }
+    catch(e){ status(e&&e.message?'Not saved: '+e.message:'Could not save; your next change will retry'); }
     saving=false;
     if(pending){ pending=false; saveWorking(); }
   }
@@ -1495,9 +1728,10 @@ regen(); renderMini(); renderStudies(false);
   ['input','change'].forEach(ev=>wrap.addEventListener(ev,e=>{ const el=e.target; if(el.id&&!SKIP.has(el.id)&&!el.closest('#scenarios')) changed(); }));
   ['tabs','mtabs','ftabs'].forEach(id=>$(id).addEventListener('click',e=>{ if(e.target.closest('button')) changed(); }));
 
+  async function refresh(){ try{ scenarios=await store.list(); renderList(); }catch(e){ status('Could not load scenarios'); } }
   function renderList(){
     const sel=$('sc-list'), c=curScen();
-    sel.innerHTML=`<option value="">${current&&!c?'Working draft':'Working draft'}</option>`+scenarios.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.id===current&&edited?' (edited)':''}</option>`).join('');
+    sel.innerHTML='<option value="">Working draft</option>'+scenarios.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.id===current&&edited?' (edited)':''}</option>`).join('');
     sel.value=c?current:'';
     sel.disabled=!ready;
     $('sc-update').disabled=!c; $('sc-delete').disabled=!c;
@@ -1518,36 +1752,33 @@ regen(); renderMini(); renderStudies(false);
   $('sc-save').addEventListener('click',async()=>{
     const name=$('sc-name').value.trim(); if(!name){ status('Name the scenario first'); $('sc-name').focus(); return; }
     $('sc-save').disabled=true;
-    try{ const ref=await db.collection('scenarios').add({name,...collect(),savedAt:new Date().toISOString()});
-      current=ref.id; edited=false; $('sc-name').value=''; closePop(); status(`Saved "${name}"`); schedule(); renderList(); }
-    catch(e){ status(e&&e.code==='quota_exceeded'?'Storage full: delete a scenario':'Couldn\'t save; try again'); }
+    try{ const r=await store.add(name,collect()); current=(r&&r.id)||current; edited=false; $('sc-name').value=''; closePop(); status(`Saved "${name}"`); await refresh(); schedule(); }
+    catch(e){ status('Not saved: '+(e.message||'try again')); }
     $('sc-save').disabled=false;
   });
   $('sc-name').addEventListener('keydown',e=>{ if(e.key==='Enter') $('sc-save').click(); });
   $('sc-update').addEventListener('click',async()=>{
     const s=curScen(); if(!s) return;
-    try{ await db.doc('scenarios/'+s.id).set({name:s.name,...collect(),savedAt:new Date().toISOString()}); edited=false; closePop(); status(`Updated "${s.name}"`); schedule(); renderList(); }
-    catch(e){ status('Couldn\'t update; try again'); }
+    try{ await store.update(s.id,s.name,collect()); edited=false; closePop(); status(`Updated "${s.name}"`); await refresh(); schedule(); }
+    catch(e){ status('Not updated: '+(e.message||'try again')); }
   });
   $('sc-delete').addEventListener('click',async()=>{
     const s=curScen(); if(!s) return;
-    if(!armDelete){ armDelete=true; $('sc-delete').textContent=`Confirm delete`; return; }
-    try{ await db.doc('scenarios/'+s.id).delete(); current=''; edited=false; closePop(); status(`Deleted "${s.name}"`); schedule(); }
-    catch(e){ status('Couldn\'t delete; try again'); }
+    if(!armDelete){ armDelete=true; $('sc-delete').textContent='Confirm delete'; return; }
+    try{ await store.remove(s.id); current=''; edited=false; closePop(); status(`Deleted "${s.name}"`); await refresh(); schedule(); }
+    catch(e){ status('Not deleted: '+(e.message||'try again')); }
   });
 
   (async()=>{
-    db=window.claude&&window.claude.use?await window.claude.use('db'):null;
-    if(!db){ status('Saving unavailable in this view'); return; }
+    store=await pickStore();
     let resumed=false;
-    try{ const w=await db.doc('state/working').get(); if(w.exists){ const d=w.data(); apply(d); current=d.scenarioId||''; edited=!!d.edited; resumed=true; } }
-    catch(e){ status('Couldn\'t load last session'); }
-    ready=true; $('sc-menu').disabled=false; renderList();
-    status(resumed?'Resumed last session':'Changes save automatically');
-    db.collection('scenarios').orderBy('savedAt','desc').onSnapshot(snap=>{
-      scenarios=snap.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.values&&typeof s.name==='string');
-      renderList();
-    },e=>{ if(e.code!=='revoked') status('Scenario list stopped updating; reload'); });
+    try{ const w=await store.getWorking(); if(w&&w.values){ apply(w); current=w.scenarioId||''; edited=!!w.edited; resumed=true; } }
+    catch(e){ status('Could not load your last session'); }
+    ready=true; $('sc-menu').disabled=false;
+    await refresh();
+    status(resumed?'Resumed last session':('Changes save automatically'+(store.where?' '+store.where:'')));
+    if(store.subscribe){ store.subscribe(list=>{ scenarios=list; renderList(); }); }
+    else setInterval(()=>{ if(!saving&&document.visibilityState==='visible') refresh(); },60000);
   })();
 })();
 })();

@@ -1,0 +1,16 @@
+{
+  "name": "725-grand",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "725 Grand Street - Proposed New Development: zoning, massing, plans and pro forma",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "scripts": {
+    "db:init": "node scripts/init_db.mjs"
+  }
+}
