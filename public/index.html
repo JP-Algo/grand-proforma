@@ -1640,8 +1640,12 @@ $('iv-orbit').addEventListener('click',()=>setIView('orbit'));
 /* ---------- wiring ---------- */
 document.querySelectorAll('#tabs button').forEach(b=>b.addEventListener('click',()=>{st.scheme=b.dataset.s;renderStudies(false);}));
 document.querySelectorAll('#gtabs button').forEach(b=>b.addEventListener('click',()=>{
+  // hold your place: the sections above can change height when the scheme changes
+  const anchor=[...document.querySelectorAll('.sheet')].find(s=>s.getBoundingClientRect().bottom>90)||document.body;
+  const before=anchor.getBoundingClientRect().top;
   st.scheme=b.dataset.s; st.mini=b.dataset.s;      // one scheme for the whole page
   renderMini(); renderStudies(true);               // keep the floor you were looking at
+  requestAnimationFrame(()=>{ const shift=anchor.getBoundingClientRect().top-before; if(Math.abs(shift)>1) window.scrollBy(0,shift); });
 }));
 // name the section you are reading, so the scheme buttons have context
 (function(){
