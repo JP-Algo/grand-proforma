@@ -1817,12 +1817,14 @@ regen(); renderMini(); renderStudies(false);
     let key=ls('g725-key')||'';
     const H=()=>{ const h={'content-type':'application/json'}; if(key) h['x-edit-key']=key; return h; };
     async function askKey(){
-      const k=window.prompt('Enter the edit key to save changes on this site:');
-      if(!k) return false;
+      const k=window.prompt('Editing or deleting a saved scenario needs the edit key. Anyone can add a new draft without it — use "Save as new scenario" instead.');
+      if(!k) { status('No edit key entered — nothing changed.'); return false; }
       const trial=k.trim();
       const ok=await fetch('/api/auth',{headers:{'x-edit-key':trial}}).then(r=>r.json()).then(j=>j.canWrite).catch(()=>false);
-      if(ok){ key=trial; ls('g725-key',trial); return true; }
-      status('That edit key was not accepted.'); return false;
+      if(ok){ key=trial; ls('g725-key',trial); status('Edit key accepted.'); return true; }
+      key=''; ls('g725-key',null);
+      status('That edit key was not accepted — nothing changed.');
+      return false;
     }
     async function write(run){
       let r=await run();
@@ -1830,9 +1832,10 @@ regen(); renderMini(); renderStudies(false);
       if(!r.ok){ const j=await r.json().catch(()=>({})); throw new Error(j.error||('Request failed ('+r.status+')')); }
       return r.json().catch(()=>({}));
     }
-    return {mode:'api', where:'to the database',
-      async getWorking(){ const j=await fetch('/api/state').then(r=>r.json()); return j.state; },
-      async setWorking(o){ return write(()=>fetch('/api/state',{method:'PUT',headers:H(),body:JSON.stringify(o)})); },
+    const localWorking=browserStore();   // your own in-progress values stay in your browser
+    return {mode:'api', where:'· scenarios shared',
+      async getWorking(){ return localWorking.getWorking(); },
+      async setWorking(o){ return localWorking.setWorking(o); },
       async list(){ const j=await fetch('/api/scenarios').then(r=>r.json()); return j.scenarios||[]; },
       async add(name,o){ return write(()=>fetch('/api/scenarios',{method:'POST',headers:H(),body:JSON.stringify({name,...o})})); },
       async update(id,name,o){ return write(()=>fetch('/api/scenarios',{method:'POST',headers:H(),body:JSON.stringify({id,name,...o})})); },
@@ -1877,7 +1880,7 @@ regen(); renderMini(); renderStudies(false);
   async function refresh(){ try{ scenarios=await store.list(); renderList(); }catch(e){ status('Could not load scenarios'); } }
   function renderList(){
     const sel=$('sc-list'), c=curScen();
-    sel.innerHTML='<option value="">Working draft</option>'+scenarios.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.id===current&&edited?' (edited)':''}</option>`).join('');
+    sel.innerHTML='<option value="">Working draft (this browser)</option>'+scenarios.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.origin==='draft'?' · draft':''}${s.id===current&&edited?' (edited)':''}</option>`).join('');
     sel.value=c?current:'';
     sel.disabled=!ready;
     $('sc-update').disabled=!c; $('sc-delete').disabled=!c;
