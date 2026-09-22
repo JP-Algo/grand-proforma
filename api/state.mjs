@@ -1,8 +1,10 @@
-import { sql, canWrite, readBody, fail } from './_db.mjs';
+import { getSql, canWrite, readBody, fail, noDb } from './_db.mjs';
 
 /** The autosaved working set of inputs — one row, shared by everyone who can edit. */
 export default async function handler(req, res) {
   try {
+    const sql = getSql();
+    if (!sql) return noDb(res);
     if (req.method === 'GET') {
       const rows = await sql`select data, updated_at from grand725.working_state where id = 'default'`;
       if (!rows.length) return res.status(200).json({ state: null });

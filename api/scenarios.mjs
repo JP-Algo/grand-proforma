@@ -1,7 +1,9 @@
-import { sql, canWrite, readBody, fail } from './_db.mjs';
+import { getSql, canWrite, readBody, fail, noDb } from './_db.mjs';
 
 export default async function handler(req, res) {
   try {
+    const sql = getSql();
+    if (!sql) return noDb(res);
     if (req.method === 'GET') {
       const rows = await sql`select id, name, data, saved_at from grand725.scenarios order by saved_at desc limit 200`;
       return res.status(200).json({ scenarios: rows.map(r => ({ id: r.id, name: r.name, savedAt: r.saved_at, ...r.data })) });
