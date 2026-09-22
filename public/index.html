@@ -167,6 +167,12 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .fac .controls{padding:16px;display:grid;gap:12px;align-content:start;border-right:1px solid var(--rule)}
 @media (max-width:860px){.fac .controls{border-right:0;border-bottom:1px solid var(--rule)}}
 .field input[type="range"]{padding:0;accent-color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:35;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:8px 0;margin-bottom:-8px;background:color-mix(in srgb,var(--ground) 93%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding-right:330px}
+.topbar .tabs{gap:4px}
+.topbar .tabs button{padding:5px 10px;font-size:.8rem}
+.topbar .tabs button b{margin-right:4px}
+.topbar .where{font-family:var(--mono);font-size:.72rem;color:var(--ink-2);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
+@media (max-width:900px){.topbar{padding-right:0}.topbar .where{display:none}}
 .rel{position:relative;min-width:0}
 .tiles .tile{position:relative}
 .stats .sub{font-size:.7rem;color:var(--ink-2);line-height:1.25}
@@ -230,6 +236,17 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
 </style>
 
 <div class="wrap">
+
+<div class="topbar" id="topbar">
+  <span class="label">Scheme</span>
+  <div class="tabs" id="gtabs" role="group" aria-label="Scheme, applies to the whole page">
+    <button type="button" id="gt-A" data-s="A" aria-pressed="false"><b>A</b>Own lot</button>
+    <button type="button" id="gt-B" data-s="B" aria-pressed="false"><b>B</b>+ certificates</button>
+    <button type="button" id="gt-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
+    <button type="button" id="gt-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
+  </div>
+  <span class="where" id="topbar-where">Cover</span>
+</div>
 
 <header class="cover">
   <span class="label">725 Grand Street, Brooklyn · Block 2783 Lot 43 · C4-4A (R7A) · former IH designated area</span>
@@ -922,7 +939,7 @@ function regen(){D0=defs(); for(const k in D0) D0[k].cap=D0[k].base+D0[k].tr+D0[
 function renderStudies(keepFloor){
   const p=plans[st.scheme]; if(!p) return;
   if(!keepFloor||!p.floors.some(f=>f.n===st.floor)){ const sb=p.floors.find(f=>f.setback&&!f.top); st.floor=(sb||p.floors[3]||p.floors[2]).n; }
-  document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
+  document.querySelectorAll('#tabs button, #gtabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
   $('a-neighbor').textContent=fmt(D0.C.tr)+' sf';
   $('a-neighbor-p').textContent=`2,067 sf × 4.0 − ${fmt(st.exist)} sf existing (${st.exist===4133?'field measurement':'PLUTO'}), merged via a zoning lot merger.`;
   $('a-bonus').textContent=fmt(D0.D.cert)+' sf';
@@ -1622,6 +1639,25 @@ $('iv-orbit').addEventListener('click',()=>setIView('orbit'));
 
 /* ---------- wiring ---------- */
 document.querySelectorAll('#tabs button').forEach(b=>b.addEventListener('click',()=>{st.scheme=b.dataset.s;renderStudies(false);}));
+document.querySelectorAll('#gtabs button').forEach(b=>b.addEventListener('click',()=>{
+  st.scheme=b.dataset.s; st.mini=b.dataset.s;      // one scheme for the whole page
+  renderMini(); renderStudies(true);               // keep the floor you were looking at
+}));
+// name the section you are reading, so the scheme buttons have context
+(function(){
+  const marks=[...document.querySelectorAll('.sheet')].map(s=>({el:s,
+    no:(s.querySelector('.sheet-tag .no')||{}).textContent||'',
+    name:(s.querySelector('h2')||{}).textContent||''}));
+  const label=$('topbar-where');
+  const update=()=>{
+    const y=window.scrollY+120; let cur=null;
+    for(const m of marks){ if(m.el.offsetTop<=y) cur=m; }
+    label.textContent=cur?`${cur.no} · ${cur.name}`:'Cover';
+  };
+  let tick=false;
+  addEventListener('scroll',()=>{ if(tick) return; tick=true; requestAnimationFrame(()=>{ update(); tick=false; }); },{passive:true});
+  update();
+})();
 document.querySelectorAll('#mtabs button').forEach(b=>b.addEventListener('click',()=>{st.mini=b.dataset.s;renderMini();}));
 $('in-exist').addEventListener('change',()=>{st.exist=+$('in-exist').value;regen();renderMini();renderStudies(true);});
 ['in-p1','in-p2'].forEach(id=>$(id).addEventListener('input',()=>{renderMini();renderFinance();}));
@@ -1727,7 +1763,7 @@ regen(); renderMini(); renderStudies(false);
   const changed=()=>{ if(!ready) return; if(current&&!edited){ edited=true; renderList(); } status('Saving…'); schedule(); };
   const wrap=document.querySelector('.wrap');
   ['input','change'].forEach(ev=>wrap.addEventListener(ev,e=>{ const el=e.target; if(el.id&&!SKIP.has(el.id)&&!el.closest('#scenarios')) changed(); }));
-  ['tabs','mtabs','ftabs'].forEach(id=>$(id).addEventListener('click',e=>{ if(e.target.closest('button')) changed(); }));
+  ['tabs','mtabs','ftabs','gtabs'].forEach(id=>$(id).addEventListener('click',e=>{ if(e.target.closest('button')) changed(); }));
 
   async function refresh(){ try{ scenarios=await store.list(); renderList(); }catch(e){ status('Could not load scenarios'); } }
   function renderList(){
