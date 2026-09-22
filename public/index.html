@@ -171,6 +171,8 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .topbar .tabs{gap:4px}
 .topbar .tabs button{padding:5px 10px;font-size:.8rem}
 .topbar .tabs button b{margin-right:4px}
+.topbar .tb-field select{padding:4px 7px;font-size:.78rem}
+.topbar .tb-field .label{font-size:.62rem}
 .topbar .where{font-family:var(--mono);font-size:.72rem;color:var(--ink-2);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
 @media (max-width:900px){.topbar{padding-right:0}.topbar .where{display:none}}
 .rel{position:relative;min-width:0}
@@ -245,6 +247,10 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <button type="button" id="gt-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
     <button type="button" id="gt-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
   </div>
+  <label class="field tb-field"><span class="label">Method</span>
+    <select id="in-mode"><option value="gu" selected>Ground-up</option><option value="enl">Keep + add floors</option></select></label>
+  <label class="field tb-field" id="exfloors-wrap" hidden><span class="label">Floors kept</span>
+    <select id="in-exfloors"><option value="1">Ground only</option><option value="2" selected>Ground + 2</option><option value="3">Ground + 3</option></select></label>
   <span class="where" id="topbar-where">Cover</span>
 </div>
 
@@ -586,6 +592,9 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
       <label class="field"><span class="label">Cellar $/sf</span><input id="f-cellar" type="number" step="25" value="325"></label>
       <label class="field"><span class="label">Terraces $/sf</span><input id="f-outc" type="number" step="5" value="75"></label>
       <label class="field"><span class="label">Core cost per level $</span><input id="f-story" type="number" step="5000" value="85000"></label>
+      <label class="field"><span class="label">Renovate retained $/sf</span><input id="f-reno" type="number" step="25" value="175"></label>
+      <label class="field"><span class="label">Steel columns above fl. 4 $/gsf</span><input id="f-steel" type="number" step="5" value="95"></label>
+      <label class="field"><span class="label">Code upgrade $/sf existing</span><input id="f-upgrade" type="number" step="5" value="60"></label>
       <label class="field"><span class="label">Demolition $/sf (5,534 sf)</span><input id="f-demo" type="number" step="5" value="30"></label>
       <label class="field"><span class="label">E-232 remediation $</span><input id="f-edes" type="number" step="25000" value="200000"></label>
       <label class="field"><span class="label">Green / ULE premium %</span><input id="f-green" type="number" step="0.5" value="3"></label>
@@ -733,7 +742,7 @@ const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('en-US');
 const ft=v=>{const f=Math.floor(v+1e-6), i=Math.round((v-f)*12); return i===12?`${f+1}'-0"`:`${f}'-${i}"`;};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const st={scheme:'D',mini:'D',floor:null,green:true,exist:4133,cut:false,strategy:'eff',circ:'100',openUnits:new Set(),ifit:true};
+const st={scheme:'D',mini:'D',floor:null,green:true,exist:4133,cut:false,strategy:'eff',circ:'100',mode:'gu',openUnits:new Set(),ifit:true};
 
 /* ---------- scenario caps ---------- */
 function defs(){
@@ -816,7 +825,7 @@ const TYPES={
   logg:{tok:'--t-terr',counts:0,open:true}
 };
 let uid=0;
-const R=(x0,z0,x1,z1,t,label,u)=>({x0,z0,x1,z1,t,label:label||'',u:u||null,area:(x1-x0)*(z1-z0)});
+const R=(x0,z0,x1,z1,t,label,u,ex)=>({x0,z0,x1,z1,t,label:label||'',u:u||null,ex:!!ex,area:(x1-x0)*(z1-z0)});
 const unitName=a=>a<560?'Studio':a<760?'1BR':a<1000?'2BR':'3BR';
 
 // core in the rear arm (x 0..S0, z 80..100); elevator lobby spills into stem x S0..31
@@ -839,6 +848,13 @@ function baseCD(){const k=++uid;return core(false).concat([
   R(S0,45,31,80,'corr',''),
   R(31,45,45,72,'res','1BR','b'+k),R(45,45,S1,53,'res','','b'+k),R(45,63,S1,72,'res','','b'+k),R(45,53,S1,63,'logg',''),
   R(31,72,45,94,'res','1BR','c'+k),R(45,72,S1,76,'res','','c'+k),R(45,86,S1,94,'res','','c'+k),R(36,94,S1,100,'res','','c'+k),R(45,76,S1,86,'logg','')]);}
+// Retained floors of the existing 1930 building: units over the 25 ft stem only,
+// with a new core built in the rear arm at every level (the old building has none).
+function exFloorF(){const k=++uid;return core(false).concat([
+  R(S0,0,S1,36,'res','2BR','a'+k,true),
+  R(S0,36,31,80,'corr','',null,true),
+  R(31,36,S1,64,'res','1BR','b'+k,true),
+  R(31,64,S1,94,'res','1BR','c'+k,true),R(36,94,S1,100,'res','','c'+k,true)]);}
 const UPMAX=813.4+15.17*50;
 function upperF(Au){
   const k=++uid, out=core(false); Au=Math.max(0,Math.min(UPMAX,Au));
@@ -863,6 +879,7 @@ const grossOf=rects=>rects.reduce((s,r)=>s+(TYPES[r.t].open?0:r.area),0);
 function generate(s){
   const env=s.bonus?{maxBase:85,H:115}:{maxBase:75,H:85};
   const gf=st.green?1.05:1, budget=s.cap*gf;
+  if(st.mode==='enl') return generateEnlargement(s,env,gf,budget);
   const ease=e=>s.merged&&e+3>=30;           // window sill above the 30 ft easement line
   // every base floor ends its corridor at a 3BR and is <100 ft long -> 100% exempt (ZR 23-232 a+b)
   const fracUp=st.circ==='100'?0:.5, frac=e=>0;
@@ -905,7 +922,12 @@ function generate(s){
   const topE=g+(N-2)*typ, retailSf=2254, L=.05*(s.cap-retailSf);
   if(!eff) floors.push({n:N,elev:topE,h:typ,rects:topF(L),frac:fracUp,prog:'Roof lounge · deck',setback:true,top:true});
 
-  let gross=0,cnt=0,corrEx=0,amenEx=0,mechEx=0,trash=0,net=0,units=new Set(),cellar=0,outdoor=0,retail=0;
+  return tally({s,env,g,N,typ,nb,Au,floors,unused:best.unused,mode:'gu'},gf);
+}
+
+function tally(P,gf){
+  const {floors}=P;
+  let gross=0,cnt=0,corrEx=0,amenEx=0,mechEx=0,trash=0,net=0,units=new Set(),cellar=0,outdoor=0,retail=0,exGross=0,newAbove4=0;
   const occ=f=>{const a=new Uint8Array(S1*100);for(const r of f.rects){if(TYPES[r.t].open)continue;for(let z=Math.floor(r.z0);z<Math.ceil(r.z1);z++)for(let x=Math.floor(r.x0);x<Math.ceil(r.x1);x++){if(x+.5>r.x0&&x+.5<r.x1&&z+.5>r.z0&&z+.5<r.z1)a[z*S1+x]=1;}}return a;};
   const loggOcc=f=>{const a=new Uint8Array(S1*100);for(const r of f.rects){if(r.t!=='logg')continue;for(let z=Math.floor(r.z0);z<Math.ceil(r.z1);z++)for(let x=Math.floor(r.x0);x<Math.ceil(r.x1);x++){if(x+.5>r.x0&&x+.5<r.x1&&z+.5>r.z0&&z+.5<r.z1)a[z*S1+x]=1;}}return a;};
   let prevOcc=null;
@@ -917,6 +939,8 @@ function generate(s){
     f.units=new Set(f.rects.filter(r=>r.t==='res'&&r.u).map(r=>r.u)).size;
     f.occ=occ(f);
     if(f.cellar){cellar=f.gross; f.terr=[]; f.outdoor=0; continue;}
+    f.exGross=f.rects.reduce((a,r)=>a+(r.ex&&!TYPES[r.t].open?r.area:0),0);
+    exGross+=f.exGross; if(typeof f.n==='number'&&f.n>4) newAbove4+=f.gross-f.exGross;
     gross+=f.gross; cnt+=f.counts; corrEx+=f.corrEx;
     f.rects.forEach(r=>{if(r.t==='amen')amenEx+=r.area; if(r.t==='mech')mechEx+=r.area; if(r.t==='trash')trash+=r.area; if(r.t==='res')net+=r.area; if(r.t==='retail')retail+=r.area; if(r.u&&r.t==='res')units.add(r.u);});
     f.terr=[]; let terr=0;
@@ -927,10 +951,52 @@ function generate(s){
   }
   const lounge=floors[floors.length-1].rects.filter(r=>r.t==='amen').reduce((s,r)=>s+r.area,0);
   outdoor+=lounge;
-  if(eff){ const last=floors[floors.length-1]; outdoor+=Math.max(0,last.gross-517); } // common roof deck over the top floor
+  { const last=floors[floors.length-1]; if(!last.top) outdoor+=Math.max(0,last.gross-517); } // roof deck when the top floor is residential
   const refuse=Math.min(trash,3*units.size);
   const pre=cnt-refuse, zfa=pre/gf, greenEx=pre-zfa;
-  return {s,env,g,N,typ,nb,Au,floors,gross,cellar,cnt,corrEx,amenEx,mechEx,refuse,greenEx,zfa,units:units.size,net,outdoor,retail,height:g+(N-1)*typ,unused:best.unused};
+  const height=P.mode==='enl'?P.exTop+(P.N-1-P.exN)*P.typ:P.g+(P.N-1)*P.typ;
+  return {...P,gross,cellar,cnt,corrEx,amenEx,mechEx,refuse,greenEx,zfa,units:units.size,net,outdoor,retail,height,
+    exGross,newGross:gross-exGross,newAbove4};
+}
+
+/* Vertical enlargement: keep the existing ground + upper floors, build new floors above.
+   Existing floors are fixed, so only the floors above are fitted to the remaining floor area. */
+function generateEnlargement(s,env,gf,budget){
+  const exN=Math.max(0,Math.min(3,+($('in-exfloors')||{value:2}).value||0));   // retained upper floors
+  const exGH=14, exUH=11, exTop=exGH+exN*exUH;                                  // existing floor-to-floors
+  const fracUp=st.circ==='100'?0:.5;
+  const prefix=[{n:1,elev:0,h:exGH,rects:groundF(),frac:0,existing:true,prog:'Existing ground floor · retail'}];
+  for(let i=0;i<exN;i++) prefix.push({n:i+2,elev:exGH+i*exUH,h:exUH,rects:exFloorF(),frac:st.circ==='100'?0:.5,existing:true,
+    prog:`Existing floor ${i+2} (vacant) · converted to ${3} units`});
+  // everything over the stem is the 1930 building; the core in the rear arm is new at every level
+  prefix.forEach(f=>f.rects.forEach(r=>{ if(r.x0>=S0) r.ex=true; }));
+  const prefixCounted=prefix.reduce((a,f)=>a+counted(f.rects,f.frac),0);
+  let best=null;
+  for(const typ of [10,10.5,11,11.5,12]){
+    for(let Nn=1;Nn<=12;Nn++){
+      if(exTop+Nn*typ>env.H+1e-6) break;
+      let sum=0, cand=null;
+      for(let nb=0;nb<=Nn;nb++){
+        if(nb>0){ const e=exTop+(nb-1)*typ; sum+=counted(baseCD(),0); if(exTop+nb*typ>env.maxBase+1e-6) break; }
+        const upper=Nn-nb, remain=budget-prefixCounted-sum;
+        if(upper===0){ if(remain>=-60&&remain<400) cand={typ,Nn,nb,Au:null,unused:Math.max(0,remain)}; break; }
+        const coreU=counted(core(false),fracUp), Au=remain/upper-coreU;
+        if(Au>UPMAX){ if(exTop+(nb+1)*typ>env.maxBase+1e-6||nb+1>Nn){cand={typ,Nn,nb,Au:UPMAX,unused:remain-upper*(UPMAX+coreU)};break;} continue; }
+        if(Au<0) break;
+        cand={typ,Nn,nb,Au,unused:0}; break;
+      }
+      if(!cand) continue;
+      const ok=cand.Au===null||cand.Au>=700;
+      const score=[ok?1:0, ok?cand.Nn:(cand.Au||0), -Math.abs(cand.typ-10.5)];   // denser: prefer more new floors
+      if(!best||score[0]>best.score[0]||(score[0]===best.score[0]&&(score[1]>best.score[1]||(score[1]===best.score[1]&&score[2]>best.score[2])))) best={...cand,score};
+    }
+  }
+  if(!best) return null;
+  const {typ,Nn,nb,Au}=best;
+  const floors=[{n:'C',elev:-12,h:12,rects:cellarF(),frac:0,cellar:true,existing:true,prog:'Existing full cellar · MEP, bikes, storage'}].concat(prefix);
+  for(let i=0;i<nb;i++){const e=exTop+i*typ; floors.push({n:exN+2+i,elev:e,h:typ,rects:baseCD(),frac:0,prog:'New floor · 3 units'});}
+  for(let i=nb;i<Nn;i++){const e=exTop+i*typ; floors.push({n:exN+2+i,elev:e,h:typ,rects:upperF(Au),frac:fracUp,prog:'New floor · setback + dormer',setback:true});}
+  return tally({s,env,g:exGH,N:exN+1+Nn,typ,nb,Au,floors,unused:best.unused,exN,exTop,mode:'enl'},gf);
 }
 
 let plans={};
@@ -949,7 +1015,7 @@ function renderStudies(keepFloor){
   const s=p.s;
   $('stats').innerHTML=[
     ['Height',`${Math.round(p.height)} ft`],['Stories',p.N],['Floor-to-floor',`${ft(p.g)} / ${ft(p.typ)}`],['Units',p.units],
-    ['ZFA / cap',`${fmt(p.zfa)} / ${fmt(s.cap)}`],['Gross above grade',fmt(p.gross)],['Outdoor sf',fmt(p.outdoor)],['Efficiency',Math.round((p.net+p.retail)/p.gross*100)+'%',`+ outdoor ${Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)}% · loss factor ${Math.round((p.gross-p.net-p.retail)/p.gross*100)}%`]
+    ['ZFA / cap',`${fmt(p.zfa)} / ${fmt(s.cap)}`],['Gross above grade',fmt(p.gross),p.mode==='enl'?`${fmt(p.exGross)} retained · ${fmt(p.newGross)} new`:''],['Outdoor sf',fmt(p.outdoor)],['Efficiency',Math.round((p.net+p.retail)/p.gross*100)+'%',`+ outdoor ${Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)}% · loss factor ${Math.round((p.gross-p.net-p.retail)/p.gross*100)}%`]
   ].map(([l,v,sub])=>`<div><span class="label">${l}</span><span class="v num">${v}</span>${sub?`<span class="sub num">${sub}</span>`:''}</div>`).join('');
   $('floors').innerHTML=p.floors.slice().reverse().map(f=>`<button type="button" id="fl-${st.scheme}-${f.n}" data-f="${f.n}" aria-pressed="${f.n===st.floor}">${f.n==='C'?'Cellar':f.n===1?'Ground':'Fl '+f.n}</button>`).join('');
   $('floors').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{st.floor=b.dataset.f==='C'?'C':+b.dataset.f; renderStudies(true);}));
@@ -965,7 +1031,10 @@ function renderStudies(keepFloor){
     C:'The easement from 30 ft up turns base floors into 3BR corner layouts with a fully exempt corridor.',
     D:'The largest scheme: 115 ft, certificate bonus, easement windows, loggias on every floor, and a roof lounge and deck.'
   };
-  $('scheme-note').textContent=notes[s.k]+(p.unused>50?` About ${fmt(p.unused/(st.green?1.05:1))} sf doesn't fit inside the envelope.`:'');
+  const modeNote=p.mode==='enl'
+    ? ` Keep + add: the 1930 ground floor and ${p.exN} vacant floors above stay (${fmt(p.exGross)} sf, counted against the cap), a new core is cut through them in the rear arm, and ${fmt(p.newGross)} sf is built on top. Floors above the 4th sit on new steel columns and foundations. No demolition, but the whole building is brought up to code.`
+    : '';
+  $('scheme-note').textContent=notes[s.k]+modeNote+(p.unused>50?` About ${fmt(p.unused/(st.green?1.05:1))} sf doesn't fit inside the envelope.`:'');
   $('cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${fmt(q.s.cap)}</td><td class="num">${fmt(q.zfa)}</td><td class="num">${fmt(q.gross)}</td><td class="num">${Math.round(q.height)}' · ${q.N}</td><td class="num">${ft(q.typ)}</td><td class="num">${q.units}</td><td class="num">${fmt(q.retail)}</td><td class="num">${fmt(q.outdoor)}</td><td class="num">${Math.round((q.net+q.retail)/q.gross*100)}%</td><td class="num">${Math.round((q.net+q.retail+q.outdoor)/(q.gross+q.outdoor)*100)}%</td><td class="num">${Math.round((q.gross-q.net-q.retail)/q.gross*100)}%</td></tr>`;}).join('');
   renderPlan(p); build3D(p); renderFinance(); renderZPlan(); renderFacade(); renderInterior();
 }
@@ -988,7 +1057,17 @@ function fin(p,o={}){
   const resGross=p.net*v('f-res')+privOut*v('f-out'), resNet=resGross*(1-v('f-scres')/100);
   const rent=p.retail*v('f-rent'), noi=rent*(1-v('f-vac')/100-v('f-opex')/100), retVal=noi/(v('f-cap')/100), retNet=retVal*(1-v('f-scret')/100);
   const revenue=resNet+retNet;
-  const items=[
+  const enl=p.mode==='enl';
+  const items=enl?[
+    ['New construction above the existing',`${fmt(p.newGross)} gsf × $${v('f-hard')}`,p.newGross*v('f-hard')],
+    ['Renovate retained floors',`${fmt(p.exGross)} sf × $${v('f-reno')}`,p.exGross*v('f-reno')],
+    ['Steel columns + foundations above floor 4',`${fmt(p.newAbove4)} gsf × $${v('f-steel')}`,p.newAbove4*v('f-steel')],
+    ['Building-wide code upgrade (sprinklers, egress, alarm)',`${fmt(p.exGross+p.cellar)} sf × $${v('f-upgrade')}`,(p.exGross+p.cellar)*v('f-upgrade')],
+    ['Cellar fit-out',`${fmt(p.cellar)} sf × $${v('f-reno')}`,p.cellar*v('f-reno')],
+    ['Loggias, terraces, roof deck',`${fmt(p.outdoor)} sf × $${v('f-outc')}`,p.outdoor*v('f-outc')],
+    ['E-232 testing and remediation','allowance',v('f-edes')],
+    ['Elevator stops, stair flights, risers',`${p.N+1} levels × $${fmt(v('f-story'))}`,(p.N+1)*v('f-story')]
+  ]:[
     ['Above-grade construction',`${fmt(p.gross)} gsf × $${v('f-hard')}`,p.gross*v('f-hard')],
     ['Cellar',`${fmt(p.cellar)} sf × $${v('f-cellar')}`,p.cellar*v('f-cellar')],
     ['Rooftop MEP penthouse',`625 sf × $${v('f-hard')}`,625*v('f-hard')],
@@ -1241,7 +1320,7 @@ function build3D(p){
     const above=st.cut&&i>selIdx, slab=.9;
     for(const r of f.rects){
       if(TYPES[r.t].open){ if(!above){ v.box(r.x0,r.z0,r.x1,r.z1,f.elev,f.elev+slab,css('--t-serv'),{edge:0}); v.box(r.x0,r.z0,r.x1,r.z1,f.elev+slab,f.elev+slab+.3,css('--t-terr'),{edge:0}); v.box(r.x1-.3,r.z0,r.x1,r.z1,f.elev+slab,f.elev+slab+3.5,css('--ink'),{op:.35,edge:0}); } continue; }
-      v.box(r.x0,r.z0,r.x1,r.z1,f.elev+slab,f.elev+f.h,css(TYPES[r.t].tok),above?{op:.07,edge:0}:{edge:.26});
+      v.box(r.x0,r.z0,r.x1,r.z1,f.elev+slab,f.elev+f.h,r.ex?css('--m-exist'):css(TYPES[r.t].tok),above?{op:.07,edge:0}:{edge:.26});
       v.box(r.x0,r.z0,r.x1,r.z1,f.elev,f.elev+slab,css('--t-serv'),above?{op:.05,edge:0}:{edge:0});
     }
     if(!above) for(const [x0,z0,x1,z1] of f.terr) v.box(x0,z0,x1,z1,f.elev,f.elev+.5,css('--t-terr'),{edge:0});
@@ -1672,6 +1751,13 @@ $('f-res').addEventListener('input',renderInterior);
 $('in-green').addEventListener('change',()=>{st.green=$('in-green').checked;regen();renderStudies(true);});
 $('in-strategy').addEventListener('change',()=>{st.strategy=$('in-strategy').value;regen();renderStudies(false);});
 $('in-circ').addEventListener('change',()=>{st.circ=$('in-circ').value;regen();renderStudies(true);});
+$('in-mode').addEventListener('change',()=>{
+  st.mode=$('in-mode').value;
+  $('exfloors-wrap').hidden=st.mode!=='enl';
+  if(st.mode==='enl') { st.strategy='height'; $('in-strategy').value='height'; }   // denser: fill the envelope above the existing floors
+  regen(); renderMini(); renderStudies(false);
+});
+$('in-exfloors').addEventListener('change',()=>{regen();renderStudies(false);});
 $('in-cut').addEventListener('change',()=>{st.cut=$('in-cut').checked;build3D(plans[st.scheme]);});
 const rethemed=()=>{renderMini();renderStudies(true);};
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
