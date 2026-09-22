@@ -240,6 +240,10 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
 <div class="wrap">
 
 <div class="topbar" id="topbar">
+  <label class="field tb-field"><span class="label">Method</span>
+    <select id="in-mode"><option value="gu" selected>Ground-up</option><option value="enl">Keep + add floors</option></select></label>
+  <label class="field tb-field" id="exfloors-wrap" hidden><span class="label">Floors kept</span>
+    <select id="in-exfloors"><option value="1">Ground only</option><option value="2" selected>Ground + 2</option><option value="3">Ground + 3</option></select></label>
   <span class="label">Scheme</span>
   <div class="tabs" id="gtabs" role="group" aria-label="Scheme, applies to the whole page">
     <button type="button" id="gt-A" data-s="A" aria-pressed="false"><b>A</b>Own lot</button>
@@ -247,10 +251,6 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <button type="button" id="gt-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
     <button type="button" id="gt-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
   </div>
-  <label class="field tb-field"><span class="label">Method</span>
-    <select id="in-mode"><option value="gu" selected>Ground-up</option><option value="enl">Keep + add floors</option></select></label>
-  <label class="field tb-field" id="exfloors-wrap" hidden><span class="label">Floors kept</span>
-    <select id="in-exfloors"><option value="1">Ground only</option><option value="2" selected>Ground + 2</option><option value="3">Ground + 3</option></select></label>
   <span class="where" id="topbar-where">Cover</span>
 </div>
 
@@ -274,7 +274,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   <div class="facts">
     <span class="chip">Lot 3,034 sf · 25.17 × 100 ft + 25.83 × 20 ft rear arm</span>
     <span class="chip">Grand St 80 ft wide · Graham Ave 80 ft wide</span>
-    <span class="chip">FAR 4.0 std · 5.01 with certificates</span>
+    <span class="chip">FAR 4.0 std · 5.01 with Inclusionary Housing certificates (UAP off-site option)</span>
     <span class="chip">E-designation E-232</span>
     <span class="chip">Inner Transit Zone</span>
   </div>
@@ -1006,12 +1006,30 @@ function renderStudies(keepFloor){
   const p=plans[st.scheme]; if(!p) return;
   if(!keepFloor||!p.floors.some(f=>f.n===st.floor)){ const sb=p.floors.find(f=>f.setback&&!f.top); st.floor=(sb||p.floors[3]||p.floors[2]).n; }
   document.querySelectorAll('#tabs button, #gtabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
-  $('a-neighbor').textContent=fmt(D0.C.tr)+' sf';
-  $('a-neighbor-p').textContent=`2,067 sf × 4.0 − ${fmt(st.exist)} sf existing (${st.exist===4133?'field measurement':'PLUTO'}), merged via a zoning lot merger.`;
-  $('a-bonus').textContent=fmt(D0.D.cert)+' sf';
-  $('a-bonus-p').textContent=`Bonus to FAR 5.01 on 5,101 sf, bought from vested generating sites. About ${fmt(D0.D.cert/1.25)} sf of affordable floor area at the 1.25 ratio.`;
+  const SC=p.s;
+  const ad=document.querySelectorAll('.answer .label');
+  if(SC.tr>0){
+    ad[0].textContent='Buy from 727 Grand';
+    $('a-neighbor').textContent=fmt(SC.tr)+' sf';
+    $('a-neighbor-p').textContent=`2,067 sf × 4.0 − ${fmt(st.exist)} sf existing (${st.exist===4133?'field measurement':'PLUTO'}), merged via a zoning lot merger.`;
+  } else {
+    ad[0].textContent='727 Grand air rights';
+    $('a-neighbor').textContent='not used';
+    $('a-neighbor-p').textContent=`Scheme ${SC.k} builds on 725 Grand alone. Merging with 727 Grand would add ${fmt(D0.C.tr)} sf — see schemes C and D.`;
+  }
+  if(SC.cert>0){
+    ad[1].textContent=SC.merged?'IH certificates (merged lot)':'IH certificates (own lot)';
+    $('a-bonus').textContent=fmt(SC.cert)+' sf';
+    $('a-bonus-p').textContent=`Bonus to FAR 5.01 on ${fmt(SC.lot)} sf, bought from vested generating sites. About ${fmt(SC.cert/1.25)} sf of affordable floor area at the 1.25 ratio.`;
+  } else {
+    ad[1].textContent='Inclusionary Housing certificates';
+    $('a-bonus').textContent='not used';
+    $('a-bonus-p').textContent=`Scheme ${SC.k} stops at FAR 4.0. Certificates would add ${fmt(SC.merged?D0.D.cert:D0.B.cert)} sf — see schemes ${SC.merged?'D':'B and D'}.`;
+  }
   $('m-transfer').textContent=fmt(D0.C.tr)+' sf'; $('m-bonus').textContent=fmt(D0.D.cert)+' sf'; $('m-aff').textContent=fmt(D0.D.cert/1.25)+' sf';
-  const pd=plans.D; if(pd){$('a-total').textContent=`${pd.N} story · ${Math.round(pd.height)} ft`; $('a-total-p').textContent=`${fmt(pd.zfa)} zoning sf, ${fmt(pd.gross)} sf gross above grade, ${pd.units} units, ${fmt(pd.retail)} sf retail, ${fmt(pd.outdoor)} sf outdoor.`;}
+  ad[2].textContent=`Scheme ${SC.k} building · ${p.mode==='enl'?'keep + add':'ground-up'}`;
+  $('a-total').textContent=`${p.N} story · ${Math.round(p.height)} ft`;
+  $('a-total-p').textContent=`${fmt(p.zfa)} zoning sf, ${fmt(p.gross)} sf gross above grade${p.mode==='enl'?` (${fmt(p.exGross)} retained)`:''}, ${p.units} units, ${fmt(p.retail)} sf retail, ${fmt(p.outdoor)} sf outdoor.`;
   const s=p.s;
   $('stats').innerHTML=[
     ['Height',`${Math.round(p.height)} ft`],['Stories',p.N],['Floor-to-floor',`${ft(p.g)} / ${ft(p.typ)}`],['Units',p.units],
