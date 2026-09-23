@@ -243,7 +243,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   <label class="field tb-field"><span class="label">Method</span>
     <select id="in-mode"><option value="gu" selected>Ground-up</option><option value="enl">Keep + add floors</option></select></label>
   <label class="field tb-field" id="exfloors-wrap" hidden><span class="label">Floors kept</span>
-    <select id="in-exfloors"><option value="1">Ground only</option><option value="2" selected>Ground + 2</option><option value="3">Ground + 3</option></select></label>
+    <select id="in-exfloors"><option value="0">Ground only</option><option value="1">Ground + 1</option><option value="2" selected>Ground + 2</option><option value="3">Ground + 3</option></select></label>
   <div class="field tb-field">
   <span class="label">Scheme</span>
   <div class="tabs" id="gtabs" role="group" aria-label="Scheme, applies to the whole page">
@@ -364,6 +364,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
           <span><i class="sw" style="background:var(--m-base)"></i>Own lot, FAR 4.0</span>
           <span><i class="sw" style="background:var(--m-transfer)"></i>From 727 Grand</span>
           <span><i class="sw" style="background:var(--m-bonus)"></i>IH certificates</span>
+          <span id="mini-keep" hidden><i class="sw" style="background:var(--m-exist)"></i>725 Grand retained</span>
           <span><i class="sw" style="background:var(--m-exist)"></i>727 Grand existing</span>
         </div>
       </div>
@@ -806,17 +807,38 @@ function renderMini(){
   document.querySelectorAll('#mtabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.mini));
   const p1=+$('in-p1').value||0, p2=+$('in-p2').value||0;
   $('c-1').textContent='$'+fmt(s.tr*p1); $('c-2').textContent='$'+fmt(s.cert*p2); $('c-t').textContent='$'+fmt(s.tr*p1+s.cert*p2);
-  const stories=Math.ceil(s.cap/LOT-1e-9), ht=15+(stories-1)*10;
-  $('mr-name').textContent=s.k+' · '+s.name; $('mr-sf').textContent=fmt(s.cap)+' sf'; $('mr-ht').textContent=`${stories} stories · ${ht} ft`;
+  // what is kept when the method is "keep + add"
+  const enl=st.mode==='enl', exN=enl?Math.max(0,Math.min(3,+$('in-exfloors').value||0)):0;
+  const EX_G=3034, EX_U=2517, exGH=14, exUH=11;            // existing ground covers the lot; upper floors the stem
+  const exZFA=enl?EX_G+exN*EX_U:0, exTop=enl?exGH+exN*exUH:0;
+  const newZFA=Math.max(0,s.cap-exZFA);
+  const stories=enl?1+exN+Math.ceil(newZFA/LOT-1e-9):Math.ceil(s.cap/LOT-1e-9);
+  const ht=enl?exTop+Math.ceil(newZFA/LOT-1e-9)*10:15+(stories-1)*10;
+  $('mr-name').textContent=s.k+' · '+s.name+(enl?' · keep + add':'');
+  $('mr-sf').textContent=fmt(s.cap)+' sf';
+  $('mr-ht').textContent=enl?`${fmt(exZFA)} kept + ${fmt(newZFA)} new · ${stories} stories · ${Math.round(ht)} ft`:`${stories} stories · ${ht} ft`;
   $('scen-body').innerHTML=Object.values(D0).map(v=>`<tr class="${v.k===st.mini?'hi':''}"><td><b>${v.k}</b> · ${v.name}</td><td class="num">${fmt(v.lot)}</td><td class="num">${v.far.toFixed(2)}</td><td class="num">${fmt(v.maxz)}</td><td class="num">${v.less?'− '+fmt(v.less):'—'}</td><td class="num"><b>${fmt(v.cap)}</b></td><td class="num">${v.tr?fmt(v.tr):'—'}</td><td class="num">${v.cert?fmt(v.cert):'—'}</td></tr>`).join('');
   if(!window.THREE) return;
   if(!mini) mini=makeViewer($('mini'),{theta:-0.95,phi:1.05,radius:330});
   mini.reset(); mini.context();
-  const hAt=sf=>sf<=LOT?15*sf/LOT:15+10*(sf-LOT)/LOT;
-  [[0,s.base,'--m-base'],[s.base,s.base+s.tr,'--m-transfer'],[s.base+s.tr,s.cap,'--m-bonus']].forEach(([a,b,c])=>{if(b-a>1) mini.prism(LFULL,hAt(a),hAt(b),css(c));});
+  const STEM=[[S0,80],[S0,0],[S1,0],[S1,100],[S0,100]];    // the existing upper floors cover the stem only
+  if(enl){
+    // kept: the 1930 building, drawn in its own colour
+    mini.prism(LFULL,0,exGH,css('--m-exist'));
+    for(let i=0;i<exN;i++) mini.prism(STEM,exGH+i*exUH,exGH+(i+1)*exUH,css('--m-exist'));
+    // new floors stack above it, still coloured by where their floor area comes from
+    const hNew=sf=>exTop+10*sf/LOT;
+    const own=Math.max(0,s.base-exZFA);                      // the existing building uses up your own lot's FAR first
+    [[0,own,'--m-base'],[own,own+s.tr,'--m-transfer'],[own+s.tr,newZFA,'--m-bonus']]
+      .forEach(([a,b,c])=>{ if(b-a>1) mini.prism(LFULL,hNew(a),hNew(b),css(c)); });
+  } else {
+    const hAt=sf=>sf<=LOT?15*sf/LOT:15+10*(sf-LOT)/LOT;
+    [[0,s.base,'--m-base'],[s.base,s.base+s.tr,'--m-transfer'],[s.base+s.tr,s.cap,'--m-bonus']].forEach(([a,b,c])=>{if(b-a>1) mini.prism(LFULL,hAt(a),hAt(b),css(c));});
+  }
   const env=s.bonus?[85,115]:[75,85];
   mini.wire(LFULL,0,env[0],css('--accent')); mini.wire(LSET,env[0],env[1],css('--accent'));
-  mini.target.set(26,38,50); mini.draw();
+  $('mini-keep').hidden=!enl;
+  mini.target.set(26,enl?Math.max(38,exTop):38,50); mini.draw();
 }
 
 /* ---------- detailed studies ---------- */
@@ -1777,7 +1799,7 @@ $('in-mode').addEventListener('change',()=>{
   if(st.mode==='enl') { st.strategy='height'; $('in-strategy').value='height'; }   // denser: fill the envelope above the existing floors
   regen(); renderMini(); renderStudies(false);
 });
-$('in-exfloors').addEventListener('change',()=>{regen();renderStudies(false);});
+$('in-exfloors').addEventListener('change',()=>{regen();renderMini();renderStudies(false);});
 $('in-cut').addEventListener('change',()=>{st.cut=$('in-cut').checked;build3D(plans[st.scheme]);});
 const rethemed=()=>{renderMini();renderStudies(true);};
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
