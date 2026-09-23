@@ -2271,6 +2271,8 @@ measureBar(); addEventListener('resize',measureBar);
 const markStuck=()=>{ const s=$('bar-top'), b=$('topbar'); if(!s||!b) return;
   b.classList.toggle('stuck', window.scrollY>=s.offsetTop-1 && getComputedStyle(b).position==='sticky'); };
 addEventListener('scroll',markStuck,{passive:true}); addEventListener('resize',markStuck); markStuck();
+if(window.IntersectionObserver&&$('bar-top'))   // second signal, in case scroll events are throttled
+  new IntersectionObserver(([e])=>$('topbar').classList.toggle('stuck',!e.isIntersecting&&getComputedStyle($('topbar')).position==='sticky'),{threshold:1}).observe($('bar-top'));
 if(window.ResizeObserver) new ResizeObserver(measureBar).observe($('topbar'));
 const rethemed=()=>{renderMini();renderStudies(true);};
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
