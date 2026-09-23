@@ -243,6 +243,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
 <div class="wrap">
 
 <div class="topbar" id="topbar">
+  <label class="field tb-field"><span class="label">Tenure</span>
+    <select id="in-tenure"><option value="condo" selected>Condo sale</option><option value="rental">Rental</option></select></label>
   <label class="field tb-field"><span class="label">Method</span>
     <select id="in-mode"><option value="gu" selected>Ground-up</option><option value="enl">Keep + add floors</option></select></label>
   <label class="field tb-field" id="exfloors-wrap" hidden><span class="label">Floors kept</span>
@@ -441,7 +443,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
         <label class="field"><span class="label">Bonus source</span>
           <select id="in-bonus"><option value="cert" selected>IH certificates (off-site)</option><option value="onsite">On-site affordable (UAP)</option></select></label>
         <label class="field"><span class="label">Tenure</span>
-          <select id="in-tenure"><option value="condo" selected>Condo sale</option><option value="rental">Rental (485-x)</option></select></label>
+          <select id="in-tenure2"><option value="condo" selected>Condo sale</option><option value="rental">Rental</option></select></label>
         <label class="field"><span class="label">Massing strategy</span>
           <select id="in-strategy"><option value="eff" selected>Compact (fewest floors)</option><option value="height">Max height (fills envelope)</option></select></label>
         <label class="field"><span class="label">Circulation deduction</span>
@@ -560,7 +562,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   <div class="sheet-tag"><span class="no">F-100</span><span class="label">Sell-out</span></div>
   <div class="sheet-body">
     <div class="fbar">
-      <h2>Projected sell-out</h2>
+      <h2 id="sellout-h">Projected sell-out</h2>
       <div class="tabs" id="ftabs" role="group" aria-label="Scheme for financials">
         <button type="button" id="ft-A" data-s="A" aria-pressed="false"><b>A</b>Own lot</button>
         <button type="button" id="ft-B" data-s="B" aria-pressed="false"><b>B</b>+ certs</button>
@@ -568,7 +570,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
         <button type="button" id="ft-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
       </div>
     </div>
-    <p>Residential condos are priced per sellable sf, taken as unit area from the plans (core, corridors, lobby and amenities excluded). The ground-floor retail is valued as a commercial condo: rent, less vacancy and landlord costs, divided by the cap rate. The lease is assumed triple-net, and <b>ICAP</b> is assumed to keep real estate taxes low, which supports the rent. Changing the scheme here also changes the studies above.</p>
+    <p id="sellout-intro"></p>
     <div class="fgrid">
       <label class="field"><span class="label">Condo $/sf</span><input id="f-res" type="number" step="25" value="1500"></label>
       <label class="field"><span class="label">Private outdoor $/sf</span><input id="f-out" type="number" step="25" value="0"></label>
@@ -580,6 +582,9 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
       <label class="field"><span class="label">Taxes $/sf/yr with 485-x</span><input id="f-tax485" type="number" step="0.5" value="2"></label>
       <label class="field"><span class="label">Resi vacancy %</span><input id="f-rvac" type="number" step="0.5" value="4"></label>
       <label class="field"><span class="label">Resi cap rate %</span><input id="f-rcap" type="number" step="0.25" value="5.25"></label>
+      <label class="field"><span class="label">Rental exit</span>
+        <select id="f-exit"><option value="sale" selected>Sell at cap rate</option><option value="refi">Refinance and hold</option></select></label>
+      <label class="field"><span class="label">Refinance LTV %</span><input id="f-refiltv" type="number" step="5" value="65"></label>
       <label class="check" style="align-self:end;padding-bottom:6px"><input id="f-485" type="checkbox" checked> Apply 485-x</label>
       <label class="field"><span class="label">Retail rent $/sf/yr</span><input id="f-rent" type="number" step="5" value="80"></label>
       <label class="field"><span class="label">Vacancy + credit %</span><input id="f-vac" type="number" step="0.5" value="5"></label>
@@ -590,11 +595,13 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <div class="tiles" id="rev-tiles"></div>
     <div class="below">
       <div class="tbl" style="max-height:440px;overflow:auto"><table>
-        <thead><tr><th>Floor</th><th>Unit</th><th>Sellable sf</th><th>Price</th><th>$/sf</th></tr></thead>
+        <thead><tr><th>Floor</th><th>Unit</th><th id="uh-sf">Sellable sf</th><th id="uh-val">Price</th><th id="uh-psf">$/sf</th></tr></thead>
         <tbody id="unit-body"></tbody>
         <tfoot id="unit-foot" class="sticky-foot"></tfoot>
       </table></div>
       <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <span class="label" id="resi-ledger-label" hidden>Residential rental</span>
+        <div class="ledger" id="resi-ledger" hidden></div>
         <span class="label">Ground-floor retail condo</span>
         <div class="ledger" id="retail-ledger"></div>
         <p class="note">Commercial condos sell to investors on in-place income, so a signed lease before sale supports the 5% cap rate. ICAP (Industrial & Commercial Abatement Program) phases in the tax increase from new construction; apply before permits are pulled <span class="verify">verify eligibility</span>.</p>
@@ -1112,6 +1119,7 @@ function renderStudies(keepFloor){
   const p=plans[st.scheme]; if(!p) return;
   if(!keepFloor||!p.floors.some(f=>f.n===st.floor)){ const sb=p.floors.find(f=>f.setback&&!f.top); st.floor=(sb||p.floors[3]||p.floors[2]).n; }
   document.querySelectorAll('#tabs button, #gtabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
+  if($('in-tenure2')) $('in-tenure2').value=st.tenure;
   if($('in-mode2')){
     $('in-mode2').value=st.mode; $('in-exfloors2').value=$('in-exfloors').value;
     $('exfloors2-wrap').hidden=st.mode!=='enl';
@@ -1185,8 +1193,8 @@ const pct=n=>(n*100).toFixed(1)+'%';
 function unitsOf(p){
   const out=[];
   for(const f of p.floors){ if(typeof f.n!=='number'||f.n<2) continue;
-    const g={}; f.rects.forEach(r=>{if(r.t==='res'&&r.u){(g[r.u]=g[r.u]||{sf:0,label:''}); g[r.u].sf+=r.area; if(r.label) g[r.u].label=r.label;}});
-    Object.values(g).forEach(u=>out.push({floor:f.n,label:u.label||unitName(u.sf),sf:u.sf}));
+    const g={}; f.rects.forEach(r=>{if((r.t==='res'||r.t==='aff')&&r.u){(g[r.u]=g[r.u]||{sf:0,label:'',aff:false,id:r.u}); g[r.u].sf+=r.area; if(r.t==='aff') g[r.u].aff=true; if(r.label) g[r.u].label=r.label;}});
+    Object.values(g).forEach(u=>out.push({floor:f.n,label:u.label||unitName(u.sf),sf:u.sf,aff:u.aff,u:u.id}));
   }
   return out;
 }
@@ -1205,8 +1213,11 @@ function fin(p,o={}){
   const affRoll=affSf*v('f-arent'), affNOI=affRoll*(1-v('f-rvac')/100)-affSf*(v('f-ropex')+taxPsf);
   const affVal=affSf?affNOI/Math.max(.01,v('f-rcap')/100):0;
   const condoGross=mktSf*v('f-res')+privOut*v('f-out');
+  const refi=rental&&$('f-exit')&&$('f-exit').value==='refi';
+  const refiLtv=v('f-refiltv')/100;
   const resGross=rental?resCapVal:condoGross+affVal;
-  const resNet=rental?resCapVal*(1-v('f-scret')/100)
+  // selling costs brokerage and transfer tax; refinancing does not, but leaves your equity in the building
+  const resNet=rental?(refi?resCapVal:resCapVal*(1-v('f-scret')/100))
                      :condoGross*(1-v('f-scres')/100)+affVal*(1-v('f-scret')/100);
   const rent=p.retail*v('f-rent'), noi=rent*(1-v('f-vac')/100-v('f-opex')/100), retVal=noi/(v('f-cap')/100), retNet=retVal*(1-v('f-scret')/100);
   const revenue=resNet+retNet;
@@ -1240,7 +1251,8 @@ function fin(p,o={}){
   const sc=1-v('f-scres')/100, c=1/(1-ltc*k);
   const bePsf=rental?NaN:(total-retNet-affVal*(1-v('f-scret')/100)-privOut*v('f-out')*sc)/(Math.max(1,mktSf)*sc);
   const target=.15, residual=revenue/((1+target)*c)-(costEx-land);
-  return {rental,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
+  const refiProceeds=refi?resCapVal*refiLtv:0;
+  return {rental,refi,refiLtv,refiProceeds,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
     margin:profit/total, roe:profit/equity, em, irr:em>0?Math.pow(em,12/Math.max(1,v('f-months')))-1:-1};
 }
 function investorOf(F,o={}){
@@ -1354,8 +1366,41 @@ function renderFinance(){
     ['Retail condo value',mm(F.retVal),'',`Rent ${fmt(p.retail)} sf × $${$('f-rent').value} = ${mm(F.rent)}. Less ${$('f-vac').value}% vacancy and ${$('f-opex').value}% non-reimbursed opex = NOI ${money(F.noi)}. ÷ ${$('f-cap').value}% cap rate = <b>${mm(F.retVal)}</b>.`],
     ['Net revenue after sales costs',mm(F.revenue),'',`Condo sales ${mm(F.resGross)} × (1 − ${$('f-scres').value}%) = ${mm(F.resNet)}, plus retail ${mm(F.retVal)} × (1 − ${$('f-scret').value}%) = ${mm(F.retNet)}. Total <b>${mm(F.revenue)}</b>.`]
   ].map(tileHTML).join('');
-  $('unit-body').innerHTML=units.slice().reverse().map(u=>`<tr><td class="num">${u.floor}</td><td>${u.label}</td><td class="num">${fmt(u.sf)}</td><td class="num">${money(u.sf*psf)}</td><td class="num">$${fmt(psf)}</td></tr>`).join('');
-  $('unit-foot').innerHTML=`<tr class="tot"><td colspan="2">${units.length} units · avg ${short$(p.net*psf/Math.max(1,units.length))}/unit</td><td class="num">${fmt(p.net)}</td><td class="num">${money(p.net*psf)}</td><td class="num">$${fmt(p.net>0?p.net*psf/p.net:0)}</td></tr>`;
+  const mrent=+$('f-mrent').value||0, arent=+$('f-arent').value||0;
+  const affIds=new Set(); p.floors.forEach(f=>f.rects.forEach(r=>{ if(r.t==='aff'&&r.u) affIds.add(r.u); }));
+  $('sellout-h').textContent=F.rental?'Projected rental income and exit':'Projected sell-out';
+  $('uh-sf').textContent=F.rental?'Rentable sf':'Sellable sf';
+  $('uh-val').textContent=F.rental?'Rent / month':'Price';
+  $('uh-psf').textContent=F.rental?'$/sf/yr':'$/sf';
+  $('sellout-intro').textContent=F.rental
+    ? `Every unit is rented, not sold. Market units are underwritten at $${fmt(mrent)}/sf/yr and income-restricted units at $${fmt(arent)}/sf/yr${F.use485?', with 485-x holding taxes down':''}. Rent less vacancy, operating costs and taxes gives the NOI; the cap rate turns that into value, which you either sell or refinance against. The ground-floor retail is valued separately as a commercial condo on a triple-net lease, with ICAP keeping its taxes low.`
+    : 'Residential condos are priced per sellable sf, taken as unit area from the plans (core, corridors, lobby and amenities excluded). The ground-floor retail is valued as a commercial condo: rent, less vacancy and landlord costs, divided by the cap rate. The lease is assumed triple-net, and ICAP is assumed to keep real estate taxes low, which supports the rent. Changing the scheme here also changes the studies above.';
+  $('unit-body').innerHTML=units.slice().reverse().map(u=>{
+    const aff=u.aff||affIds.has(u.u), psfU=F.rental?(aff?arent:mrent):psf;
+    const val=F.rental?money(u.sf*psfU/12):money(u.sf*psf);
+    return `<tr><td class="num">${u.floor}</td><td>${u.label}${aff?' · affordable':''}</td><td class="num">${fmt(u.sf)}</td><td class="num">${val}</td><td class="num">$${fmt(psfU)}</td></tr>`;
+  }).join('');
+  $('unit-foot').innerHTML=F.rental
+    ? `<tr class="tot"><td colspan="2">${units.length} units · ${p.affUnits} affordable</td><td class="num">${fmt(p.net)}</td><td class="num">${money(F.rentRoll/12)}</td><td class="num">$${fmt(F.rentRoll/Math.max(1,p.net))}</td></tr>`
+    : `<tr class="tot"><td colspan="2">${units.length} units · avg ${short$(p.net*psf/Math.max(1,units.length))}/unit</td><td class="num">${fmt(p.net)}</td><td class="num">${money(p.net*psf)}</td><td class="num">$${fmt(p.net>0?p.net*psf/p.net:0)}</td></tr>`;
+  $('resi-ledger-label').hidden=!F.rental; $('resi-ledger').hidden=!F.rental;
+  if(F.rental){
+    const rows=[['Market rent, '+fmt(F.mktSf)+' sf',money(F.mktSf*mrent)],
+      ...(F.affSf?[['Affordable rent, '+fmt(F.affSf)+' sf',money(F.affSf*arent)]]:[]),
+      ['Less vacancy '+$('f-rvac').value+'%',money(-F.rentRoll*(+$('f-rvac').value||0)/100)],
+      ['Operating costs @ $'+$('f-ropex').value+'/sf',money(-p.net*(+$('f-ropex').value||0))],
+      ['Real estate taxes @ $'+F.taxPsf+'/sf'+(F.use485?' (485-x)':''),money(-p.net*F.taxPsf)]];
+    $('resi-ledger').innerHTML=rows.map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('')
+      +`<div class="sum"><span>Stabilized NOI</span><span class="num">${money(F.resNOI)}</span></div>`
+      +`<div><span>Value @ ${$('f-rcap').value}% cap</span><span class="num">${money(F.resCapVal)}</span></div>`
+      +(F.refi
+        ? `<div><span>Refinance at ${$('f-refiltv').value}% LTV</span><span class="num">${money(F.refiProceeds)}</span></div>`
+          +`<div><span>Equity left in the building</span><span class="num">${money(F.resCapVal-F.refiProceeds)}</span></div>`
+          +`<div><span>Debt service on the new loan</span><span class="num">${money(-F.refiProceeds*0.065)}/yr at 6.5%</span></div>`
+          +`<div class="sum"><span>Cash flow after debt service</span><span class="num">${money(F.resNOI-F.refiProceeds*0.065)}/yr</span></div>`
+        : `<div><span>Less ${$('f-scret').value}% sale costs</span><span class="num">${money(-F.resCapVal*(+$('f-scret').value||0)/100)}</span></div>`
+          +`<div class="sum"><span>Net from the sale</span><span class="num">${money(F.resCapVal*(1-(+$('f-scret').value||0)/100))}</span></div>`);
+  }
   $('retail-ledger').innerHTML=[
     ['Retail area',fmt(p.retail)+' sf'],['Gross rent @ $'+$('f-rent').value,money(F.rent)],['Less vacancy + non-reimbursed opex',money(F.noi-F.rent)],
   ].map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('')
@@ -1374,6 +1419,12 @@ function renderFinance(){
     +row('Total project cost','',F.total,'tot');
   const neg=F.profit<0?' neg':'';
   $('ret-tiles').innerHTML=[
+    [F.rental?(F.refi?'Exit: refinance and hold':'Exit: sale at cap rate'):'Exit: condo sell-out',
+      F.rental?(F.refi?money(F.refiProceeds)+' out':mm(F.resCapVal)):mm(F.condoGross),'',
+      F.rental?(F.refi
+        ? `The building is refinanced at ${$('f-refiltv').value}% of its ${mm(F.resCapVal)} value: ${money(F.refiProceeds)} of proceeds repay the construction loan of ${mm(F.loan)} first. You keep the asset and ${money(F.resCapVal-F.refiProceeds)} of equity in it, plus the rent.`
+        : `Stabilized NOI ${money(F.resNOI)} ÷ ${$('f-rcap').value}% cap = ${mm(F.resCapVal)}, less ${$('f-scret').value}% sale costs.`)
+      :`${fmt(F.mktSf)} sf of condos at $${fmt(+$('f-res').value||0)}/sf${F.affSf?`, plus ${mm(F.affVal)} for the affordable rentals held`:''}.`],
     ['Total project cost',mm(F.total),'',`Hard costs <b>${mm(F.hard)}</b> + soft costs <b>${mm(F.soft)}</b> + land <b>${mm(F.land)}</b> + air rights &amp; certificates <b>${mm(F.nb+F.certs)}</b> + financing (interest reserve + fees) <b>${mm(F.financing)}</b> = <b>${mm(F.total)}</b>.`],
     ['Bank loan ('+$('f-ltc').value+'% LTC)',mm(F.loan),'',`Loan-to-cost ${$('f-ltc').value}% × total project cost ${mm(F.total)} = <b>${mm(F.loan)}</b>. The interest reserve is inside the cost, so the loan also funds its own interest.`],
     ['Equity required',mm(F.equity),'',`Total project cost ${mm(F.total)} − bank loan ${mm(F.loan)} = <b>${mm(F.equity)}</b>, the ${100-(+$('f-ltc').value||0)}% of cost the bank won't fund. It goes in first (land, predevelopment, early construction) before the loan starts drawing. F-500 shows who funds it.`],
@@ -1916,6 +1967,7 @@ $('in-mode2').addEventListener('change',()=>{ $('in-mode').value=$('in-mode2').v
 $('in-exfloors2').addEventListener('change',()=>{ $('in-exfloors').value=$('in-exfloors2').value; $('in-exfloors').dispatchEvent(new Event('change')); });
 $('in-bonus').addEventListener('change',()=>{ st.bonusSrc=$('in-bonus').value; regen(); renderStudies(true); });
 $('in-tenure').addEventListener('change',()=>{ st.tenure=$('in-tenure').value; regen(); renderStudies(true); });
+$('in-tenure2').addEventListener('change',()=>{ $('in-tenure').value=$('in-tenure2').value; $('in-tenure').dispatchEvent(new Event('change')); });
 $('f-485').addEventListener('change',()=>{ regen(); renderStudies(true); });
 $('in-cut').addEventListener('change',()=>{st.cut=$('in-cut').checked;build3D(plans[st.scheme]);});
 const measureBar=()=>{ const b=$('topbar'); if(!b) return; const sticky=getComputedStyle(b).position==='sticky';
