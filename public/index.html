@@ -788,10 +788,10 @@ function makeViewer(canvas,opts){
     v.group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(v3),new THREE.LineBasicMaterial({color,transparent:true,opacity:op??.9})));};
   v.tag=(text,x,y,z,color)=>{ // small architectural level annotation: tick, leader and number
     const c=document.createElement('canvas'); c.width=192; c.height=96; const g2=c.getContext('2d');
-    g2.fillStyle=css('--paper'); g2.globalAlpha=.92; g2.fillRect(0,26,192,44); g2.globalAlpha=1;
     g2.strokeStyle=color; g2.lineWidth=3; g2.beginPath(); g2.moveTo(2,70); g2.lineTo(190,70); g2.stroke();
-    g2.fillStyle=css('--ink'); g2.font='600 34px "IBM Plex Mono", monospace'; g2.textAlign='center';
-    g2.fillText(text,96,62);
+    g2.font='600 34px "IBM Plex Mono", monospace'; g2.textAlign='center';
+    g2.lineWidth=6; g2.strokeStyle='rgba(0,0,0,.55)'; g2.strokeText(text,96,62);   // keeps white readable on a pale sky
+    g2.fillStyle='#ffffff'; g2.fillText(text,96,62);
     const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false,transparent:true}));
     s.scale.set(17,8.5,1); s.position.set(x,y,z); s.renderOrder=20; v.group.add(s);};
   v.context=()=>{ // streets, lot pad, 727 Grand existing
