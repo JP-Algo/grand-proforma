@@ -698,8 +698,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
 <section class="sheet" id="returns">
   <div class="sheet-tag"><span class="no">F-300</span><span class="label">Returns</span></div>
   <div class="sheet-body">
-    <h2>Return on investment at 70% loan-to-cost</h2>
-    <p>The bank funds 70% of total project cost, including land, acquisitions and its own interest reserve. Equity covers the other 30%. The loan is repaid from sales, and profit is what remains after the loan and every cost. Interest is estimated on the average drawn balance over the full project period.</p>
+    <h2 id="returns-h">Return on investment</h2>
+    <p id="returns-intro" data-rest="The loan is repaid from sales, and profit is what remains after the loan and every cost. Interest is estimated on the average drawn balance over the full project period.">The bank funds part of the total project cost, including land, acquisitions and its own interest reserve. Equity covers the rest. The loan is repaid from sales, and profit is what remains after the loan and every cost. Interest is estimated on the average drawn balance over the full project period.</p>
     <div class="fgrid">
       <label class="field"><span class="label">Loan-to-cost %</span><input id="f-ltc" type="number" step="5" value="70"></label>
       <label class="field"><span class="label">Interest rate %</span><input id="f-rate" type="number" step="0.25" value="9"></label>
@@ -1518,6 +1518,9 @@ function renderFinance(){
     ['Land value for 15% margin',mm(F.residual),F.residual<0?' neg':'',`The most you could pay for the land and still earn a 15% margin on cost: net revenue ${mm(F.revenue)} ÷ 1.15, less all non-land costs and the financing they carry = <b>${mm(F.residual)}</b>. Compare it with your land basis of ${mm(F.land)}.`],
     ['Building efficiency',Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)+'%','',`(Condo sellable ${fmt(p.net)} sf + retail ${fmt(p.retail)} sf + occupiable outdoor ${fmt(p.outdoor)} sf) ÷ (gross above-grade ${fmt(p.gross)} sf + occupiable outdoor ${fmt(p.outdoor)} sf) = <b>${Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)}%</b>. Outdoor means loggias, setback terraces and roof decks; adding it to both sides keeps the ratio under 100%. Enclosed only: ${Math.round((p.net+p.retail)/p.gross*100)}%. Condo only: ${Math.round(p.net/p.gross*100)}%.`]
   ].map(tileHTML).join('');
+  const ltcNow=+$('f-ltc').value||0;
+  $('returns-h').textContent=`Return on investment at ${ltcNow}% loan-to-cost`;
+  $('returns-intro').textContent=`The bank funds ${ltcNow}% of total project cost, including land, acquisitions and its own interest reserve. Equity covers the other ${Math.round(100-ltcNow)}%. `+$('returns-intro').dataset.rest;
   const T=F.total;
   $('src-body').innerHTML=`<tr><td>Construction loan</td><td class="num">${money(F.loan)}</td><td class="num">${pct(F.loan/T)}</td></tr><tr><td>Equity</td><td class="num">${money(F.equity)}</td><td class="num">${pct(F.equity/T)}</td></tr><tr class="tot"><td>Total</td><td class="num">${money(T)}</td><td class="num">100%</td></tr>`;
   const uses=[['Land',F.land],['Air rights + certificates',F.nb+F.certs],['Hard costs',F.hard],['Soft costs',F.soft],['Financing',F.financing]];
@@ -2293,8 +2296,6 @@ const rethemed=()=>{renderMini();renderStudies(true);};
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
 new MutationObserver(rethemed).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 regen(); renderMini(); renderStudies(false);
-// read-only hook for the investor deck (public/deck.html), which loads this page in a hidden frame
-window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,get plans(){return plans;},loaded:false};
 
 /* ---------- saved values + scenarios (artifact db · Neon API · browser) ---------- */
 (function(){
@@ -2438,7 +2439,6 @@ window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,get plans(){return
     let resumed=false;
     try{ const w=await store.getWorking(); if(w&&w.values){ apply(w); current=w.scenarioId||''; edited=!!w.edited; resumed=true; } }
     catch(e){ status('Could not load your last session'); }
-    window.G725.loaded=true; window.dispatchEvent(new Event('g725-ready'));
     ready=true; $('sc-menu').disabled=false;
     await refresh();
     status(resumed?'Resumed last session':('Changes save automatically'+(store.where?' '+store.where:'')));
