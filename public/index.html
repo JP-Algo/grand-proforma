@@ -288,9 +288,9 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
 </header>
 
 <section class="answer" aria-label="Headline answers">
-  <div><span class="label">Buy from 727 Grand</span><span class="big num" id="a-neighbor">—</span><p id="a-neighbor-p">—</p></div>
-  <div><span class="label">IH certificates (merged)</span><span class="big num" id="a-bonus">—</span><p id="a-bonus-p">—</p></div>
-  <div><span class="label">Scheme D building</span><span class="big num" id="a-total">—</span><p id="a-total-p">—</p></div>
+  <div><span class="label" id="a-total-l">Scheme D building</span><span class="big num" id="a-total">—</span><p id="a-total-p">—</p></div>
+  <div><span class="label" id="a-neighbor-l">Buy from 727 Grand</span><span class="big num" id="a-neighbor">—</span><p id="a-neighbor-p">—</p></div>
+  <div><span class="label" id="a-bonus-l">IH certificates (merged)</span><span class="big num" id="a-bonus">—</span><p id="a-bonus-p">—</p></div>
 </section>
 
 <section class="sheet" id="summary">
@@ -1191,7 +1191,7 @@ function renderStudies(keepFloor){
     ? `Keep + add: the 1930 building stays — its ground-floor retail and ${p.exN} vacant floor${p.exN===1?'':'s'} above, ${fmt(p.exGross)} sf in total, which counts against the floor-area cap. A new core is cut through them in the rear arm, and ${fmt(p.newGross)} sf of new floors is built on top, following the same envelope as a new building: the 40 ft minimum base height, 10 ft setbacks from both streets and a 40 ft dormer on Graham. Floors above the 4th need new steel columns. Retained floors are drawn in grey. Pick a floor to see its plan.`
     : 'Each scheme is generated from its floor-area cap. The ground floor is 100% built, with retail wrapping the corner and a small lobby on Graham. Floor-to-floor heights stretch so the roof lands on the envelope: 85 ft standard, 115 ft with certificates. The building stays at the street line through the 40 ft minimum base height, then sets back 10 ft from both streets, with a 40 ft dormer on Graham. Pick a floor to see its plan. Blue lines are windows and hatched areas are outdoor space.';
   const SC=p.s;
-  const ad=document.querySelectorAll('.answer .label');
+  const ad={0:$('a-neighbor-l'),1:$('a-bonus-l'),2:$('a-total-l')};
   if(SC.tr>0){
     ad[0].textContent='Buy from 727 Grand';
     $('a-neighbor').textContent=fmt(SC.tr)+' sf';
