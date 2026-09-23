@@ -7,7 +7,9 @@ Inclusionary Housing designated area — including a zoning lot merger with 727 
 Inclusionary Housing certificates.
 
 ## Layout
-- `public/index.html` — the whole presentation, one file (three.js from cdnjs).
+- `src/page.html` — the page as authored (artifact content: no doctype/html/head wrapper).
+- `public/index.html` — built by `npm run build`, which wraps `src/page.html` in a real HTML document.
+  Serving the raw artifact source would put browsers in quirks mode and break sticky positioning.
 - `api/` — Vercel serverless functions: `scenarios` (list/save/delete), `state` (autosaved inputs), `auth` (edit-key check).
 - `scripts/init_db.mjs` — creates the `grand725` schema in Neon. Safe to re-run.
 

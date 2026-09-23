@@ -11,6 +11,7 @@
     "dotenv": "^16.4.5"
   },
   "scripts": {
-    "db:init": "node scripts/init_db.mjs"
+    "db:init": "node scripts/init_db.mjs",
+    "build": "node scripts/build_site.mjs"
   }
 }
