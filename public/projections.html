@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>725 Grand Projections</title>
+<meta name="description" content="Line-by-line projections for 725 Grand Street: Scheme B (own lot + IH certificates) and Scheme D (merged with 727 Grand + certificates).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EDF0EE; --paper:#F8FAF8; --ink:#172125; --ink-2:#4A575C; --rule:#C9D1CE;
+  --accent:#0D6A80; --accent-soft:#D6E8EC; --warn:#9A5B00; --neg:#A8322A; --neg-soft:#F3DEDA; --pos:#2F7A4A; --pos-soft:#DCEEDF;
+  --c-hard:#5E6E76; --c-soft:#8D9A9F; --c-land:#C98517; --c-rights:#3A8656; --c-fin:#B6A6E2; --c-condo:#0D6A80; --c-retail:#E39E6B;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111719; --paper:#182023; --ink:#E4EAE8; --ink-2:#9AA8AC; --rule:#2E3A3E;
+    --accent:#5FB6CB; --accent-soft:#16333B; --warn:#E0A548; --neg:#F08C80; --neg-soft:#3A1F1C; --pos:#6FC58D; --pos-soft:#17301F;
+    --c-hard:#8A9CA4; --c-soft:#5F6B70; --c-land:#E3A23A; --c-rights:#5DB07B; --c-fin:#7D6FB0; --c-condo:#5FB6CB; --c-retail:#C07A4A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111719; --paper:#182023; --ink:#E4EAE8; --ink-2:#9AA8AC; --rule:#2E3A3E;
+  --accent:#5FB6CB; --accent-soft:#16333B; --warn:#E0A548; --neg:#F08C80; --neg-soft:#3A1F1C; --pos:#6FC58D; --pos-soft:#17301F;
+  --c-hard:#8A9CA4; --c-soft:#5F6B70; --c-land:#E3A23A; --c-rights:#5DB07B; --c-fin:#7D6FB0; --c-condo:#5FB6CB; --c-retail:#C07A4A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.55;padding:0 16px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:36px 80px}
+h1,h2,h3{font-family:var(--display);font-stretch:78%;line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:760;letter-spacing:-.01em}
+h2{font-size:clamp(1.45rem,3vw,2rem);font-weight:700}
+h3{font-size:1.1rem;font-weight:680;font-stretch:90%}
+p{margin:0;max-width:72ch}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-family:var(--mono);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
+a{color:var(--accent)}
+b{font-weight:600}
+header{display:grid;gap:14px;padding-bottom:26px;border-bottom:2px solid var(--ink)}
+header .lede{font-size:1.08rem;color:var(--ink-2)}
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:end;margin-top:6px}
+.controls label{display:grid;gap:4px}
+.controls input{font:500 1rem var(--mono);width:9.5em;padding:7px 9px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);color:var(--ink)}
+.controls button{font:500 .8rem var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:9px 12px;border:1px solid var(--rule);border-radius:6px;background:transparent;color:var(--ink-2);cursor:pointer}
+.controls button:hover{color:var(--ink);border-color:var(--ink-2)}
+.controls .hint{color:var(--ink-2);font-size:.85rem;max-width:44ch}
+section{padding-block:34px;border-bottom:1px solid var(--rule);display:grid;gap:18px}
+.kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:18px;display:grid;gap:12px;align-content:start}
+.card .head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.tag{font:500 .7rem var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:4px;background:var(--accent-soft);color:var(--accent)}
+.big{font-family:var(--display);font-stretch:80%;font-weight:720;font-size:2.3rem;line-height:1}
+.neg{color:var(--neg)} .pos{color:var(--pos)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpis div{display:grid;gap:2px}
+.kpis .v{font:500 1.05rem var(--mono)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.93rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+td.num,th.num{text-align:right;white-space:nowrap}
+td .sub{display:block;color:var(--ink-2);font-size:.8rem;font-family:var(--mono)}
+tr.grp td{font:600 .74rem var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--accent);padding-top:18px;border-bottom:1px solid var(--ink-2)}
+tr.tot td{font-weight:600;border-bottom:2px solid var(--ink)}
+tr.tot td.num{font-weight:500}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.84rem;color:var(--ink-2)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+svg text{font-family:var(--mono);fill:var(--ink)}
+.explain{display:grid;gap:10px;background:var(--paper);border-left:3px solid var(--accent);padding:14px 16px;border-radius:0 8px 8px 0}
+.grid-sens td.num{font-size:.86rem}
+.grid-sens td.cell-neg{background:var(--neg-soft);color:var(--neg)}
+.grid-sens td.cell-pos{background:var(--pos-soft);color:var(--pos)}
+.grid-sens td.cell-hi{outline:2px solid var(--ink);outline-offset:-2px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px}
+.status{font-family:var(--mono);font-size:.82rem;color:var(--ink-2)}
+footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px}
+#engine{position:absolute;left:-10000px;top:0;width:1200px;height:900px;border:0;visibility:hidden}
+@media (max-width:560px){ .kpis{grid-template-columns:repeat(2,1fr)} .big{font-size:1.9rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <span class="kicker">725 Grand Street · Brooklyn · pro forma detail</span>
+  <h1>Projections: Scheme B base case vs Scheme D upside</h1>
+  <p class="lede">Every number here comes from the same pro forma as the <a href="/">main study</a>, using its saved inputs, with both schemes built ground-up and sold as condos. Change the condo price or land basis below to see how the result moves. Changes on this page are not saved.</p>
+  <div class="controls">
+    <label><span class="label">Condo $/sf</span><input id="c-price" type="number" step="25" min="0"></label>
+    <label><span class="label">Land basis, 725 Grand $</span><input id="c-land" type="number" step="100000" min="0"></label>
+    <button id="c-reset" type="button">Reset to saved</button>
+    <span class="hint" id="status">Loading the pro forma…</span>
+  </div>
+</header>
+
+<section aria-labelledby="h-sum">
+  <span class="kicker">01 · Summary</span>
+  <h2 id="h-sum">What each scheme makes</h2>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section aria-labelledby="h-why">
+  <span class="kicker">02 · Why</span>
+  <h2 id="h-why">Cost vs revenue per sellable square foot</h2>
+  <div class="explain" id="why"></div>
+  <div class="legend" id="legend"></div>
+  <div class="scroll"><svg id="bars" role="img" aria-label="Cost and revenue per sellable square foot for schemes B and D"></svg></div>
+</section>
+
+<section aria-labelledby="h-lines">
+  <span class="kicker">03 · Line by line</span>
+  <h2 id="h-lines">Program, revenue, costs, capital and returns</h2>
+  <div class="scroll"><table id="lines"></table></div>
+</section>
+
+<section aria-labelledby="h-inv">
+  <span class="kicker">04 · Investor</span>
+  <h2 id="h-inv">A $2M LP investment through the waterfall</h2>
+  <p id="inv-p" class="status"></p>
+  <div class="scroll"><table id="inv"></table></div>
+</section>
+
+<section aria-labelledby="h-sens">
+  <span class="kicker">05 · Sensitivity</span>
+  <h2 id="h-sens">Margin on cost by condo price and land basis</h2>
+  <p>Each cell is profit ÷ total project cost. Green is positive. The outlined cell is the price and land basis set above.</p>
+  <div class="two" id="sens"></div>
+</section>
+
+<section aria-labelledby="h-ass">
+  <span class="kicker">06 · Assumptions</span>
+  <h2 id="h-ass">Inputs used</h2>
+  <div class="scroll"><table id="ass"></table></div>
+</section>
+
+<footer>
+  <span>Preliminary feasibility figures for discussion only; not an offer to sell securities. Source: 725 Grand Street pro forma (same site, saved inputs).</span>
+  <span class="status" id="asof"></span>
+</footer>
+</div>
+<iframe id="engine" src="/" title="Pro forma engine" aria-hidden="true" tabindex="-1"></iframe>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const money=n=>(n<0?'−$':'$')+fmt(Math.abs(n));
+const mm=n=>(n<0?'−$':'$')+(Math.abs(n)/1e6).toFixed(2)+'M';
+const pct=n=>(n<0?'−':'')+Math.abs(n*100).toFixed(1)+'%';
+const psf=n=>(n<0?'−$':'$')+fmt(Math.abs(n));
+const sign=n=>n<0?'neg':'pos';
+const SCHEMES=[
+  {k:'B',title:'Scheme B · base case',tag:'Start now',sub:'725 Grand alone + IH certificates. No deal with 727 Grand needed.'},
+  {k:'D',title:'Scheme D · upside',tag:'With 727 Grand',sub:'Zoning lot merger with 727 Grand + IH certificates on the merged lot.'}
+];
+let G=null, W=null, saved={};
+
+function compute(o){
+  return SCHEMES.map(s=>{
+    const p=G.plans[s.k], F=G.fin(p,o), V=G.investorOf(F,o), units=G.unitsOf(p);
+    return {...s,p,F,V,units};
+  });
+}
+function overrides(){ return {'f-res':+$('c-price').value||0,'f-land':+$('c-land').value||0}; }
+function inVal(id){ const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):''; }
+
+function render(){
+  const o=overrides(), R=compute(o), price=o['f-res'], sc=+inVal('f-scres')/100;
+
+  $('cards').innerHTML=R.map(r=>{ const F=r.F,V=r.V; return `<div class="card">
+    <div class="head"><h3>${r.title}</h3><span class="tag">${r.tag}</span></div>
+    <p class="status">${r.sub}</p>
+    <div><span class="label">Profit</span><div class="big num ${sign(F.profit)}">${mm(F.profit)}</div></div>
+    <div class="kpis">
+      <div><span class="label">Margin on cost</span><span class="v ${sign(F.margin)}">${pct(F.margin)}</span></div>
+      <div><span class="label">Equity multiple</span><span class="v">${F.em.toFixed(2)}×</span></div>
+      <div><span class="label">Break-even $/sf</span><span class="v">${psf(F.bePsf)}</span></div>
+      <div><span class="label">Total cost</span><span class="v">${mm(F.total)}</span></div>
+      <div><span class="label">Net revenue</span><span class="v">${mm(F.revenue)}</span></div>
+      <div><span class="label">Equity needed</span><span class="v">${mm(F.equity)}</span></div>
+    </div>
+    <p class="status">${r.p.N} stories · ${fmt(r.p.height)} ft · ${r.units.length} condos · ${fmt(r.p.retail)} sf retail</p>
+  </div>`; }).join('');
+
+  // per sellable sf
+  const per=R.map(r=>{ const F=r.F, n=Math.max(1,F.mktSf);
+    return {k:r.k, n, cost:[['Hard costs',F.hard/n,'--c-hard'],['Soft costs',F.soft/n,'--c-soft'],['Land',F.land/n,'--c-land'],['Air rights + certificates',(F.nb+F.certs)/n,'--c-rights'],['Financing',F.financing/n,'--c-fin']],
+      rev:[['Condo sales, net of '+Math.round(sc*100)+'% selling costs',(F.revenue-F.retNet)/n,'--c-condo'],['Retail (sold at cap rate)',F.retNet/n,'--c-retail']],
+      costT:F.total/n, revT:F.revenue/n, gross:r.p.gross, eff:F.mktSf/r.p.gross}; });
+  const b=per[0], d=per[1], B=R[0].F;
+  $('why').innerHTML=`<p><b>The short version:</b> the condo price is per <i>sellable</i> square foot, but costs are paid on every square foot built. Scheme B builds ${fmt(b.gross)} sf above grade, plus a ${fmt(R[0].p.cellar)} sf cellar, to get <b>${fmt(b.n)} sf of sellable condos</b> (${pct(b.eff)} of above-grade area). The rest is retail, lobby, stairs, elevator, corridors, walls and mechanical space.</p>
+  <p>Spread over those ${fmt(b.n)} sellable sf, Scheme B costs <b>${psf(b.costT)}/sf</b> all-in: hard ${psf(b.cost[0][1])}, soft ${psf(b.cost[1][1])}, land ${psf(b.cost[2][1])}, certificates ${psf(b.cost[3][1])}, financing ${psf(b.cost[4][1])}. At ${psf(price)}/sf, each sellable sf brings in <b>${psf(b.revT)}</b>: ${psf(b.rev[0][1])} from the condo after selling costs, plus ${psf(b.rev[1][1])} of retail value. The gap of ${psf(b.revT-b.costT)} per sf × ${fmt(b.n)} sf is the ${mm(B.profit)} result.</p>
+  <p>Scheme D spreads the same ${money(o['f-land'])} land basis over ${fmt(d.n)} sellable sf instead of ${fmt(b.n)}, so land drops from ${psf(b.cost[2][1])} to ${psf(d.cost[2][1])} per sf. That's most of the difference between the two schemes.</p>`;
+  const cols=[...new Set(per[0].cost.concat(per[0].rev).map(x=>x[0]+'|'+x[2]))];
+  $('legend').innerHTML=cols.map(c=>{const [l,v]=c.split('|'); return `<span><i style="background:var(${v})"></i>${l.replace(/, net of.*/,'')}</span>`;}).join('');
+  drawBars(per);
+
+  // line by line
+  const row=(l,sub,a,bv,cls='')=>`<tr class="${cls}"><td>${l}${sub?`<span class="sub">${sub}</span>`:''}</td><td class="num">${a}</td><td class="num">${bv}</td></tr>`;
+  const both=(l,f,cls,subf)=>row(l,subf?subf(R[0]):'',f(R[0]),f(R[1]),cls);
+  const itemRows=R[0].F.items.map((it,i)=>row(it[0],`B: ${it[1]} · D: ${R[1].F.items[i][1]}`,money(it[2]),money(R[1].F.items[i][2]))).join('');
+  $('lines').innerHTML=`<thead><tr><th>Line</th><th class="num">Scheme B</th><th class="num">Scheme D</th></tr></thead><tbody>
+    <tr class="grp"><td colspan="3">Program</td></tr>
+    ${both('Stories / height',r=>`${r.p.N} / ${fmt(r.p.height)} ft`)}
+    ${both('Zoning floor area',r=>fmt(r.p.zfa||0)+' sf')}
+    ${both('Gross above grade',r=>fmt(r.p.gross)+' sf')}
+    ${both('Cellar',r=>fmt(r.p.cellar)+' sf')}
+    ${both('Sellable condo area',r=>fmt(r.F.mktSf)+' sf')}
+    ${both('Condo units',r=>String(r.units.length))}
+    ${both('Retail',r=>fmt(r.p.retail)+' sf')}
+    ${both('Loggias, terraces, roof deck',r=>fmt(r.p.outdoor)+' sf')}
+    <tr class="grp"><td colspan="3">Revenue</td></tr>
+    ${both('Condo sales, gross',r=>money(r.F.condoGross),'',()=>`sellable sf × ${psf(price)}`)}
+    ${both('Less condo selling costs',r=>money(-(r.F.condoGross-(r.F.revenue-r.F.retNet))),'',()=>`${inVal('f-scres')}% brokerage + transfer tax`)}
+    ${both('Retail, sold at cap rate',r=>money(r.F.retNet),'',()=>`${fmt(R[0].p.retail)} sf × $${inVal('f-rent')} rent, ${inVal('f-cap')}% cap, less ${inVal('f-scret')}% costs`)}
+    ${both('Net revenue',r=>money(r.F.revenue),'tot')}
+    <tr class="grp"><td colspan="3">Hard costs</td></tr>
+    ${itemRows}
+    ${both('Green / ULE premium',r=>money(r.F.green),'',()=>`${inVal('f-green')}% of the above`)}
+    ${both('Hard-cost contingency',r=>money(r.F.cont),'',()=>`${inVal('f-cont')}%`)}
+    ${both('Total hard costs',r=>money(r.F.hard),'tot',r=>`${psf(r.F.hard/r.p.gross)}/gsf above grade all-in`)}
+    <tr class="grp"><td colspan="3">Other costs</td></tr>
+    ${both('Soft costs',r=>money(r.F.soft),'',()=>`${inVal('f-soft')}% of hard: design, legal, insurance, permits, dev fee, marketing`)}
+    ${both('Land, 725 Grand',r=>money(r.F.land))}
+    ${both('Air rights from 727 Grand',r=>money(r.F.nb),'',()=>`$${inVal('in-p1')}/sf`)}
+    ${both('IH certificates',r=>money(r.F.certs),'',()=>`$${inVal('in-p2')}/sf of bonus floor area`)}
+    ${both('Financing: interest reserve + fees',r=>money(r.F.financing),'',()=>`${inVal('f-rate')}% on ${inVal('f-util')}% avg drawn over ${inVal('f-months')} mo + ${inVal('f-fee')}% fee`)}
+    ${both('Total project cost',r=>money(r.F.total),'tot')}
+    <tr class="grp"><td colspan="3">Capital</td></tr>
+    ${both('Construction loan',r=>money(r.F.loan),'',()=>`${inVal('f-ltc')}% of total cost`)}
+    ${both('Equity',r=>money(r.F.equity))}
+    <tr class="grp"><td colspan="3">Returns</td></tr>
+    ${both('Profit',r=>`<span class="${sign(r.F.profit)}">${money(r.F.profit)}</span>`,'tot')}
+    ${both('Margin on cost',r=>pct(r.F.margin))}
+    ${both('Return on equity',r=>pct(r.F.roe))}
+    ${both('Equity multiple',r=>r.F.em.toFixed(2)+'×')}
+    ${both('Annualized (simplified)',r=>pct(r.F.irr),'',()=>`over ${inVal('f-months')} months`)}
+    ${both('Break-even condo price',r=>psf(r.F.bePsf)+'/sf')}
+    ${both('Price for a 15% margin',r=>psf(solve(r.k,F=>F.margin>=.15,o))+'/sf')}
+  </tbody>`;
+
+  // investor
+  $('inv-p').textContent=`${inVal('iv-pref')}% preferred return, then ${100-(+inVal('iv-promote'))}/${inVal('iv-promote')} split of profit above the pref (LP/sponsor), over ${inVal('f-months')} months.`;
+  const ir=(l,f,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="num">${f(R[0])}</td><td class="num">${f(R[1])}</td></tr>`;
+  $('inv').innerHTML=`<thead><tr><th>$2M LP investment</th><th class="num">Scheme B</th><th class="num">Scheme D</th></tr></thead><tbody>
+    ${ir('Share of project equity',r=>pct(r.V.s))}
+    ${ir('1 · Capital back',r=>money(r.V.invCap))}
+    ${ir('2 · Preferred return',r=>money(r.V.invPref))}
+    ${ir('3 · Share of profit above pref',r=>money(r.V.invRes))}
+    ${ir('Total distributions',r=>money(r.V.total),'tot')}
+    ${ir('LP profit',r=>`<span class="${sign(r.V.profit)}">${money(r.V.profit)}</span>`)}
+    ${ir('LP equity multiple',r=>r.V.em.toFixed(2)+'×')}
+    ${ir('LP annualized (simplified)',r=>pct(r.V.irr))}
+  </tbody>`;
+
+  // sensitivity
+  const prices=[1500,1600,1700,1800,1900,2000,2100], lands=[3500000,3000000,2500000,2000000,1500000];
+  $('sens').innerHTML=SCHEMES.map(s=>`<div><h3>Scheme ${s.k}</h3><div class="scroll"><table class="grid-sens" style="min-width:420px"><thead><tr><th>$/sf ↓ · land →</th>${lands.map(l=>`<th class="num">${mm(l).replace('.00M','M').replace(/0M$/,'M')}</th>`).join('')}</tr></thead><tbody>${
+    prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${lands.map(l=>{const F=G.fin(G.plans[s.k],{'f-res':pr,'f-land':l}); const hi=pr===price&&l===o['f-land']; return `<td class="num ${F.margin<0?'cell-neg':'cell-pos'}${hi?' cell-hi':''}">${pct(F.margin)}</td>`;}).join('')}</tr>`).join('')
+  }</tbody></table></div></div>`).join('');
+
+  // assumptions
+  const A=[['Condo price',psf(price)+'/sf','set above'],['Land basis, 725 Grand',money(o['f-land']),'set above'],['Condo selling costs',inVal('f-scres')+'%'],['Retail rent',`$${inVal('f-rent')}/sf/yr, ${inVal('f-vac')}% vacancy, ${inVal('f-cap')}% cap`],
+    ['Hard cost above grade',`$${inVal('f-hard')}/gsf`],['Cellar',`$${inVal('f-cellar')}/sf`],['Terraces',`$${inVal('f-outc')}/sf`],['Core per level',money(+inVal('f-story'))],['Demolition',`$${inVal('f-demo')}/sf`],['E-232 remediation',money(+inVal('f-edes'))],
+    ['Green premium',inVal('f-green')+'% of hard'],['Contingency',inVal('f-cont')+'% of hard'],['Soft costs',inVal('f-soft')+'% of hard'],['IH certificates',`$${inVal('in-p2')}/sf`],['727 Grand air rights',`$${inVal('in-p1')}/sf`],
+    ['Loan-to-cost',inVal('f-ltc')+'%'],['Interest rate',inVal('f-rate')+'%'],['Avg loan drawn',inVal('f-util')+'%'],['Origination fee',inVal('f-fee')+'%'],['Project length',inVal('f-months')+' months'],
+    ['LP pref / promote',`${inVal('iv-pref')}% / ${inVal('iv-promote')}%`]];
+  $('ass').innerHTML=`<thead><tr><th>Input</th><th class="num">Value</th></tr></thead><tbody>${A.map(a=>`<tr><td>${a[0]}${a[2]?`<span class="sub">${a[2]}</span>`:''}</td><td class="num">${a[1]}</td></tr>`).join('')}</tbody>`;
+}
+
+function solve(k,test,o){ let lo=500,hi=5000; for(let i=0;i<36;i++){const m=(lo+hi)/2; test(G.fin(G.plans[k],{...o,'f-res':m}))?hi=m:lo=m;} return hi; }
+
+function drawBars(per){
+  const svg=$('bars'), W0=Math.max(560,svg.parentNode.clientWidth), L=150, Rp=70, bh=26, gap=10, grpGap=34;
+  const max=Math.max(...per.map(p=>Math.max(p.costT,p.revT)))*1.02, X=v=>L+(W0-L-Rp)*v/max;
+  let y=8, o='';
+  per.forEach(p=>{
+    o+=`<text x="0" y="${y+12}" font-size="12" font-weight="600">Scheme ${p.k}</text><text x="0" y="${y+28}" font-size="10.5" style="fill:var(--ink-2)">${fmt(p.n)} sellable sf</text>`;
+    [['Cost',p.cost,p.costT],['Revenue',p.rev,p.revT]].forEach(([lab,parts,t],i)=>{
+      const yy=y+i*(bh+gap); let x=L;
+      o+=`<text x="${L-8}" y="${yy+bh/2+4}" font-size="11" text-anchor="end" style="fill:var(--ink-2)">${lab}</text>`;
+      parts.forEach(([l,v,c])=>{ if(v<=0) return; const w=X(v)-L; o+=`<rect x="${x}" y="${yy}" width="${Math.max(0,w-1)}" height="${bh}" rx="2" style="fill:var(${c})"><title>${l}: ${psf(v)}/sf</title></rect>`; if(w>46) o+=`<text x="${x+w/2}" y="${yy+bh/2+4}" font-size="10.5" text-anchor="middle" style="fill:#fff">${psf(v)}</text>`; x+=w; });
+      o+=`<text x="${x+6}" y="${yy+bh/2+4}" font-size="11.5" font-weight="600">${psf(t)}</text>`;
+    });
+    const gapV=p.revT-p.costT, yy=y+2*(bh+gap)-2;
+    o+=`<text x="${L}" y="${yy+10}" font-size="11" style="fill:var(${gapV<0?'--neg':'--pos'})">${gapV<0?'Shortfall':'Surplus'}: ${psf(gapV)} per sellable sf</text>`;
+    y+=2*(bh+gap)+grpGap;
+  });
+  svg.setAttribute('viewBox',`0 0 ${W0} ${y-grpGap+22}`); svg.setAttribute('width',W0); svg.setAttribute('height',y-grpGap+22); svg.innerHTML=o;
+}
+
+function start(){
+  W=$('engine').contentWindow; G=W.G725;
+  G.st.mode='gu'; G.st.tenure='condo'; G.regen();
+  saved={'f-res':+inVal('f-res'),'f-land':+inVal('f-land')};
+  $('c-price').value=saved['f-res']; $('c-land').value=saved['f-land'];
+  $('status').textContent=`Saved inputs: ${psf(saved['f-res'])}/sf condo, ${mm(saved['f-land'])} land.`;
+  $('asof').textContent='Computed '+new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
+  render();
+}
+['c-price','c-land'].forEach(id=>$(id).addEventListener('input',()=>G&&render()));
+$('c-reset').addEventListener('click',()=>{ if(!G) return; $('c-price').value=saved['f-res']; $('c-land').value=saved['f-land']; render(); });
+let rT; addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>G&&render(),150); });
+const t0=Date.now();
+(function wait(){
+  let g=null; try{ g=$('engine').contentWindow.G725; }catch(e){}
+  if(g&&g.loaded) return start();
+  if(Date.now()-t0>25000){ $('status').textContent='Could not load the pro forma. Reload the page.'; return; }
+  setTimeout(wait,200);
+})();
+})();
+</script>
+</body>
+</html>
