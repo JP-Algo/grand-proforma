@@ -338,8 +338,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <p>Each block is colored by where its floor area comes from: your lot at FAR 4.0, rights bought from 727 Grand, or IH certificates. This simple model assumes a 15 ft ground floor and 10 ft floors on the full 3,034 sf footprint. The detailed studies further down carve and stretch it.</p>
     <div class="mini">
       <div class="controls">
-        <div class="field"><span class="label">Scenario</span>
-          <div class="tabs" id="mtabs" role="group" aria-label="Scenario">
+        <div class="field"><span class="label">Scheme</span>
+          <div class="tabs" id="mtabs" role="group" aria-label="Scheme">
             <button type="button" id="ms-A" data-s="A" aria-pressed="false"><b>A</b>As-of-right</button>
             <button type="button" id="ms-B" data-s="B" aria-pressed="false"><b>B</b>+ certificates</button>
             <button type="button" id="ms-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
@@ -370,7 +370,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
       </div>
     </div>
     <div class="tbl"><table>
-      <thead><tr><th>Scenario</th><th>Lot sf</th><th>FAR</th><th>Max ZFA</th><th>Less 727 existing</th><th>New building cap</th><th>From neighbor</th><th>Certificates</th></tr></thead>
+      <thead><tr><th>Scheme</th><th>Lot sf</th><th>FAR</th><th>Max ZFA</th><th>Less 727 existing</th><th>New building cap</th><th>From neighbor</th><th>Certificates</th></tr></thead>
       <tbody id="scen-body"></tbody>
     </table></div>
   </div>
@@ -751,7 +751,7 @@ const ft=v=>{const f=Math.floor(v+1e-6), i=Math.round((v-f)*12); return i===12?`
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const st={scheme:'D',mini:'D',floor:null,green:true,exist:4133,cut:false,strategy:'eff',circ:'100',mode:'gu',openUnits:new Set(),ifit:true};
 
-/* ---------- scenario caps ---------- */
+/* ---------- scheme caps ---------- */
 function defs(){
   const transfer=Math.max(0,NEIGH*STD-st.exist), merged=LOT+NEIGH;
   return {
