@@ -782,7 +782,18 @@ function makeViewer(canvas,opts){
   v.prism=(pts,y0,y1,color,o={})=>{const sh=new THREE.Shape(); pts.forEach(([x,z],i)=>i?sh.lineTo(x,-z):sh.moveTo(x,-z));
     const g=new THREE.ExtrudeGeometry(sh,{depth:Math.max(.05,y1-y0),bevelEnabled:false}); g.rotateX(-Math.PI/2); g.translate(0,y0,0);
     v.group.add(new THREE.Mesh(g,new THREE.MeshLambertMaterial({color})));
-    v.group.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:css('--ink'),transparent:true,opacity:o.edge??.5})));};
+    v.group.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:o.edgeColor||css('--ink'),transparent:true,opacity:o.edge??.5})));};
+  v.loop=(pts,y,color,op)=>{ // a single horizontal outline at height y
+    const v3=pts.concat([pts[0]]).map(([x,z])=>new THREE.Vector3(x,y,z));
+    v.group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(v3),new THREE.LineBasicMaterial({color,transparent:true,opacity:op??.9})));};
+  v.tag=(text,x,y,z,color)=>{ // small architectural level annotation: tick, leader and number
+    const c=document.createElement('canvas'); c.width=192; c.height=96; const g2=c.getContext('2d');
+    g2.fillStyle=css('--paper'); g2.globalAlpha=.92; g2.fillRect(0,26,192,44); g2.globalAlpha=1;
+    g2.strokeStyle=color; g2.lineWidth=3; g2.beginPath(); g2.moveTo(2,70); g2.lineTo(190,70); g2.stroke();
+    g2.fillStyle=css('--ink'); g2.font='600 34px "IBM Plex Mono", monospace'; g2.textAlign='center';
+    g2.fillText(text,96,62);
+    const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false,transparent:true}));
+    s.scale.set(17,8.5,1); s.position.set(x,y,z); s.renderOrder=20; v.group.add(s);};
   v.context=()=>{ // streets, lot pad, 727 Grand existing
     const street=new THREE.Mesh(new THREE.PlaneGeometry(320,320),new THREE.MeshBasicMaterial({color:css('--street')}));
     street.rotation.x=-Math.PI/2; street.position.set(40,-.4,50); v.group.add(street);
@@ -824,8 +835,8 @@ function renderMini(){
   const STEM=[[S0,80],[S0,0],[S1,0],[S1,100],[S0,100]];    // the existing upper floors cover the stem only
   if(enl){
     // kept: the 1930 building, drawn in its own colour
-    mini.prism(LFULL,0,exGH,css('--m-exist'));
-    for(let i=0;i<exN;i++) mini.prism(STEM,exGH+i*exUH,exGH+(i+1)*exUH,css('--m-exist'));
+    mini.prism(LFULL,0,exGH,css('--m-exist'),{edge:.95,edgeColor:css('--accent')});
+    for(let i=0;i<exN;i++) mini.prism(STEM,exGH+i*exUH,exGH+(i+1)*exUH,css('--m-exist'),{edge:.95,edgeColor:css('--accent')});
     // new floors stack above it, still coloured by where their floor area comes from
     const hNew=sf=>exTop+10*sf/LOT;
     const own=Math.max(0,s.base-exZFA);                      // the existing building uses up your own lot's FAR first
@@ -837,6 +848,23 @@ function renderMini(){
   }
   const env=s.bonus?[85,115]:[75,85];
   mini.wire(LFULL,0,env[0],css('--accent')); mini.wire(LSET,env[0],env[1],css('--accent'));
+  // floor lines and level tags, so each floor reads separately
+  const keepEdge=css('--accent'), newEdge=css('--ink-2');
+  const levels=[];
+  if(enl){
+    levels.push({y0:0,y1:exGH,plan:LFULL,kept:true});
+    for(let i=0;i<exN;i++) levels.push({y0:exGH+i*exUH,y1:exGH+(i+1)*exUH,plan:STEM,kept:true});
+    const nNew=Math.ceil(newZFA/LOT-1e-9);
+    for(let i=0;i<nNew;i++) levels.push({y0:exTop+i*10,y1:exTop+(i+1)*10,plan:LFULL,kept:false});
+  } else {
+    levels.push({y0:0,y1:15,plan:LFULL,kept:false});
+    for(let i=1;i<stories;i++) levels.push({y0:15+(i-1)*10,y1:15+i*10,plan:LFULL,kept:false});
+  }
+  levels.forEach((L,i)=>{
+    const col=L.kept?keepEdge:newEdge;
+    mini.loop(L.plan,L.y1-0.05,col,L.kept?.95:.6);
+    mini.tag((L.kept?'EXIST · L':'L')+(i+1),S1+13,(L.y0+L.y1)/2,12,col);
+  });
   $('mini-keep').hidden=!enl;
   mini.target.set(26,enl?Math.max(38,exTop):38,50); mini.draw();
 }
