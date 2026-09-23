@@ -937,7 +937,7 @@ function generate(s){
   const fracUp=st.circ==='100'?0:.5, frac=e=>0;
   const G=counted(groundF(),0);
   const baseRects=e=>baseCD();
-  let best=null;
+  let best=null, fallback=null;
   const eff=st.strategy==='eff';
   for(const g of eff?[15]:[15,18,20]){
     for(let N=4;N<=16;N++){
@@ -958,12 +958,14 @@ function generate(s){
         cand={g,N,typ,nb,Au,unused:0}; break;
       }
       if(!cand) continue;
+      if(!fallback||cand.unused<fallback.unused) fallback={...cand,score:[0,0,0]};
       if(eff&&cand.unused>150) continue;
       const ok=cand.Au===null||cand.Au>=(eff?300:850);
       const score=[ok?1:0, ok?(eff?-N:N):(cand.Au||0), -Math.abs(typ-10.5)];
       if(!best||score[0]>best.score[0]||(score[0]===best.score[0]&&(score[1]>best.score[1]||(score[1]===best.score[1]&&score[2]>best.score[2])))) best={...cand,score};
     }
   }
+  if(!best) best=fallback;
   if(!best) return null;
   const {g,N,typ,nb,Au}=best;
   const floors=[];
@@ -1023,7 +1025,8 @@ function generateEnlargement(s,env,gf,budget){
   // everything over the stem is the 1930 building; the core in the rear arm is new at every level
   prefix.forEach(f=>f.rects.forEach(r=>{ if(r.x0>=S0) r.ex=true; }));
   const prefixCounted=prefix.reduce((a,f)=>a+counted(f.rects,f.frac),0);
-  let best=null;
+  const eff=st.strategy==='eff';        // compact: fewest new floors; otherwise fill the envelope
+  let best=null, fallback=null;
   for(const typ of [10,10.5,11,11.5,12]){
     for(let Nn=1;Nn<=12;Nn++){
       if(exTop+Nn*typ>env.H+1e-6) break;
@@ -1038,11 +1041,14 @@ function generateEnlargement(s,env,gf,budget){
         cand={typ,Nn,nb,Au,unused:0}; break;
       }
       if(!cand) continue;
-      const ok=cand.Au===null||cand.Au>=700;
-      const score=[ok?1:0, ok?cand.Nn:(cand.Au||0), -Math.abs(cand.typ-10.5)];   // denser: prefer more new floors
+      if(!fallback||cand.unused<fallback.unused) fallback={...cand,score:[0,0,0]};
+      if(eff&&cand.unused>150) continue;                       // compact must still use the floor area
+      const ok=cand.Au===null||cand.Au>=(eff?300:700);
+      const score=[ok?1:0, ok?(eff?-cand.Nn:cand.Nn):(cand.Au||0), -Math.abs(cand.typ-10.5)];
       if(!best||score[0]>best.score[0]||(score[0]===best.score[0]&&(score[1]>best.score[1]||(score[1]===best.score[1]&&score[2]>best.score[2])))) best={...cand,score};
     }
   }
+  if(!best) best=fallback;
   if(!best) return null;
   const {typ,Nn,nb,Au}=best;
   const floors=[{n:'C',elev:-12,h:12,rects:cellarF(),frac:0,cellar:true,existing:true,prog:'Existing full cellar · MEP, bikes, storage'}].concat(prefix);
@@ -1824,7 +1830,6 @@ $('in-circ').addEventListener('change',()=>{st.circ=$('in-circ').value;regen();r
 $('in-mode').addEventListener('change',()=>{
   st.mode=$('in-mode').value;
   $('exfloors-wrap').hidden=st.mode!=='enl';
-  if(st.mode==='enl') { st.strategy='height'; $('in-strategy').value='height'; }   // denser: fill the envelope above the existing floors
   regen(); renderMini(); renderStudies(false);
 });
 $('in-exfloors').addEventListener('change',()=>{regen();renderMini();renderStudies(false);});
