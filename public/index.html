@@ -2268,8 +2268,9 @@ $('in-cut').addEventListener('change',()=>{st.cut=$('in-cut').checked;build3D(pl
 const measureBar=()=>{ const b=$('topbar'); if(!b) return; const sticky=getComputedStyle(b).position==='sticky';
   document.documentElement.style.setProperty('--topbar-h',(sticky?Math.round(b.getBoundingClientRect().height):0)+'px'); };
 measureBar(); addEventListener('resize',measureBar);
-if(window.IntersectionObserver&&$('bar-top'))
-  new IntersectionObserver(([e])=>$('topbar').classList.toggle('stuck',!e.isIntersecting),{threshold:1}).observe($('bar-top'));
+const markStuck=()=>{ const s=$('bar-top'), b=$('topbar'); if(!s||!b) return;
+  b.classList.toggle('stuck', window.scrollY>=s.offsetTop-1 && getComputedStyle(b).position==='sticky'); };
+addEventListener('scroll',markStuck,{passive:true}); addEventListener('resize',markStuck); markStuck();
 if(window.ResizeObserver) new ResizeObserver(measureBar).observe($('topbar'));
 const rethemed=()=>{renderMini();renderStudies(true);};
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
