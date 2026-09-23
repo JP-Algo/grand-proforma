@@ -1078,7 +1078,7 @@ function generate(s){
 function tagAffordable(P){
   const uapSf=(st.bonusSrc==='onsite'&&P.s.cert>0)?P.s.cert:0;
   const wants485=st.tenure==='rental'&&$('f-485')&&$('f-485').checked;
-  const resFloors=P.floors.filter(f=>typeof f.n==='number'&&f.n>1&&!f.top&&f.rects.some(r=>r.t==='res'));
+  const resFloors=P.floors.filter(f=>typeof f.n==='number'&&f.n>1&&!f.top&&f.rects.some(r=>(r.t==='res'||r.t==='aff')));
   const groups=[];
   resFloors.forEach(f=>{
     const by={}; f.rects.forEach(r=>{ if(r.t==='res'&&r.u) (by[r.u]=by[r.u]||[]).push(r); });
@@ -1775,9 +1775,9 @@ function interiorPlan(p,f){
   door(24.4,90); door(23,85); door(31,97); door(7.5,90);
   const retail=f.rects.filter(r=>r.t==='retail'); if(retail.length){ add('retail','Retail','retail',retail); door(33.5,92); }
   const amen=f.rects.filter(r=>r.t==='amen'); if(amen.length&&!f.cellar){ add('lounge','Resident lounge','lounge',amen); door(31,85); }
-  const a3=find(r=>r.t==='res'&&r.label==='3BR'&&r.x0===S0&&r.z0===0);
+  const a3=find(r=>(r.t==='res'||r.t==='aff')&&r.label==='3BR'&&r.x0===S0&&r.z0===0);
   if(a3){
-    const uA=a3.u, uB=find(r=>r.t==='res'&&r.x0===31&&r.z0===45).u, uC=find(r=>r.t==='res'&&r.x0===31&&r.z0===72).u;
+    const uA=a3.u, uB=(find(r=>(r.t==='res'||r.t==='aff')&&r.x0===31&&r.z0===45)||{}).u, uC=(find(r=>(r.t==='res'||r.t==='aff')&&r.x0===31&&r.z0===72)||{}).u;
     add(uA+':br3','Bedroom','br',[R(S0,0,36,11)],{unit:uA});
     add(uA+':liv','Living · kitchen','liv',[R(36,0,43,11),R(S0,11,43,22),R(43,12,S1,22)],{unit:uA,kit:[S0,19.6,36,22]});
     add(uA+':hall','Hall','hall',[R(31,22,36,45),R(S0,41,31,45)],{unit:uA});
@@ -1797,9 +1797,9 @@ function interiorPlan(p,f){
     add(uC+':br','Bedroom','br',[R(36,86,S1,100)],{unit:uC});
     [[31,82],[40.5,86],[36,90]].forEach(d=>door(...d));
   } else {
-    const front=find(r=>r.t==='res'&&r.x0===S0&&r.z0===60), rear=find(r=>r.t==='res'&&r.x0===31&&r.z0===80);
+    const front=find(r=>(r.t==='res'||r.t==='aff')&&r.x0===S0&&r.z0===60), rear=find(r=>(r.t==='res'||r.t==='aff')&&r.x0===31&&r.z0===80);
     if(front){
-      const ua=front.u, strip=find(r=>r.t==='res'&&r.x0===S0&&r.x1===SB);
+      const ua=front.u, strip=find(r=>(r.t==='res'||r.t==='aff')&&r.x0===S0&&r.x1===SB);
       const len=strip?60-strip.z0:0, nBR=len>=10?Math.max(1,Math.floor(len/11)):0;
       const livR=[R(31,60,S1,70),R(31,70,45,80),R(S0,66,31,80)]; if(strip&&nBR===0) livR.push(strip);
       add(ua+':liv','Living · kitchen','liv',livR,{unit:ua,kit:[S0,66,S0+2,80]});
@@ -1955,7 +1955,7 @@ function renderInterior(){
     rows+=units[u].map((g,gi)=>`<tr id="${rid}-${gi}"${open?'':' hidden'}><td style="padding-left:30px">${g.name}</td><td class="num">${fmt(g.rects.reduce((a,q)=>a+q.area,0))}</td><td></td></tr>`).join('');
   }
   G.filter(g=>!g.unit&&['hall','lounge','retail'].includes(g.kind)).forEach(g=>{rows+=`<tr><td>${g.name}</td><td class="num">${fmt(g.rects.reduce((a,q)=>a+q.area,0))}</td><td></td></tr>`;});
-  { const unitSf=f.rects.filter(r=>r.t==='res').reduce((s,r)=>s+r.area,0);
+  { const unitSf=f.rects.filter(r=>(r.t==='res'||r.t==='aff')).reduce((s,r)=>s+r.area,0);
     rows+=`<tr class="tot"><td>Floor ${f.n===1?'1 (ground)':f.n} total · gross</td><td class="num">${fmt(f.gross)}</td><td class="num">${unitSf?short$(unitSf*(+$('f-res').value||0)):''}</td></tr>`; }
   $('int-body').innerHTML=rows;
   $('int-body').querySelectorAll('.unit-toggle').forEach(b=>b.addEventListener('click',()=>{
