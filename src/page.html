@@ -2178,7 +2178,7 @@ function renderSummary(){
     $('sum-best-h').textContent=label(best);
     const line=(l,x)=>`<div><span>${l}</span><span class="num">${x}</span></div>`;
     $('sum-best').innerHTML=
-      line('Building',`${best.q.N} storeys · ${Math.round(best.q.height)} ft · ${best.q.units} units`)+
+      line('Building',`${best.q.N} stories · ${Math.round(best.q.height)} ft · ${best.q.units} units`)+
       line('Total project cost',mm(best.F.total))+
       line('Equity required',mm(best.F.equity))+
       line('Developer capital in',mm(best.V.devCap))+
@@ -2195,7 +2195,7 @@ function renderSummary(){
       const base=baseRuns.reduce((a,b)=>b.F.equity<a.F.equity?b:a);
       $('sum-base-h').textContent=label(base);
       $('sum-base').innerHTML=
-        line('Building',`${base.q.N} storeys · ${Math.round(base.q.height)} ft · ${base.q.units} units`)+
+        line('Building',`${base.q.N} stories · ${Math.round(base.q.height)} ft · ${base.q.units} units`)+
         line('Zoning floor area',`${fmt(base.q.zfa)} sf at FAR 4.0`)+
         line('Total project cost',mm(base.F.total))+
         `<div class="sum"><span>Equity required</span><span class="num">${mm(base.F.equity)}</span></div>`+
