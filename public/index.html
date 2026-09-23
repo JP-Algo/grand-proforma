@@ -293,6 +293,33 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   <div><span class="label">Scheme D building</span><span class="big num" id="a-total">—</span><p id="a-total-p">—</p></div>
 </section>
 
+<section class="sheet" id="summary">
+  <div class="sheet-tag"><span class="no">00</span><span class="label">Summary</span></div>
+  <div class="sheet-body">
+    <h2>The opportunity</h2>
+    <p>A corner site at Grand Street and Graham Avenue, one block from the Grand St L station, in a C4-4A district that follows R7A rules. Zoning allows 4.0 FAR as of right and <b>5.01 with Inclusionary Housing certificates</b>, which this block can still buy because it sits in the former Greenpoint/Williamsburg IH designated area. Two things make the site unusual: the neighbor at 727 Grand has unused air rights that only this lot can practically buy, and the existing 1930 building can be kept and built on top of, which takes demolition and several thousand square feet of new construction out of the budget. The ground floor stays commercial, and the whole page below is a working model — change any assumption and every number moves.</p>
+    <div class="two">
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <span class="label">Best case for the developer</span>
+        <h3 id="sum-best-h">—</h3>
+        <div class="ledger" id="sum-best"></div>
+        <p class="note" id="sum-best-note"></p>
+      </div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <span class="label">Base case · no air rights, least capital</span>
+        <h3 id="sum-base-h">—</h3>
+        <div class="ledger" id="sum-base"></div>
+        <p class="note">Scheme A builds on 725 Grand alone at 4.0 FAR: no merger with 727 Grand, no certificates, and the smallest equity cheque of any scheme. It is the fallback if the neighbor will not sell or the certificate market is empty.</p>
+      </div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>What has to be true</th><th>Needed</th><th>Assumed now</th></tr></thead>
+      <tbody id="sum-truth"></tbody>
+    </table></div>
+    <p class="note">Every figure here is generated from the same model as the sections below, at the assumptions currently loaded. Prices, rents, land basis and construction costs are placeholders until they are replaced with quotes. Not an offer to sell securities.</p>
+  </div>
+</section>
+
 <section class="sheet" id="site">
   <div class="sheet-tag"><span class="no">Z-001</span><span class="label">Site</span></div>
   <div class="sheet-body">
@@ -1484,6 +1511,7 @@ function renderFinance(){
     return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${mm(G.revenue)}</td><td class="num">${mm(G.total)}</td><td class="num">${mm(G.loan)}</td><td class="num">${mm(G.equity)}</td><td class="num ${c}">${mm(G.profit)}</td><td class="num ${c}">${pct(G.margin)}</td><td class="num ${c}">${G.em.toFixed(2)}×</td><td class="num ${c}">${pct(G.irr)}</td></tr>`;}).join('');
   renderInvestor(p);
   renderCashflow(p);
+  renderSummary();
 }
 
 function renderPlan(p){
@@ -2115,6 +2143,75 @@ function drawCashflowChart(C){
   });
   g+=`<line x1="${ml}" y1="${y0}" x2="${W-mr}" y2="${y0}" stroke="var(--ink)" stroke-width="1.5"/></svg>`;
   $('cf-chart').innerHTML=g;
+}
+
+
+/* ---------- 00 summary: search every combination for the developer's best outcome ---------- */
+let sumTimer=null, sumKey='';
+function renderSummary(){
+  if(!$('sum-best')) return;
+  const key=[...document.querySelectorAll('.wrap input[id], .wrap select[id]')].map(e=>e.type==='checkbox'?e.checked:e.value).join('|');
+  if(key===sumKey) return; sumKey=key;
+  clearTimeout(sumTimer);
+  sumTimer=setTimeout(()=>{
+    const keep={mode:st.mode,strategy:st.strategy,bonusSrc:st.bonusSrc,tenure:st.tenure,scheme:st.scheme};
+    const runs=[];
+    for(const scheme of ['A','B','C','D'])
+      for(const mode of ['gu','enl'])
+        for(const strategy of ['eff','height'])
+          for(const bonusSrc of ['cert','onsite'])
+            for(const tenure of ['condo','rental']){
+              if(bonusSrc==='onsite'&&(scheme==='A'||scheme==='C')) continue;   // no bonus to deliver
+              st.mode=mode; st.strategy=strategy; st.bonusSrc=bonusSrc; st.tenure=tenure;
+              const defsNow=defs(); for(const k in defsNow) defsNow[k].cap=defsNow[k].base+defsNow[k].tr+defsNow[k].cert;
+              const q=generate(defsNow[scheme]); if(!q) continue;
+              const F=fin(q), V=developerOf(F), C=cashflow(q,F);
+              runs.push({scheme,mode,strategy,bonusSrc,tenure,q,F,V,C,profit:V.profit});
+            }
+    Object.assign(st,keep); regen();
+    if(!runs.length) return;
+    const best=runs.reduce((a,b)=>b.profit>a.profit?b:a);
+    const label=r=>`Scheme ${r.scheme} · ${r.mode==='enl'?'keep + add':'ground-up'} · ${r.bonusSrc==='onsite'?'affordable on site':(r.q.s.cert?'IH certificates':'no bonus')} · ${r.tenure==='rental'?'rental':'condo sale'}`;
+    $('sum-best-h').textContent=label(best);
+    const line=(l,x)=>`<div><span>${l}</span><span class="num">${x}</span></div>`;
+    $('sum-best').innerHTML=
+      line('Building',`${best.q.N} storeys · ${Math.round(best.q.height)} ft · ${best.q.units} units`)+
+      line('Total project cost',mm(best.F.total))+
+      line('Equity required',mm(best.F.equity))+
+      line('Developer capital in',mm(best.V.devCap))+
+      line('Developer take',mm(best.V.take))+
+      `<div class="sum"><span>Developer profit</span><span class="num${best.V.profit<0?' neg':''}">${mm(best.V.profit)}</span></div>`+
+      line('Margin on cost',pct(best.F.margin))+
+      line('Project IRR (monthly model)',best.C.irr==null?'does not repay':pct(best.C.irr));
+    const others=runs.slice().sort((a,b)=>b.profit-a.profit).slice(1,3).map(r=>`${label(r)} at ${mm(r.profit)}`).join('; ');
+    $('sum-best-note').textContent=`Best of ${runs.length} combinations of scheme, method, massing, bonus source and tenure at today's assumptions. Next best: ${others}.`;
+
+    // base case: scheme A, whichever method needs the least equity
+    const baseRuns=runs.filter(r=>r.scheme==='A'&&r.tenure===keep.tenure);
+    if(baseRuns.length){
+      const base=baseRuns.reduce((a,b)=>b.F.equity<a.F.equity?b:a);
+      $('sum-base-h').textContent=label(base);
+      $('sum-base').innerHTML=
+        line('Building',`${base.q.N} storeys · ${Math.round(base.q.height)} ft · ${base.q.units} units`)+
+        line('Zoning floor area',`${fmt(base.q.zfa)} sf at FAR 4.0`)+
+        line('Total project cost',mm(base.F.total))+
+        `<div class="sum"><span>Equity required</span><span class="num">${mm(base.F.equity)}</span></div>`+
+        line('Developer profit',mm(base.V.profit))+
+        line('Margin on cost',pct(base.F.margin))+
+        line('vs. best case',`${mm(best.V.profit-base.V.profit)} more upside`);
+    }
+
+    // what has to be true, measured against what is loaded
+    const F=fin(plans[st.scheme]);
+    const rows=[
+      ['Condo price to break even',`$${fmt(F.bePsf)}/sf`,`$${fmt(+$('f-res').value||0)}/sf assumed`],
+      ['Land basis for a 15% margin',mm(F.residual),`${mm(F.land)} assumed`],
+      ['Air rights from 727 Grand',`${fmt(D0.C.tr)} sf`,`$${$('in-p1').value}/sf assumed`],
+      ['IH certificates for the merged bonus',`${fmt(D0.D.cert)} sf`,`$${$('in-p2').value}/sf assumed, market is finite and the option ends around 2034`],
+      ['Hard cost',`$${$('f-hard').value}/gsf above grade`,'placeholder until a GC bid']
+    ];
+    $('sum-truth').innerHTML=rows.map(([a,b,c])=>`<tr><td>${a}</td><td class="num">${b}</td><td>${c}</td></tr>`).join('');
+  },250);
 }
 
 /* ---------- wiring ---------- */
