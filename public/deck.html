@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>725 Grand Investor Deck</title>
+<meta name="description" content="Investor presentation for 725 Grand Street, Brooklyn: base case (Scheme B) and upside (Scheme D), with live figures from the pro forma.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#1B2326; --paper:#F8FAF8; --ink:#172125; --ink-2:#4A575C; --rule:#C9D1CE; --soft:#EDF0EE;
+  --accent:#0D6A80; --accent-soft:#D6E8EC; --gold:#C98517; --gold-soft:#F4E6CC; --green:#3A8656; --green-soft:#DCEEDF;
+  --neg:#A8322A; --pos:#2F7A4A;
+  --m-base:#5E6E76; --m-bonus:#3A8656; --m-transfer:#C98517; --m-exist:#AEB8B5; --m-retail:#E39E6B;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--ground);font-family:var(--body);color:var(--ink);overflow:hidden}
+.viewport{position:fixed;inset:0 0 48px 0;overflow:hidden}
+.stage{width:1280px;height:720px;position:absolute;left:50%;top:50%;transform-origin:center center}
+.slide{position:absolute;inset:0;background:var(--paper);padding:56px 64px 48px;display:none;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.slide.on{display:flex;flex-direction:column}
+.slide .pn{position:absolute;right:28px;bottom:18px;font:500 11px var(--mono);color:var(--ink-2);letter-spacing:.08em}
+.slide .brand{position:absolute;left:64px;bottom:18px;font:500 11px var(--mono);color:var(--ink-2);letter-spacing:.12em;text-transform:uppercase}
+h1,h2,h3{font-family:var(--display);font-stretch:78%;margin:0;line-height:1.04;text-wrap:balance}
+h1{font-size:76px;font-weight:760;letter-spacing:-.01em}
+h2{font-size:44px;font-weight:720;margin-bottom:22px}
+h3{font-size:21px;font-weight:680;font-stretch:88%}
+p{margin:0}
+.kicker{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.label{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.lead{font-size:20px;line-height:1.5;color:var(--ink-2);max-width:60ch}
+.cols{display:grid;gap:36px;flex:1;min-height:0;align-items:start}
+.cols>table{align-self:start}
+.kv td{padding:7px 10px}
+.c2{grid-template-columns:1fr 1fr}
+.c-46{grid-template-columns:.42fr .58fr}
+.c-64{grid-template-columns:.58fr .42fr}
+ul.pts{margin:0;padding:0;list-style:none;display:grid;gap:13px;align-content:start}
+ul.pts li.note::before{display:none}
+ul.pts li{position:relative;padding-left:22px;font-size:17px;line-height:1.45}
+ul.pts li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;background:var(--accent);border-radius:2px}
+ul.pts li b{font-weight:600}
+.panel{background:var(--soft);border-radius:10px;padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+.panel.base{border-top:5px solid var(--accent)}
+.panel.up{border-top:5px solid var(--gold)}
+.tag{display:inline-block;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:4px}
+.tag.base{background:var(--accent-soft);color:var(--accent)}
+.tag.up{background:var(--gold-soft);color:#8A5A0B}
+.stat{display:grid;gap:2px}
+.stat .v{font:600 30px var(--display);font-stretch:82%}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 18px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:left}
+th{font:500 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td{font-weight:600;border-top:2px solid var(--ink);border-bottom:0}
+tr.grp td{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);padding-top:14px}
+.neg{color:var(--neg)} .pos{color:var(--pos)}
+.note{font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.todo{border:2px dashed var(--gold);background:#FFF9EE;border-radius:10px;padding:18px 20px;color:#7A4E08;font-size:15px}
+svg text{font-family:var(--mono)}
+/* cover */
+.cover{background:#172125;color:#E4EAE8;padding:0;display:none}
+.cover.on{display:grid;grid-template-columns:.5fr .5fr}
+.cover .l{padding:64px;display:flex;flex-direction:column;justify-content:space-between;background:var(--accent);color:#fff}
+.cover .l .kicker{color:#CFE7EC}
+.cover h1{color:#fff}
+.cover .sub{font-size:21px;line-height:1.45;color:#E2F1F4;max-width:28ch;margin-top:20px}
+.cover .r{display:grid;place-items:center;padding:36px;background:#172125}
+.cover .facts{display:grid;gap:6px;font:500 13px var(--mono);letter-spacing:.06em;color:#CFE7EC;text-transform:uppercase}
+.cover .pn,.cover .brand{display:none}
+/* nav */
+.bar{position:fixed;left:0;right:0;bottom:0;height:48px;display:flex;align-items:center;justify-content:center;gap:14px;color:#AEB8B5;font:500 12px var(--mono);letter-spacing:.06em}
+.bar button{font:inherit;color:#E4EAE8;background:#27333A;border:1px solid #3A4A51;border-radius:6px;padding:7px 12px;cursor:pointer}
+.bar button:hover{background:#33434B}
+.bar .st{min-width:260px;text-align:center}
+.loading{position:fixed;inset:0;display:grid;place-items:center;color:#E4EAE8;font:500 14px var(--mono);background:var(--ground);z-index:5}
+#engine{position:absolute;left:-10000px;top:0;width:1200px;height:900px;border:0;visibility:hidden}
+@media print{
+  @page{size:1280px 720px;margin:0}
+  body{background:#fff;overflow:visible;height:auto}
+  .viewport{position:static;display:block}
+  .stage{transform:none!important;position:static;width:auto;height:auto}
+  .slide,.cover{position:relative;display:flex!important;width:1280px;height:720px;page-break-after:always;break-after:page;box-shadow:none}
+  .cover{display:grid!important}
+  .bar,.loading{display:none}
+}
+</style>
+</head>
+<body>
+<div class="loading" id="loading">Loading the pro forma…</div>
+<div class="viewport"><div class="stage" id="stage"></div></div>
+<div class="bar">
+  <button id="prev" type="button" aria-label="Previous slide">←</button>
+  <span class="st" id="st">—</span>
+  <button id="next" type="button" aria-label="Next slide">→</button>
+  <button id="print" type="button">Save as PDF</button>
+</div>
+<iframe id="engine" src="/" title="Pro forma engine" aria-hidden="true" tabindex="-1"></iframe>
+<script>
+(function(){
+/* ---- deck settings: the proposal's own assumptions ---- */
+const DECK={
+  price:1600,              // condo $/sf used throughout the deck
+  sponsor:'[Sponsor name]', // shown on the cover and team slide
+  base:'B', up:'D'
+};
+const $=id=>document.getElementById(id);
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const money=n=>(n<0?'−$':'$')+fmt(Math.abs(n));
+const mm=n=>(n<0?'−$':'$')+(Math.abs(n)/1e6).toFixed(1)+'M';
+const mm2=n=>(n<0?'−$':'$')+(Math.abs(n)/1e6).toFixed(2)+'M';
+const pct=n=>(n<0?'−':'')+Math.abs(n*100).toFixed(1)+'%';
+const sg=n=>n<0?'neg':'pos';
+let G,W;
+const iv=id=>{const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):'';};
+
+function scheme(k,o={}){
+  const p=G.plans[k], opt={'f-res':DECK.price,...o}, F=G.fin(p,opt), V=G.investorOf(F,opt), Dv=G.developerOf(F,opt), units=G.unitsOf(p);
+  const mix={}; units.forEach(u=>{mix[u.label]=(mix[u.label]||0)+1;});
+  return {k,p,F,V,Dv,units,mix};
+}
+function solve(k,test){ let lo=500,hi=5000; for(let i=0;i<36;i++){const m=(lo+hi)/2; test(G.fin(G.plans[k],{'f-res':m}))?hi=m:lo=m;} return hi; }
+
+/* ---- drawings ---- */
+// Graham Avenue elevation: 100 ft of frontage, floors stepped back as the model sets them
+function elevation(S,{w=520,h=420,ghost=null,dark=false}={}){
+  const all=[S].concat(ghost?[ghost]:[]);
+  const top=Math.max(...all.map(s=>Math.max(...s.p.floors.map(f=>f.elev+f.h))))+14;
+  const pad=34, sc=Math.min((w-pad*2)/100,(h-pad*1.6)/(top+12)), gy=h-pad*1.1;
+  const X=z=>pad+z*sc, Y=e=>gy-e*sc;
+  const ink=dark?'#E4EAE8':'#172125', mute=dark?'#6B7B80':'#AEB8B5';
+  let o=`<line x1="${pad-10}" x2="${w-pad+10}" y1="${gy}" y2="${gy}" stroke="${ink}" stroke-width="1.5"/>`;
+  const draw=(s,style)=>s.p.floors.filter(f=>typeof f.n==='number').forEach(f=>{
+    const r=f.rects||[]; const z0=f.n===1?0:Math.min(...r.map(x=>x.z0)), z1=Math.max(...r.map(x=>x.z1));
+    const fill=style==='ghost'?'none':(f.n===1?'var(--m-retail)':(dark?'#5FB6CB':'var(--accent)'));
+    o+=`<rect x="${X(z0)}" y="${Y(f.elev+f.h)}" width="${(z1-z0)*sc}" height="${f.h*sc-1.2}" fill="${fill}" ${style==='ghost'?`stroke="${dark?'#E3A23A':'var(--gold)'}" stroke-dasharray="5 4" stroke-width="1.6"`:''} opacity="${style==='ghost'?1:(f.n===1?1:.92)}"/>`;
+  });
+  if(ghost) draw(ghost,'ghost');
+  draw(S,'solid');
+  const H=Math.max(...S.p.floors.map(f=>f.elev+f.h));
+  o+=`<text x="${X(100)+6}" y="${Y(H)+4}" font-size="12" fill="${ink}">${fmt(S.p.height)} ft</text>`;
+  if(ghost){ const Hg=Math.max(...ghost.p.floors.map(f=>f.elev+f.h)); o+=`<text x="${X(100)+6}" y="${Y(Hg)+4}" font-size="12" fill="${dark?'#E3A23A':'#8A5A0B'}">${fmt(ghost.p.height)} ft</text>`; }
+  o+=`<text x="${X(0)}" y="${gy+18}" font-size="11" fill="${mute}">GRAND ST</text><text x="${X(100)}" y="${gy+18}" font-size="11" fill="${mute}" text-anchor="end">GRAHAM AVE ELEVATION · 100 FT</text>`;
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Graham Avenue elevation">${o}</svg>`;
+}
+// site plan: 725 Grand L-shaped lot + 727 Grand, Grand Street at top
+function sitePlan(){
+  const s=3.4, ox=70, oy=46, P=pts=>pts.map(([x,z])=>`${ox+x*s},${oy+z*s}`).join(' ');
+  const lot725=[[0,0],[25.17,0],[25.17,80],[51,80],[51,100],[0,100]];
+  const lot727=[[25.17,0],[51,0],[51,80],[25.17,80]];
+  return `<svg viewBox="0 0 330 420" width="330" height="420" role="img" aria-label="Site plan: 725 Grand Street corner lot and 727 Grand Street">
+    <rect x="${ox-60}" y="${oy-40}" width="${51*s+120}" height="30" fill="#D9DEDC"/><text x="${ox+51*s/2}" y="${oy-20}" font-size="11" text-anchor="middle" fill="#4A575C">GRAND STREET · 80 FT WIDE</text>
+    <rect x="${ox-44}" y="${oy-10}" width="30" height="${100*s+20}" fill="#D9DEDC"/><text transform="translate(${ox-24},${oy+50*s}) rotate(-90)" font-size="11" text-anchor="middle" fill="#4A575C">GRAHAM AVENUE · 80 FT</text>
+    <polygon points="${P(lot727)}" fill="#F4E6CC" stroke="#C98517" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <polygon points="${P(lot725)}" fill="#D6E8EC" stroke="#0D6A80" stroke-width="2.2"/>
+    <text x="${ox+12.5*s}" y="${oy+45*s}" font-size="12" text-anchor="middle" fill="#0D6A80" font-weight="600">725</text>
+    <text x="${ox+12.5*s}" y="${oy+45*s+15}" font-size="10" text-anchor="middle" fill="#0D6A80">3,034 sf</text>
+    <text x="${ox+38*s}" y="${oy+38*s}" font-size="12" text-anchor="middle" fill="#8A5A0B" font-weight="600">727</text>
+    <text x="${ox+38*s}" y="${oy+38*s+15}" font-size="10" text-anchor="middle" fill="#8A5A0B">2,067 sf</text>
+    <text x="${ox+51*s+8}" y="${oy+50*s}" font-size="10" fill="#4A575C">100 ft</text>
+    <text x="${ox+25.5*s}" y="${oy+100*s+18}" font-size="10" text-anchor="middle" fill="#4A575C">51 ft merged</text>
+  </svg>`;
+}
+// floor-area sources, stacked
+function farBars(R){
+  const w=560, bh=46, L=70, max=Math.max(...R.map(r=>r.p.s.cap))*1.05, X=v=>L+(w-L-20)*v/max;
+  let o='', y=10;
+  R.forEach(r=>{ const s=r.p.s, parts=[['Own lot, FAR 4.0',s.base,'var(--m-base)'],['IH certificates',s.cert,'var(--m-bonus)'],['727 Grand transfer',s.tr,'var(--m-transfer)']];
+    o+=`<text x="0" y="${y+bh/2+5}" font-size="14" font-weight="600" fill="#172125">${r.k}</text>`; let x=L;
+    parts.forEach(([l,v,c])=>{ if(!v) return; const ww=X(v)-L; o+=`<rect x="${x}" y="${y}" width="${ww-1.5}" height="${bh}" fill="${c}" rx="2"/>`; if(ww>70) o+=`<text x="${x+ww/2}" y="${y+bh/2+5}" font-size="12.5" text-anchor="middle" fill="#fff">${fmt(v)}</text>`; x+=ww; });
+    o+=`<text x="${x+8}" y="${y+bh/2+5}" font-size="13" fill="#172125" font-weight="600">${fmt(s.cap)} sf</text>`; y+=bh+26; });
+  return `<svg viewBox="0 0 ${w+70} ${y}" width="${w+70}" height="${y}" role="img" aria-label="Zoning floor area by source">${o}</svg>
+  <div style="display:flex;gap:18px;font-size:13px;color:var(--ink-2);margin-top:6px"><span><i style="display:inline-block;width:11px;height:11px;background:var(--m-base);margin-right:6px"></i>Own lot, FAR 4.0</span><span><i style="display:inline-block;width:11px;height:11px;background:var(--m-bonus);margin-right:6px"></i>IH certificates</span><span><i style="display:inline-block;width:11px;height:11px;background:var(--m-transfer);margin-right:6px"></i>727 Grand transfer</span></div>`;
+}
+function mixText(r){ return ['Studio','1BR','2BR','3BR'].filter(t=>r.mix[t]).map(t=>`${r.mix[t]} × ${t}`).join(' · '); }
+
+/* ---- slides ---- */
+function slides(){
+  const B=scheme(DECK.base), D=scheme(DECK.up), R=[B,D];
+  const months=+iv('f-months'), pref=+iv('iv-pref'), promote=+iv('iv-promote'), ltc=+iv('f-ltc'), inv=+iv('iv-amt');
+  const beB=solve('B',F=>F.profit>=0), beD=solve('D',F=>F.profit>=0);
+  const S=[];
+  S.push({cls:'cover',html:`<div class="l"><div><div class="kicker">Investment opportunity</div><h1>725 Grand Street</h1><p class="sub">A ground-up condominium with ground-floor retail at the corner of Grand Street and Graham Avenue, Williamsburg, Brooklyn.</p></div>
+    <div class="facts"><span>Block 2783 · Lot 43 · C4-4A</span><span>${B.units.length}–${D.units.length} condominiums · ${fmt(B.p.retail)} sf retail</span><span>Presented by ${DECK.sponsor}</span></div></div>
+    <div class="r"><div>${elevation(B,{w:560,h:520,ghost:D,dark:true})}<p style="font:500 12px var(--mono);color:#9AA8AC;margin-top:8px;letter-spacing:.05em">SOLID: BASE CASE, ${B.p.N} STORIES · DASHED: UPSIDE, ${D.p.N} STORIES</p></div></div>`});
+
+  S.push({html:`<div class="kicker">Executive summary</div><h2>A building we can start now, with a larger one within reach</h2>
+    <div class="cols c2">
+      <div style="display:grid;gap:18px;align-content:start">
+        <p class="lead" style="font-size:18.5px">725 Grand Street is a 3,034 sf corner lot on two 80-foot-wide streets, zoned C4-4A in the former Greenpoint/Williamsburg Inclusionary Housing area. That lets the site buy Inclusionary Housing certificates and build to FAR 5.01 with no affordable units on site.</p>
+        <p class="lead" style="font-size:18.5px"><b>The base case</b> builds on 725 Grand alone. It needs no agreement with any neighbor, so design and filing can begin immediately. <b>The upside</b> adds the development rights of 727 Grand Street next door through a zoning lot merger, for a ${D.p.N}-story building with ${D.units.length} condos.</p>
+      </div>
+      <div style="display:grid;gap:14px;align-content:start">
+        <div class="panel base"><span class="tag base">Base case · start now</span><div class="stats">
+          <div class="stat"><span class="label">Building</span><span class="v">${B.p.N} stories</span></div>
+          <div class="stat"><span class="label">Condos</span><span class="v">${B.units.length}</span></div>
+          <div class="stat"><span class="label">Project cost</span><span class="v">${mm(B.F.total)}</span></div></div></div>
+        <div class="panel up"><span class="tag up">Upside · with 727 Grand</span><div class="stats">
+          <div class="stat"><span class="label">Building</span><span class="v">${D.p.N} stories</span></div>
+          <div class="stat"><span class="label">Condos</span><span class="v">${D.units.length}</span></div>
+          <div class="stat"><span class="label">Project cost</span><span class="v">${mm(D.F.total)}</span></div></div></div>
+        <p class="note">Figures at $${fmt(DECK.price)}/sf condo pricing, ${ltc}% loan-to-cost, ${months}-month project. See the returns and sensitivity slides.</p>
+      </div></div>`});
+
+  S.push({html:`<div class="kicker">Why 725 Grand</div><h2>A corner site with room to grow</h2>
+    <div class="cols c-64"><ul class="pts">
+      <li><b>Corner lot on two wide streets.</b> Grand Street and Graham Avenue are both 80 ft wide, so setbacks above the base are only 10 ft, and the whole lot is within 100 ft of the corner: 100% coverage, no rear yard.</li>
+      <li><b>Certificates instead of on-site affordable units.</b> In the former Greenpoint/Williamsburg IH area, buying certificates from vested generating sites raises the site from FAR 4.0 to 5.01.</li>
+      <li><b>A neighbor that completes the block corner.</b> 727 Grand fills the notch of the L-shaped lot. Merging the two makes a 51 × 100 ft rectangle and adds about ${fmt(D.p.s.tr)} sf of unused development rights.</li>
+      <li><b>Ground-floor retail on the corner.</b> ${fmt(B.p.retail)} sf of retail, valued in the model at ${mm(B.F.retNet)} after sale costs.</li>
+      <li><b>Loggias on every residential floor.</b> Private outdoor space for most units, excluded from zoning floor area.</li>
+    </ul><div style="display:grid;place-items:center">${sitePlan()}</div></div>`});
+
+  const need=(t)=>`<span class="note" style="font-size:14px">${t}</span>`;
+  S.push({html:`<div class="kicker">Two paths</div><h2>Base case and upside, side by side</h2>
+    <table><thead><tr><th></th><th class="n">Base case · Scheme ${B.k}</th><th class="n">Upside · Scheme ${D.k}</th></tr></thead><tbody>
+    <tr><td>What it needs</td><td class="n">${need('725 Grand + IH certificates')}</td><td class="n">${need('+ zoning lot merger and easement with 727 Grand')}</td></tr>
+    <tr><td>Stories / height</td><td class="n">${B.p.N} / ${fmt(B.p.height)} ft</td><td class="n">${D.p.N} / ${fmt(D.p.height)} ft</td></tr>
+    <tr><td>Zoning floor area</td><td class="n">${fmt(B.p.s.cap)} sf</td><td class="n">${fmt(D.p.s.cap)} sf</td></tr>
+    <tr><td>Gross above grade</td><td class="n">${fmt(B.p.gross)} sf</td><td class="n">${fmt(D.p.gross)} sf</td></tr>
+    <tr><td>Condos / sellable area</td><td class="n">${B.units.length} / ${fmt(B.F.mktSf)} sf</td><td class="n">${D.units.length} / ${fmt(D.F.mktSf)} sf</td></tr>
+    <tr><td>Unit mix</td><td class="n">${mixText(B)}</td><td class="n">${mixText(D)}</td></tr>
+    <tr><td>Retail</td><td class="n">${fmt(B.p.retail)} sf</td><td class="n">${fmt(D.p.retail)} sf</td></tr>
+    <tr><td>Total project cost</td><td class="n">${mm2(B.F.total)}</td><td class="n">${mm2(D.F.total)}</td></tr>
+    <tr><td>Net sales revenue</td><td class="n">${mm2(B.F.revenue)}</td><td class="n">${mm2(D.F.revenue)}</td></tr>
+    <tr class="tot"><td>Projected profit (margin on cost)</td><td class="n ${sg(B.F.profit)}">${mm2(B.F.profit)} (${pct(B.F.margin)})</td><td class="n ${sg(D.F.profit)}">${mm2(D.F.profit)} (${pct(D.F.margin)})</td></tr>
+    </tbody></table>`});
+
+  S.push({html:`<div class="kicker">Zoning</div><h2>Where the floor area comes from</h2>
+    <div class="cols c-46"><ul class="pts">
+      <li><b>Own lot:</b> 3,034 sf × FAR 4.0 = ${fmt(B.p.s.base)} sf, as of right.</li>
+      <li><b>IH certificates:</b> bonus to FAR 5.01. On 725 Grand alone that's ${fmt(B.p.s.cert)} sf; on the merged lot, ${fmt(D.p.s.cert)} sf. Priced at $${iv('in-p2')}/sf of bonus.</li>
+      <li><b>727 Grand transfer:</b> 2,067 sf × 4.0 less its existing building leaves ${fmt(D.p.s.tr)} sf. Recorded as a zoning lot merger with a light and air easement; priced at $${iv('in-p1')}/sf.</li>
+      <li class="note" style="padding-left:0;font-size:13px">The 727 Grand transfer depends on its existing floor area: about 4,133 sf by field measurement, or 6,042 sf per PLUTO. A CO or survey will settle it.</li>
+    </ul><div style="display:grid;align-content:center">${farBars(R)}</div></div>`});
+
+  const floorRows=r=>r.p.floors.slice().reverse().map(f=>`<tr><td>${f.n==='C'?'Cellar':f.n===1?'Ground':'Floor '+f.n}</td><td>${f.prog.replace(/Base · /,'')}</td><td class="n">${fmt(f.gross)}</td></tr>`).join('');
+  [[B,'Base case','base','Built on 725 Grand alone'],[D,'Upside','up','725 + 727 Grand merged']].forEach(([r,t,c,sub])=>S.push({html:`<div class="kicker">${t} · Scheme ${r.k}</div><h2>${r.p.N} stories, ${r.units.length} condos over corner retail</h2>
+    <div class="cols c2"><div style="display:grid;place-items:center">${elevation(r,{w:540,h:440})}</div>
+    <div style="display:grid;gap:14px;align-content:start"><span class="tag ${c}">${sub}</span>
+      <div class="stats"><div class="stat"><span class="label">Sellable</span><span class="v">${fmt(r.F.mktSf)} sf</span></div><div class="stat"><span class="label">Height</span><span class="v">${fmt(r.p.height)} ft</span></div></div><div class="stat"><span class="label">Unit mix</span><span class="v" style="font-size:19px">${mixText(r)}</span></div>
+      <table style="font-size:13.5px"><thead><tr><th>Level</th><th>Program</th><th class="n">Gross sf</th></tr></thead><tbody>${floorRows(r)}</tbody></table></div></div>`}));
+
+  S.push({html:`<div class="kicker">Project summary</div><h2>Deal terms</h2>
+    <div class="cols c2"><table class="kv"><tbody>
+      <tr><td class="label">Asset class</td><td>Ground-up condominium + retail</td></tr>
+      <tr><td class="label">Location</td><td>Grand St &amp; Graham Ave, Williamsburg, Brooklyn</td></tr>
+      <tr><td class="label">Senior loan</td><td>${ltc}% loan-to-cost at ${iv('f-rate')}%</td></tr>
+      <tr><td class="label">Project length</td><td>${months} months: predevelopment, construction and sell-out</td></tr>
+      <tr><td class="label">Preferred return</td><td>${pref}% per year, compounded</td></tr>
+      <tr><td class="label">Profit split above the pref</td><td>${100-promote}% investors / ${promote}% sponsor</td></tr>
+      <tr><td class="label">Sponsor capital</td><td>${iv('dv-land')?'Land contributed as equity + ':''}${mm(+iv('dv-cash'))} cash</td></tr>
+      <tr><td class="label">Example investment</td><td>${mm(inv)} LP commitment</td></tr>
+    </tbody></table>
+    <div style="display:grid;gap:14px;align-content:start">
+      ${R.map((r,i)=>`<div class="panel ${i?'up':'base'}"><span class="tag ${i?'up':'base'}">${i?'Upside':'Base case'} · Scheme ${r.k}</span><div class="stats">
+        <div class="stat"><span class="label">Total budget</span><span class="v">${mm(r.F.total)}</span></div>
+        <div class="stat"><span class="label">Loan</span><span class="v">${mm(r.F.loan)}</span></div>
+        <div class="stat"><span class="label">Equity</span><span class="v">${mm(r.F.equity)}</span></div></div></div>`).join('')}
+    </div></div>`});
+
+  const su=(l,f,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="n">${f(B)}</td><td class="n">${f(D)}</td></tr>`;
+  S.push({html:`<div class="kicker">Key deal points</div><h2>Sources and uses</h2>
+    <div class="cols c2"><table><thead><tr><th>Uses</th><th class="n">Base · ${B.k}</th><th class="n">Upside · ${D.k}</th></tr></thead><tbody>
+      ${su('Land, 725 Grand',r=>mm2(r.F.land))}
+      ${su('727 Grand development rights',r=>mm2(r.F.nb))}
+      ${su('IH certificates',r=>mm2(r.F.certs))}
+      ${su('Hard costs incl. contingency',r=>mm2(r.F.hard))}
+      ${su('Soft costs',r=>mm2(r.F.soft))}
+      ${su('Financing: interest + fees',r=>mm2(r.F.financing))}
+      ${su('Total uses',r=>mm2(r.F.total),'tot')}
+    </tbody></table>
+    <table><thead><tr><th>Sources</th><th class="n">Base · ${B.k}</th><th class="n">Upside · ${D.k}</th></tr></thead><tbody>
+      ${su(`Construction loan (${ltc}% LTC)`,r=>mm2(r.F.loan))}
+      ${su('Sponsor equity',r=>mm2(r.Dv.devCap))}
+      ${su('Investor (LP) equity',r=>mm2(r.F.equity-r.Dv.devCap))}
+      ${su('Total sources',r=>mm2(r.F.total),'tot')}
+      <tr><td colspan="3" class="note" style="border:0;padding-top:14px">Hard costs: $${iv('f-hard')}/gsf above grade, $${iv('f-cellar')}/sf cellar, core, terraces, demolition and E-232 remediation, plus ${iv('f-green')}% green premium and ${iv('f-cont')}% contingency. Soft costs ${iv('f-soft')}% of hard, including the development fee.</td></tr>
+    </tbody></table></div>`});
+
+  const rr=(l,f,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="n">${f(B)}</td><td class="n">${f(D)}</td></tr>`;
+  const prices=[1500,1600,1700,1800,1900,2000];
+  S.push({html:`<div class="kicker">Returns</div><h2>Projected returns at $${fmt(DECK.price)}/sf</h2>
+    <div class="cols c2"><table><thead><tr><th>Project</th><th class="n">Base · ${B.k}</th><th class="n">Upside · ${D.k}</th></tr></thead><tbody>
+      ${rr('Net sales revenue',r=>mm2(r.F.revenue))}
+      ${rr('Total project cost',r=>mm2(r.F.total))}
+      ${rr('Profit',r=>`<span class="${sg(r.F.profit)}">${mm2(r.F.profit)}</span>`,'tot')}
+      ${rr('Margin on cost',r=>pct(r.F.margin))}
+      ${rr('Equity multiple',r=>r.F.em.toFixed(2)+'×')}
+      ${rr('Break-even condo price',r=>'$'+fmt(r.k===B.k?beB:beD)+'/sf')}
+      <tr class="grp"><td colspan="3">${mm(inv)} LP investment</td></tr>
+      ${rr('Total distributions',r=>mm2(r.V.total))}
+      ${rr('LP profit',r=>`<span class="${sg(r.V.profit)}">${mm2(r.V.profit)}</span>`)}
+      ${rr('LP equity multiple',r=>r.V.em.toFixed(2)+'×')}
+      ${rr('LP annualized (simplified)',r=>pct(r.V.irr))}
+    </tbody></table>
+    <div><h3 style="margin-bottom:10px">Sensitivity to condo price</h3><table><thead><tr><th>Condo $/sf</th><th class="n">Base margin</th><th class="n">Base LP ×</th><th class="n">Upside margin</th><th class="n">Upside LP ×</th></tr></thead><tbody>
+      ${prices.map(pr=>{const b=scheme('B',{'f-res':pr}), d=scheme('D',{'f-res':pr}); return `<tr style="${pr===DECK.price?'background:var(--accent-soft)':''}"><td class="n" style="text-align:left">$${fmt(pr)}</td><td class="n ${sg(b.F.margin)}">${pct(b.F.margin)}</td><td class="n">${b.V.em.toFixed(2)}×</td><td class="n ${sg(d.F.margin)}">${pct(d.F.margin)}</td><td class="n">${d.V.em.toFixed(2)}×</td></tr>`;}).join('')}
+    </tbody></table><p class="note" style="margin-top:10px">LP returns after a ${pref}% preferred return and a ${100-promote}/${promote} split above it, over ${months} months. Full line-by-line detail: <b>grand-proforma.vercel.app/projections</b></p></div></div>`});
+
+  S.push({html:`<div class="kicker">Path to the upside</div><h2>What turns the base case into the upside</h2>
+    <div class="cols c2"><div class="panel base"><span class="tag base">Base case · ready to start</span><ul class="pts">
+      <li>Everything is on 725 Grand's own lot. No neighbor agreement needed.</li>
+      <li>Land-use counsel confirms the certificate path to FAR 5.01 and 115 ft, and identifies vested generating sites.</li>
+      <li>Inspect the existing building and basement to firm up demolition cost.</li>
+      <li>Expediter review of the loggia exemption and E-232 requirements.</li></ul></div>
+    <div class="panel up"><span class="tag up">Upside · adds</span><ul class="pts">
+      <li>Zoning lot merger with 727 Grand plus a light and air easement starting at 30 ft, with waivers from the neighbor's lender.</li>
+      <li>727 Grand CO or survey to settle its existing floor area, which moves the transfer by about 1,900 sf.</li>
+      <li>Certificates on the merged lot: ${fmt(D.p.s.cert)} sf instead of ${fmt(B.p.s.cert)} sf.</li>
+      <li>Result: +${D.p.N-B.p.N} stories, +${D.units.length-B.units.length} condos, and ${mm2(D.F.profit-B.F.profit)} more projected profit.</li></ul></div></div>`});
+
+  S.push({html:`<div class="kicker">Team</div><h2>${DECK.sponsor}</h2>
+    <div class="cols c2"><div class="todo"><b>To add:</b> sponsor overview, track record, and bios for the principals.</div>
+    <div class="todo"><b>To add:</b> architect, construction manager, sales and marketing, and land-use counsel.</div></div>`});
+
+  S.push({html:`<div class="kicker">Important information</div><h2>Disclaimer</h2>
+    <div style="display:grid;gap:12px;font-size:13.5px;line-height:1.55;color:var(--ink-2);max-width:95ch">
+    <p>This presentation is for discussion purposes only and is not an offer to sell, or a solicitation of an offer to buy, any security. Any offering would be made only through definitive offering documents.</p>
+    <p>All figures are preliminary feasibility estimates based on assumptions that may prove incorrect, including sales prices, construction and soft costs, financing terms, the availability and price of Inclusionary Housing certificates, and the outcome of any zoning lot merger with 727 Grand Street. Zoning conclusions are preliminary and subject to confirmation by land-use counsel and the Department of Buildings. Actual results may differ materially. Projected returns are not a guarantee of future performance.</p>
+    <p>Building drawings are schematic massing studies, not architectural designs.</p>
+    <p class="num" style="font-size:12px">Figures computed ${new Date().toLocaleDateString('en-US',{dateStyle:'medium'})} from the 725 Grand Street pro forma.</p></div>`});
+  return S;
+}
+
+/* ---- deck mechanics ---- */
+let cur=0, N=0;
+function build(){
+  const S=slides(); N=S.length;
+  $('stage').innerHTML=S.map((s,i)=>`<section class="slide ${s.cls||''}" aria-label="Slide ${i+1}">${s.html}<span class="brand">725 Grand Street · Confidential draft</span><span class="pn">${String(i+1).padStart(2,'0')} / ${String(N).padStart(2,'0')}</span></section>`).join('');
+  go(Math.min(cur,N-1));
+}
+function go(i){ cur=Math.max(0,Math.min(N-1,i)); document.querySelectorAll('.slide').forEach((s,j)=>s.classList.toggle('on',j===cur)); $('st').textContent=`${cur+1} / ${N}`; try{history.replaceState(null,'','#'+(cur+1));}catch(e){} }
+function fit(){ const vw=innerWidth, vh=innerHeight-48, s=Math.min(vw/1280,vh/720)*.96; $('stage').style.transform=`translate(-50%,-50%) scale(${s})`; }
+addEventListener('resize',fit); fit();
+addEventListener('keydown',e=>{ if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1);} if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);} if(e.key==='Home')go(0); if(e.key==='End')go(N-1); });
+$('prev').onclick=()=>go(cur-1); $('next').onclick=()=>go(cur+1); $('print').onclick=()=>print();
+let tx=null; addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true}); addEventListener('touchend',e=>{ if(tx==null) return; const d=e.changedTouches[0].clientX-tx; if(Math.abs(d)>50) go(cur+(d<0?1:-1)); tx=null; });
+const t0=Date.now();
+(function wait(){
+  let g=null; try{ g=$('engine').contentWindow.G725; }catch(e){}
+  if(g&&g.loaded){ W=$('engine').contentWindow; G=g; G.st.mode='gu'; G.st.tenure='condo'; G.st.bonusSrc='cert'; G.regen(); cur=Math.max(0,(parseInt(location.hash.slice(1))||1)-1); build(); $('loading').remove(); return; }
+  if(Date.now()-t0>25000){ $('loading').textContent='Could not load the pro forma. Reload the page.'; return; }
+  setTimeout(wait,200);
+})();
+})();
+</script>
+</body>
+</html>

@@ -301,7 +301,7 @@ function drawBars(per){
 
 function start(){
   W=$('engine').contentWindow; G=W.G725;
-  G.st.mode='gu'; G.st.tenure='condo'; G.regen();
+  G.st.mode='gu'; G.st.tenure='condo'; G.st.bonusSrc='cert'; G.regen();
   saved={'f-res':BASE_PRICE,'f-land':+inVal('f-land')};
   $('c-price').value=saved['f-res']; $('c-land').value=saved['f-land'];
   $('status').textContent=`Proposal assumption: ${psf(BASE_PRICE)}/sf condo. Land and every other input come from the pro forma.`;
