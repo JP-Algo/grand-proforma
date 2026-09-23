@@ -2297,6 +2297,8 @@ const rethemed=()=>{renderMini();renderStudies(true);};
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
 new MutationObserver(rethemed).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 regen(); renderMini(); renderStudies(false);
+// read-only hook for the investor deck and projections pages (public/deck.html, public/projections.html) - keep when syncing from the artifact
+window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,get plans(){return plans;},loaded:false};
 
 /* ---------- saved values + scenarios (artifact db · Neon API · browser) ---------- */
 (function(){
@@ -2440,6 +2442,7 @@ regen(); renderMini(); renderStudies(false);
     let resumed=false;
     try{ const w=await store.getWorking(); if(w&&w.values){ apply(w); current=w.scenarioId||''; edited=!!w.edited; resumed=true; } }
     catch(e){ status('Could not load your last session'); }
+    window.G725.loaded=true; window.dispatchEvent(new Event('g725-ready'));
     ready=true; $('sc-menu').disabled=false;
     await refresh();
     status(resumed?'Resumed last session':('Changes save automatically'+(store.where?' '+store.where:'')));
