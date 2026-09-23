@@ -1332,8 +1332,9 @@ function fin(p,o={}){
   const sc=1-v('f-scres')/100, c=1/(1-ltc*k);
   const bePsf=rental?NaN:(total-retNet-affVal*(1-v('f-scret')/100)-privOut*v('f-out')*sc)/(Math.max(1,mktSf)*sc);
   const target=.15, residual=revenue/((1+target)*c)-(costEx-land);
-  const refiProceeds=refi?resCapVal*refiLtv:0;
-  return {rental,refi,refiLtv,refiProceeds,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
+  const assetVal=(rental?resCapVal:condoGross+affVal)+retVal;   // the retail condo is part of the project's value
+  const refiProceeds=refi?assetVal*refiLtv:0;
+  return {rental,refi,refiLtv,refiProceeds,assetVal,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
     margin:profit/total, roe:profit/equity, em, irr:em>0?Math.pow(em,12/Math.max(1,v('f-months')))-1:-1};
 }
 function investorOf(F,o={}){
@@ -1500,12 +1501,12 @@ function renderFinance(){
     +row('Total project cost','',F.total,'tot');
   const neg=F.profit<0?' neg':'';
   $('ret-tiles').innerHTML=[
-    [F.rental?(F.refi?'Exit: refinance and hold':'Exit: sale at cap rate'):'Exit: condo sell-out',
-      F.rental?(F.refi?money(F.refiProceeds)+' out':mm(F.resCapVal)):mm(F.condoGross),'',
+    [F.rental?(F.refi?'Exit: refinance and hold':'Exit: sale at cap rate'):'Exit: sell-out value',
+      F.refi?money(F.refiProceeds)+' out':mm(F.assetVal),'',
       F.rental?(F.refi
-        ? `The building is refinanced at ${$('f-refiltv').value}% of its ${mm(F.resCapVal)} value: ${money(F.refiProceeds)} of proceeds repay the construction loan of ${mm(F.loan)} first. You keep the asset and ${money(F.resCapVal-F.refiProceeds)} of equity in it, plus the rent.`
-        : `Stabilized NOI ${money(F.resNOI)} ÷ ${$('f-rcap').value}% cap = ${mm(F.resCapVal)}, less ${$('f-scret').value}% sale costs.`)
-      :`${fmt(F.mktSf)} sf of condos at $${fmt(+$('f-res').value||0)}/sf${F.affSf?`, plus ${mm(F.affVal)} for the affordable rentals held`:''}.`],
+        ? `The whole building — residential ${mm(F.resCapVal)} plus the retail condo ${mm(F.retVal)} = ${mm(F.assetVal)} — is refinanced at ${$('f-refiltv').value}%: ${money(F.refiProceeds)} of proceeds repay the construction loan of ${mm(F.loan)} first. You keep the asset and ${money(F.assetVal-F.refiProceeds)} of equity in it, plus the rent.`
+        : `Residential: stabilized NOI ${money(F.resNOI)} ÷ ${$('f-rcap').value}% cap = ${mm(F.resCapVal)}. Retail condo at a ${$('f-cap').value}% cap = ${mm(F.retVal)}. Together <b>${mm(F.assetVal)}</b> before ${$('f-scret').value}% sale costs.`)
+      :`Condos ${fmt(F.mktSf)} sf at $${fmt(+$('f-res').value||0)}/sf = ${mm(F.condoGross)}${F.affSf?`, affordable rentals held ${mm(F.affVal)}`:''}, plus the retail condo ${mm(F.retVal)}. Together <b>${mm(F.assetVal)}</b> before sales costs.`],
     ['Total project cost',mm(F.total),'',`Hard costs <b>${mm(F.hard)}</b> + soft costs <b>${mm(F.soft)}</b> + land <b>${mm(F.land)}</b> + air rights &amp; certificates <b>${mm(F.nb+F.certs)}</b> + financing (interest reserve + fees) <b>${mm(F.financing)}</b> = <b>${mm(F.total)}</b>.`],
     ['Bank loan ('+$('f-ltc').value+'% LTC)',mm(F.loan),'',`Loan-to-cost ${$('f-ltc').value}% × total project cost ${mm(F.total)} = <b>${mm(F.loan)}</b>. The interest reserve is inside the cost, so the loan also funds its own interest.`],
     ['Equity required',mm(F.equity),'',`Total project cost ${mm(F.total)} − bank loan ${mm(F.loan)} = <b>${mm(F.equity)}</b>, the ${100-(+$('f-ltc').value||0)}% of cost the bank won't fund. It goes in first (land, predevelopment, early construction) before the loan starts drawing. F-500 shows who funds it.`],
