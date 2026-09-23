@@ -177,7 +177,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .topbar .tb-field select{padding:4px 7px;font-size:.78rem}
 .topbar .tb-field .label{font-size:.62rem}
 .topbar .where{font-family:var(--mono);font-size:.72rem;color:var(--ink-2);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
-@media (max-width:900px){.topbar{padding-right:0}.topbar .where{display:none}}
+@media (max-width:900px){.topbar{position:static;padding-right:0}.topbar .where{display:none}}
 .rel{position:relative;min-width:0}
 .tiles .tile{position:relative}
 .stats .sub{font-size:.7rem;color:var(--ink-2);line-height:1.25}
@@ -1918,7 +1918,8 @@ $('in-bonus').addEventListener('change',()=>{ st.bonusSrc=$('in-bonus').value; r
 $('in-tenure').addEventListener('change',()=>{ st.tenure=$('in-tenure').value; regen(); renderStudies(true); });
 $('f-485').addEventListener('change',()=>{ regen(); renderStudies(true); });
 $('in-cut').addEventListener('change',()=>{st.cut=$('in-cut').checked;build3D(plans[st.scheme]);});
-const measureBar=()=>{ const b=$('topbar'); if(b) document.documentElement.style.setProperty('--topbar-h',Math.round(b.getBoundingClientRect().height)+'px'); };
+const measureBar=()=>{ const b=$('topbar'); if(!b) return; const sticky=getComputedStyle(b).position==='sticky';
+  document.documentElement.style.setProperty('--topbar-h',(sticky?Math.round(b.getBoundingClientRect().height):0)+'px'); };
 measureBar(); addEventListener('resize',measureBar);
 if(window.ResizeObserver) new ResizeObserver(measureBar).observe($('topbar'));
 const rethemed=()=>{renderMini();renderStudies(true);};
