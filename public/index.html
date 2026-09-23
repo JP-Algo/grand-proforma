@@ -1952,7 +1952,7 @@ document.querySelectorAll('#mtabs button').forEach(b=>b.addEventListener('click'
 $('in-exist').addEventListener('change',()=>{st.exist=+$('in-exist').value;regen();renderMini();renderStudies(true);});
 ['in-p1','in-p2'].forEach(id=>$(id).addEventListener('input',()=>{renderMini();renderFinance();}));
 document.querySelectorAll('#ftabs button').forEach(b=>b.addEventListener('click',()=>{st.scheme=b.dataset.s;renderStudies(false);}));
-document.querySelectorAll('.fgrid input').forEach(i=>i.addEventListener('input',renderFinance));
+document.querySelectorAll('.fgrid input, .fgrid select').forEach(i=>{ i.addEventListener('input',renderFinance); i.addEventListener('change',renderFinance); });
 $('f-res').addEventListener('input',renderInterior);
 $('in-green').addEventListener('change',()=>{st.green=$('in-green').checked;regen();renderStudies(true);});
 $('in-strategy').addEventListener('change',()=>{st.strategy=$('in-strategy').value;regen();renderStudies(false);});
