@@ -170,7 +170,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .fac .controls{padding:16px;display:grid;gap:12px;align-content:start;border-right:1px solid var(--rule)}
 @media (max-width:860px){.fac .controls{border-right:0;border-bottom:1px solid var(--rule)}}
 .field input[type="range"]{padding:0;accent-color:var(--accent)}
-.topbar{position:sticky;top:0;z-index:35;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:8px 0;margin-bottom:-8px;background:color-mix(in srgb,var(--ground) 93%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding-right:330px}
+.topbar{position:sticky;top:0;transition:box-shadow .18s,background-color .18s,border-color .18s;z-index:35;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:8px 0;margin-bottom:-8px;background:transparent;border-bottom:1px solid transparent;padding-right:330px}
+.topbar.stuck{background:color-mix(in srgb,var(--ground) 93%,transparent);backdrop-filter:blur(8px);border-bottom-color:var(--rule);box-shadow:0 6px 18px rgba(0,0,0,.06)}
+#bar-top{height:1px;margin-bottom:-1px}
 .topbar .tabs{gap:4px}
 .topbar .tabs button{padding:5px 10px;font-size:.8rem}
 .topbar .tabs button b{margin-right:4px}
@@ -242,25 +244,6 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
 
 <div class="wrap">
 
-<div class="topbar" id="topbar">
-  <label class="field tb-field"><span class="label">Tenure</span>
-    <select id="in-tenure"><option value="condo" selected>Condo sale</option><option value="rental">Rental</option></select></label>
-  <label class="field tb-field"><span class="label">Method</span>
-    <select id="in-mode"><option value="gu" selected>Ground-up</option><option value="enl">Keep + add floors</option></select></label>
-  <label class="field tb-field" id="exfloors-wrap" hidden><span class="label">Floors kept</span>
-    <select id="in-exfloors"><option value="0">Ground only</option><option value="1">Ground + 1</option><option value="2" selected>Ground + 2</option><option value="3">Ground + 3</option></select></label>
-  <div class="field tb-field">
-  <span class="label">Scheme</span>
-  <div class="tabs" id="gtabs" role="group" aria-label="Scheme, applies to the whole page">
-    <button type="button" id="gt-A" data-s="A" aria-pressed="false"><b>A</b>Own lot</button>
-    <button type="button" id="gt-B" data-s="B" aria-pressed="false"><b>B</b>+ certificates</button>
-    <button type="button" id="gt-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
-    <button type="button" id="gt-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
-  </div>
-  </div>
-  <span class="where" id="topbar-where">Cover</span>
-</div>
-
 <header class="cover">
   <span class="label">725 Grand Street, Brooklyn · Block 2783 Lot 43 · C4-4A (R7A) · former IH designated area</span>
   <div class="titlebar">
@@ -286,6 +269,26 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <span class="chip">Inner Transit Zone</span>
   </div>
 </header>
+
+<div id="bar-top" aria-hidden="true"></div>
+<div class="topbar" id="topbar">
+  <label class="field tb-field"><span class="label">Tenure</span>
+    <select id="in-tenure"><option value="condo" selected>Condo sale</option><option value="rental">Rental</option></select></label>
+  <label class="field tb-field"><span class="label">Method</span>
+    <select id="in-mode"><option value="gu" selected>Ground-up</option><option value="enl">Keep + add floors</option></select></label>
+  <label class="field tb-field" id="exfloors-wrap" hidden><span class="label">Floors kept</span>
+    <select id="in-exfloors"><option value="0">Ground only</option><option value="1">Ground + 1</option><option value="2" selected>Ground + 2</option><option value="3">Ground + 3</option></select></label>
+  <div class="field tb-field">
+  <span class="label">Scheme</span>
+  <div class="tabs" id="gtabs" role="group" aria-label="Scheme, applies to the whole page">
+    <button type="button" id="gt-A" data-s="A" aria-pressed="false"><b>A</b>Own lot</button>
+    <button type="button" id="gt-B" data-s="B" aria-pressed="false"><b>B</b>+ certificates</button>
+    <button type="button" id="gt-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
+    <button type="button" id="gt-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
+  </div>
+  </div>
+  <span class="where" id="topbar-where">Cover</span>
+</div>
 
 <section class="answer" aria-label="Headline answers">
   <div><span class="label" id="a-total-l">Scheme D building</span><span class="big num" id="a-total">—</span><p id="a-total-p">—</p></div>
@@ -2265,6 +2268,8 @@ $('in-cut').addEventListener('change',()=>{st.cut=$('in-cut').checked;build3D(pl
 const measureBar=()=>{ const b=$('topbar'); if(!b) return; const sticky=getComputedStyle(b).position==='sticky';
   document.documentElement.style.setProperty('--topbar-h',(sticky?Math.round(b.getBoundingClientRect().height):0)+'px'); };
 measureBar(); addEventListener('resize',measureBar);
+if(window.IntersectionObserver&&$('bar-top'))
+  new IntersectionObserver(([e])=>$('topbar').classList.toggle('stuck',!e.isIntersecting),{threshold:1}).observe($('bar-top'));
 if(window.ResizeObserver) new ResizeObserver(measureBar).observe($('topbar'));
 const rethemed=()=>{renderMini();renderStudies(true);};
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
