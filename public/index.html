@@ -9,6 +9,7 @@
   --m-base:#5E6E76; --m-transfer:#C98517; --m-bonus:#3A8656; --m-exist:#AEB8B5;
   --t-res:#E9DFC9; --t-core:#56646B; --t-serv:#8D9A9F; --t-corr:#F2F4F2;
   --t-lobby:#B9D3DA; --t-retail:#E7B78A; --t-amen:#C9C0E0; --t-terr:#7FB08F; --t-win:#0D6A80;
+  --t-aff:#BFDCC4;
   --z-res:#E3C99A; --z-ret:#E39E6B; --z-core:#B49B7C; --z-lobby-c:#D98F7A; --z-corr:#8ECFB0; --z-mech:#8DB6D9; --z-amen:#B6A6E2; --z-ref:#C4D98A;
   --i-floor:#E6D9C3; --i-wall:#F4F2EC; --i-glass:#9CC3D0; --i-soft:#C9B9A6; --i-case:#8E7B66; --i-fix:#FFFFFF; --i-core:#9AA4A8; --i-tile:#D9DEDF;
   --f-glass:#7FA3B0; --f-slab:#CFCBC2;
@@ -23,6 +24,7 @@
     --m-base:#8A9CA4; --m-transfer:#E3A23A; --m-bonus:#5DB07B; --m-exist:#4B5659;
     --t-res:#6B6250; --t-core:#A9B6BB; --t-serv:#5F6B70; --t-corr:#2A3438;
     --t-lobby:#3B6571; --t-retail:#8C603A; --t-amen:#5E5580; --t-terr:#3F7050; --t-win:#7FD0E3;
+    --t-aff:#3F6A4B;
     --z-res:#7A6440; --z-ret:#8A5530; --z-core:#6B5A45; --z-lobby-c:#7F4A3C; --z-corr:#2F7258; --z-mech:#335C80; --z-amen:#55478A; --z-ref:#5D6E2E;
     --i-floor:#6A5C49; --i-wall:#CFCBC2; --i-glass:#4E8496; --i-soft:#8C7C69; --i-case:#6B5A48; --i-fix:#E8E8E4; --i-core:#6C777B; --i-tile:#8C9496;
     --f-glass:#3D5F6B; --f-slab:#8A877F;
@@ -34,6 +36,7 @@
   --m-base:#8A9CA4; --m-transfer:#E3A23A; --m-bonus:#5DB07B; --m-exist:#4B5659;
   --t-res:#6B6250; --t-core:#A9B6BB; --t-serv:#5F6B70; --t-corr:#2A3438;
   --t-lobby:#3B6571; --t-retail:#8C603A; --t-amen:#5E5580; --t-terr:#3F7050; --t-win:#7FD0E3;
+    --t-aff:#3F6A4B;
     --z-res:#7A6440; --z-ret:#8A5530; --z-core:#6B5A45; --z-lobby-c:#7F4A3C; --z-corr:#2F7258; --z-mech:#335C80; --z-amen:#55478A; --z-ref:#5D6E2E;
     --i-floor:#6A5C49; --i-wall:#CFCBC2; --i-glass:#4E8496; --i-soft:#8C7C69; --i-case:#6B5A48; --i-fix:#E8E8E4; --i-core:#6C777B; --i-tile:#8C9496;
     --f-glass:#3D5F6B; --f-slab:#8A877F;
@@ -435,6 +438,10 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
           <select id="in-mode2"><option value="gu" selected>Ground-up</option><option value="enl">Keep + add floors</option></select></label>
         <label class="field" id="exfloors2-wrap" hidden><span class="label">Floors kept</span>
           <select id="in-exfloors2"><option value="0">Ground only</option><option value="1">Ground + 1</option><option value="2" selected>Ground + 2</option><option value="3">Ground + 3</option></select></label>
+        <label class="field"><span class="label">Bonus source</span>
+          <select id="in-bonus"><option value="cert" selected>IH certificates (off-site)</option><option value="onsite">On-site affordable (UAP)</option></select></label>
+        <label class="field"><span class="label">Tenure</span>
+          <select id="in-tenure"><option value="condo" selected>Condo sale</option><option value="rental">Rental (485-x)</option></select></label>
         <label class="field"><span class="label">Massing strategy</span>
           <select id="in-strategy"><option value="eff" selected>Compact (fewest floors)</option><option value="height">Max height (fills envelope)</option></select></label>
         <label class="field"><span class="label">Circulation deduction</span>
@@ -566,6 +573,14 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
       <label class="field"><span class="label">Condo $/sf</span><input id="f-res" type="number" step="25" value="1500"></label>
       <label class="field"><span class="label">Private outdoor $/sf</span><input id="f-out" type="number" step="25" value="0"></label>
       <label class="field"><span class="label">Condo sales costs %</span><input id="f-scres" type="number" step="0.5" value="6"></label>
+      <label class="field"><span class="label">Market rent $/sf/yr</span><input id="f-mrent" type="number" step="1" value="78"></label>
+      <label class="field"><span class="label">Affordable rent $/sf/yr</span><input id="f-arent" type="number" step="1" value="30"></label>
+      <label class="field"><span class="label">Resi opex $/sf/yr</span><input id="f-ropex" type="number" step="1" value="14"></label>
+      <label class="field"><span class="label">Taxes $/sf/yr, no 485-x</span><input id="f-taxno" type="number" step="1" value="13"></label>
+      <label class="field"><span class="label">Taxes $/sf/yr with 485-x</span><input id="f-tax485" type="number" step="0.5" value="2"></label>
+      <label class="field"><span class="label">Resi vacancy %</span><input id="f-rvac" type="number" step="0.5" value="4"></label>
+      <label class="field"><span class="label">Resi cap rate %</span><input id="f-rcap" type="number" step="0.25" value="5.25"></label>
+      <label class="check" style="align-self:end;padding-bottom:6px"><input id="f-485" type="checkbox" checked> Apply 485-x</label>
       <label class="field"><span class="label">Retail rent $/sf/yr</span><input id="f-rent" type="number" step="5" value="80"></label>
       <label class="field"><span class="label">Vacancy + credit %</span><input id="f-vac" type="number" step="0.5" value="5"></label>
       <label class="field"><span class="label">Non-reimbursed opex %</span><input id="f-opex" type="number" step="0.5" value="3"></label>
@@ -749,7 +764,7 @@ const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('en-US');
 const ft=v=>{const f=Math.floor(v+1e-6), i=Math.round((v-f)*12); return i===12?`${f+1}'-0"`:`${f}'-${i}"`;};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const st={scheme:'D',mini:'D',floor:null,green:true,exist:4133,cut:false,strategy:'eff',circ:'100',mode:'gu',openUnits:new Set(),ifit:true};
+const st={scheme:'D',mini:'D',floor:null,green:true,exist:4133,cut:false,strategy:'eff',circ:'100',mode:'gu',bonusSrc:'cert',tenure:'condo',openUnits:new Set(),ifit:true};
 
 /* ---------- scheme caps ---------- */
 function defs(){
@@ -875,7 +890,7 @@ function renderMini(){
 
 /* ---------- detailed studies ---------- */
 const TYPES={
-  res:{tok:'--t-res',counts:1}, stair:{tok:'--t-core',counts:1}, elev:{tok:'--t-core',counts:1},
+  res:{tok:'--t-res',counts:1}, aff:{tok:'--t-aff',counts:1}, stair:{tok:'--t-core',counts:1}, elev:{tok:'--t-core',counts:1},
   trash:{tok:'--t-serv',counts:1}, mech:{tok:'--t-serv',counts:0}, corr:{tok:'--t-corr',counts:'corr'},
   lobby:{tok:'--t-lobby',counts:'lobby'}, retail:{tok:'--t-retail',counts:1}, amen:{tok:'--t-amen',counts:0},
   logg:{tok:'--t-terr',counts:0,open:true}
@@ -983,9 +998,38 @@ function generate(s){
   return tally({s,env,g,N,typ,nb,Au,floors,unused:best.unused,mode:'gu'},gf);
 }
 
+/* Which units are income-restricted:
+   - UAP on-site: the bonus floor area itself must be affordable at an average of 60% AMI.
+   - 485-x (Option B, 6-99 units): 20% of the units at an average of 80% AMI, rentals only.
+   The UAP units are deeper than 485-x needs, so they count toward both. */
+function tagAffordable(P){
+  const uapSf=(st.bonusSrc==='onsite'&&P.s.cert>0)?P.s.cert:0;
+  const wants485=st.tenure==='rental'&&$('f-485')&&$('f-485').checked;
+  const resFloors=P.floors.filter(f=>typeof f.n==='number'&&f.n>1&&!f.top&&f.rects.some(r=>r.t==='res'));
+  const groups=[];
+  resFloors.forEach(f=>{
+    const by={}; f.rects.forEach(r=>{ if(r.t==='res'&&r.u) (by[r.u]=by[r.u]||[]).push(r); });
+    Object.entries(by).forEach(([u,rs])=>groups.push({u,rs,floor:f.n,sf:rs.reduce((a,r)=>a+r.area,0),corner:u.startsWith('a')}));
+  });
+  const total=groups.length;
+  const need485=wants485?Math.ceil(.2*total):0;
+  if(!uapSf&&!need485) return {affSf:0,affUnits:0,total};
+  // spread them: smaller units first, no two on the same floor until every floor has one
+  const order=groups.slice().sort((a,b)=>(a.corner-b.corner)||(a.sf-b.sf));
+  const seen=new Set(); const queue=order.filter(g=>{ if(seen.has(g.floor)) return false; seen.add(g.floor); return true; }).concat(order.filter(g=>seen.has(g.floor)&&!order.slice(0,seen.size).includes(g)));
+  let sf=0,n=0;
+  for(const g of queue){
+    if(sf>=uapSf&&n>=need485) break;
+    g.rs.forEach(r=>{r.t='aff';});
+    sf+=g.sf; n++;
+  }
+  return {affSf:sf,affUnits:n,total};
+}
+
 function tally(P,gf){
+  P.aff=tagAffordable(P);
   const {floors}=P;
-  let gross=0,cnt=0,corrEx=0,amenEx=0,mechEx=0,trash=0,net=0,units=new Set(),cellar=0,outdoor=0,retail=0,exGross=0,newAbove4=0;
+  let gross=0,cnt=0,corrEx=0,amenEx=0,mechEx=0,trash=0,net=0,units=new Set(),cellar=0,outdoor=0,retail=0,exGross=0,newAbove4=0,affNet=0,affUnits=new Set();
   const occ=f=>{const a=new Uint8Array(S1*100);for(const r of f.rects){if(TYPES[r.t].open)continue;for(let z=Math.floor(r.z0);z<Math.ceil(r.z1);z++)for(let x=Math.floor(r.x0);x<Math.ceil(r.x1);x++){if(x+.5>r.x0&&x+.5<r.x1&&z+.5>r.z0&&z+.5<r.z1)a[z*S1+x]=1;}}return a;};
   const loggOcc=f=>{const a=new Uint8Array(S1*100);for(const r of f.rects){if(r.t!=='logg')continue;for(let z=Math.floor(r.z0);z<Math.ceil(r.z1);z++)for(let x=Math.floor(r.x0);x<Math.ceil(r.x1);x++){if(x+.5>r.x0&&x+.5<r.x1&&z+.5>r.z0&&z+.5<r.z1)a[z*S1+x]=1;}}return a;};
   let prevOcc=null;
@@ -994,13 +1038,13 @@ function tally(P,gf){
     f.logg=f.rects.filter(r=>r.t==='logg').reduce((s,r)=>s+r.area,0);
     f.corrEx=f.rects.filter(r=>r.t==='corr').reduce((s,r)=>s+r.area*(1-f.frac),0)+(st.circ==='100'?f.rects.filter(r=>r.t==='lobby').reduce((s,r)=>s+r.area,0):0);
     f.exempt=f.gross-f.counts;
-    f.units=new Set(f.rects.filter(r=>r.t==='res'&&r.u).map(r=>r.u)).size;
+    f.units=new Set(f.rects.filter(r=>(r.t==='res'||r.t==='aff')&&r.u).map(r=>r.u)).size;
     f.occ=occ(f);
     if(f.cellar){cellar=f.gross; f.terr=[]; f.outdoor=0; continue;}
     f.exGross=f.rects.reduce((a,r)=>a+(r.ex&&!TYPES[r.t].open?r.area:0),0);
     exGross+=f.exGross; if(typeof f.n==='number'&&f.n>4) newAbove4+=f.gross-f.exGross;
     gross+=f.gross; cnt+=f.counts; corrEx+=f.corrEx;
-    f.rects.forEach(r=>{if(r.t==='amen')amenEx+=r.area; if(r.t==='mech')mechEx+=r.area; if(r.t==='trash')trash+=r.area; if(r.t==='res')net+=r.area; if(r.t==='retail')retail+=r.area; if(r.u&&r.t==='res')units.add(r.u);});
+    f.rects.forEach(r=>{if(r.t==='amen')amenEx+=r.area; if(r.t==='mech')mechEx+=r.area; if(r.t==='trash')trash+=r.area; if(r.t==='res'||r.t==='aff')net+=r.area; if(r.t==='aff')affNet+=r.area; if(r.t==='retail')retail+=r.area; if(r.u&&(r.t==='res'||r.t==='aff')){units.add(r.u); if(r.t==='aff')affUnits.add(r.u);}});
     f.terr=[]; let terr=0;
     if(prevOcc){ const lo=loggOcc(f);
       for(let z=0;z<100;z++){let x=0;while(x<S1){const c=z*S1+x; if(prevOcc[c]&&!f.occ[c]&&!lo[c]){let x1=x;while(x1<S1&&prevOcc[z*S1+x1]&&!f.occ[z*S1+x1]&&!lo[z*S1+x1])x1++;f.terr.push([x,z,x1,z+1]);terr+=x1-x;x=x1;}else x++;}}
@@ -1014,7 +1058,7 @@ function tally(P,gf){
   const pre=cnt-refuse, zfa=pre/gf, greenEx=pre-zfa;
   const height=P.mode==='enl'?P.exTop+(P.N-1-P.exN)*P.typ:P.g+(P.N-1)*P.typ;
   return {...P,gross,cellar,cnt,corrEx,amenEx,mechEx,refuse,greenEx,zfa,units:units.size,net,outdoor,retail,height,
-    exGross,newGross:gross-exGross,newAbove4};
+    exGross,newGross:gross-exGross,newAbove4,affNet,affUnits:affUnits.size,marketNet:net-affNet};
 }
 
 /* Vertical enlargement: keep the existing ground + upper floors, build new floors above.
@@ -1101,7 +1145,7 @@ function renderStudies(keepFloor){
   $('a-total-p').textContent=`${fmt(p.zfa)} zoning sf, ${fmt(p.gross)} sf gross above grade${p.mode==='enl'?` (${fmt(p.exGross)} retained)`:''}, ${p.units} units, ${fmt(p.retail)} sf retail, ${fmt(p.outdoor)} sf outdoor.`;
   const s=p.s;
   $('stats').innerHTML=[
-    ['Height',`${Math.round(p.height)} ft`],['Stories',p.N],['Floor-to-floor',`${ft(p.g)} / ${ft(p.typ)}`],['Units',p.units],
+    ['Height',`${Math.round(p.height)} ft`],['Stories',p.N],['Floor-to-floor',`${ft(p.g)} / ${ft(p.typ)}`],['Units',p.units,p.affUnits?`${p.affUnits} affordable · ${p.units-p.affUnits} market`:''],
     ['ZFA / cap',`${fmt(p.zfa)} / ${fmt(s.cap)}`],['Gross above grade',fmt(p.gross),p.mode==='enl'?`${fmt(p.exGross)} retained · ${fmt(p.newGross)} new`:''],['Outdoor sf',fmt(p.outdoor)],['Efficiency',Math.round((p.net+p.retail)/p.gross*100)+'%',`+ outdoor ${Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)}% · loss factor ${Math.round((p.gross-p.net-p.retail)/p.gross*100)}%`]
   ].map(([l,v,sub])=>`<div><span class="label">${l}</span><span class="v num">${v}</span>${sub?`<span class="sub num">${sub}</span>`:''}</div>`).join('');
   $('floors').innerHTML=p.floors.slice().reverse().map(f=>`<button type="button" id="fl-${st.scheme}-${f.n}" data-f="${f.n}" aria-pressed="${f.n===st.floor}">${f.n==='C'?'Cellar':f.n===1?'Ground':'Fl '+f.n}</button>`).join('');
@@ -1118,11 +1162,19 @@ function renderStudies(keepFloor){
     C:'The easement from 30 ft up turns base floors into 3BR corner layouts with a fully exempt corridor.',
     D:'The largest scheme: 115 ft, certificate bonus, easement windows, loggias on every floor, and a roof lounge and deck.'
   };
+  const bonusNote = p.s.cert>0
+    ? (st.bonusSrc==='onsite'
+        ? ` The ${fmt(p.s.cert)} sf bonus is earned on site: ${p.affUnits} units (${fmt(p.affNet)} sf) are permanently affordable at an average of 60% AMI, so no certificates are bought.`
+        : ` The ${fmt(p.s.cert)} sf bonus is bought as IH certificates, so every unit here is market rate.`)
+    : '';
+  const tenureNote = st.tenure==='rental'
+    ? ` Held as rental${$('f-485').checked?` with 485-x: 20% of units income-restricted (Option B, 6-99 units, 35-year benefit, permanently rent-stabilized), ${p.affUnits} of ${p.units} units here`:', no 485-x applied'}.`
+    : '';
   const modeNote=p.mode==='enl'
     ? ` Keep + add: the 1930 ground floor and ${p.exN} vacant floors above stay (${fmt(p.exGross)} sf, counted against the cap), a new core is cut through them in the rear arm, and ${fmt(p.newGross)} sf is built on top. Floors above the 4th sit on new steel columns and foundations. No demolition, but the whole building is brought up to code.`
     : '';
-  $('scheme-note').textContent=notes[s.k]+modeNote+(p.unused>50?` About ${fmt(p.unused/(st.green?1.05:1))} sf doesn't fit inside the envelope.`:'');
-  $('cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${fmt(q.s.cap)}</td><td class="num">${fmt(q.zfa)}</td><td class="num">${fmt(q.gross)}</td><td class="num">${Math.round(q.height)}' · ${q.N}</td><td class="num">${ft(q.typ)}</td><td class="num">${q.units}</td><td class="num">${fmt(q.retail)}</td><td class="num">${fmt(q.outdoor)}</td><td class="num">${Math.round((q.net+q.retail)/q.gross*100)}%</td><td class="num">${Math.round((q.net+q.retail+q.outdoor)/(q.gross+q.outdoor)*100)}%</td><td class="num">${Math.round((q.gross-q.net-q.retail)/q.gross*100)}%</td></tr>`;}).join('');
+  $('scheme-note').textContent=notes[s.k]+bonusNote+tenureNote+modeNote+(p.unused>50?` About ${fmt(p.unused/(st.green?1.05:1))} sf doesn't fit inside the envelope.`:'');
+  $('cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${fmt(q.s.cap)}</td><td class="num">${fmt(q.zfa)}</td><td class="num">${fmt(q.gross)}</td><td class="num">${Math.round(q.height)}' · ${q.N}</td><td class="num">${ft(q.typ)}</td><td class="num">${q.units}${q.affUnits?` (${q.affUnits} aff)`:''}</td><td class="num">${fmt(q.retail)}</td><td class="num">${fmt(q.outdoor)}</td><td class="num">${Math.round((q.net+q.retail)/q.gross*100)}%</td><td class="num">${Math.round((q.net+q.retail+q.outdoor)/(q.gross+q.outdoor)*100)}%</td><td class="num">${Math.round((q.gross-q.net-q.retail)/q.gross*100)}%</td></tr>`;}).join('');
   renderPlan(p); build3D(p); renderFinance(); renderZPlan(); renderFacade(); renderInterior();
 }
 
@@ -1141,7 +1193,21 @@ function unitsOf(p){
 function fin(p,o={}){
   const v=id=>(o[id]!=null?o[id]:(+$(id).value||0));
   const privOut=p.floors.filter(f=>typeof f.n==='number'&&f.n>1&&!f.top).reduce((s,f)=>s+f.outdoor,0);
-  const resGross=p.net*v('f-res')+privOut*v('f-out'), resNet=resGross*(1-v('f-scres')/100);
+  const rental=st.tenure==='rental', use485=rental&&$('f-485')&&$('f-485').checked;
+  const taxPsf=use485?v('f-tax485'):v('f-taxno');
+  const affSf=p.affNet||0, mktSf=Math.max(0,p.net-affSf);
+  // rents: market and income-restricted, both $/sf/year
+  const rentRoll=mktSf*v('f-mrent')+affSf*v('f-arent');
+  const resOpex=p.net*(v('f-ropex')+taxPsf);
+  const resNOI=rentRoll*(1-v('f-rvac')/100)-resOpex;
+  const resCapVal=resNOI/Math.max(.01,v('f-rcap')/100);
+  // affordable units are never sold as condos: they are held as rentals and valued on their income
+  const affRoll=affSf*v('f-arent'), affNOI=affRoll*(1-v('f-rvac')/100)-affSf*(v('f-ropex')+taxPsf);
+  const affVal=affSf?affNOI/Math.max(.01,v('f-rcap')/100):0;
+  const condoGross=mktSf*v('f-res')+privOut*v('f-out');
+  const resGross=rental?resCapVal:condoGross+affVal;
+  const resNet=rental?resCapVal*(1-v('f-scret')/100)
+                     :condoGross*(1-v('f-scres')/100)+affVal*(1-v('f-scret')/100);
   const rent=p.retail*v('f-rent'), noi=rent*(1-v('f-vac')/100-v('f-opex')/100), retVal=noi/(v('f-cap')/100), retNet=retVal*(1-v('f-scret')/100);
   const revenue=resNet+retNet;
   const enl=p.mode==='enl';
@@ -1172,9 +1238,9 @@ function fin(p,o={}){
   const financing=ltc*k*costEx/(1-ltc*k), total=costEx+financing, loan=ltc*total, equity=total-loan;
   const profit=revenue-total, em=(equity+profit)/equity;
   const sc=1-v('f-scres')/100, c=1/(1-ltc*k);
-  const bePsf=(total-retNet-privOut*v('f-out')*sc)/(Math.max(1,p.net)*sc);
+  const bePsf=rental?NaN:(total-retNet-affVal*(1-v('f-scret')/100)-privOut*v('f-out')*sc)/(Math.max(1,mktSf)*sc);
   const target=.15, residual=revenue/((1+target)*c)-(costEx-land);
-  return {bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
+  return {rental,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
     margin:profit/total, roe:profit/equity, em, irr:em>0?Math.pow(em,12/Math.max(1,v('f-months')))-1:-1};
 }
 function investorOf(F,o={}){
@@ -1281,8 +1347,10 @@ function renderFinance(){
   document.querySelectorAll('#ftabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
   const F=fin(p), units=unitsOf(p), psf=+$('f-res').value||0;
   $('rev-tiles').innerHTML=[
-    ['Condo sellable sf',fmt(p.net),'',`The sum of every unit's area in scheme ${p.s.k}'s plans (${p.units} units), measured to exterior walls and unit centerlines. It excludes loggias, terraces, corridors, core, lobby, amenity and retail.`],
-    ['Gross condo sales',mm(F.resGross),'',`Sellable ${fmt(p.net)} sf × $${fmt(+$('f-res').value||0)}/sf${(+$('f-out').value||0)?` + private outdoor ${fmt(F.privOut)} sf × $${$('f-out').value}/sf`:''} = <b>${mm(F.resGross)}</b>.`],
+    [F.rental?'Rentable sf':'Sellable sf',fmt(p.net),'',`Every unit's area in scheme ${p.s.k}'s plans (${p.units} units)${p.affUnits?`, of which ${fmt(F.affSf)} sf in ${p.affUnits} income-restricted units`:''}. Excludes loggias, terraces, corridors, core, lobby, amenity and retail.`],
+    [F.rental?'Residential value at cap':'Gross residential value',mm(F.resGross),'',F.rental
+      ? `Rent roll ${money(F.rentRoll)}/yr (market ${fmt(F.mktSf)} sf × $${$('f-mrent').value}, affordable ${fmt(F.affSf)} sf × $${$('f-arent').value}) less ${$('f-rvac').value}% vacancy, opex $${$('f-ropex').value}/sf and taxes $${F.taxPsf}/sf ${F.use485?'(485-x)':'(no 485-x)'} = NOI <b>${money(F.resNOI)}</b>, ÷ ${$('f-rcap').value}% cap = <b>${mm(F.resCapVal)}</b>.`
+      : `Market condos ${fmt(F.mktSf)} sf × $${fmt(+$('f-res').value||0)}/sf${(+$('f-out').value||0)?` + outdoor ${fmt(F.privOut)} sf × $${$('f-out').value}/sf`:''} = ${mm(F.condoGross)}${F.affSf?`, plus ${p.affUnits} affordable rentals held and valued on income at <b>${mm(F.affVal)}</b>`:''}.`],
     ['Retail condo value',mm(F.retVal),'',`Rent ${fmt(p.retail)} sf × $${$('f-rent').value} = ${mm(F.rent)}. Less ${$('f-vac').value}% vacancy and ${$('f-opex').value}% non-reimbursed opex = NOI ${money(F.noi)}. ÷ ${$('f-cap').value}% cap rate = <b>${mm(F.retVal)}</b>.`],
     ['Net revenue after sales costs',mm(F.revenue),'',`Condo sales ${mm(F.resGross)} × (1 − ${$('f-scres').value}%) = ${mm(F.resNet)}, plus retail ${mm(F.retVal)} × (1 − ${$('f-scret').value}%) = ${mm(F.retNet)}. Total <b>${mm(F.revenue)}</b>.`]
   ].map(tileHTML).join('');
@@ -1314,7 +1382,7 @@ function renderFinance(){
     ['Return on equity',pct(F.roe),neg,`Profit ${mm(F.profit)} ÷ equity ${mm(F.equity)} = <b>${pct(F.roe)}</b> over the whole ${$('f-months').value}-month project, not per year.`],
     ['Equity multiple',F.em.toFixed(2)+'×',neg,`(Equity ${mm(F.equity)} + profit ${mm(F.profit)}) ÷ equity ${mm(F.equity)} = <b>${F.em.toFixed(2)}×</b>. Every $1 of equity comes back as $${F.em.toFixed(2)}.`],
     ['Annualized (simplified)',pct(F.irr),neg,`Multiple ${F.em.toFixed(2)}× spread over ${$('f-months').value} months: ${F.em.toFixed(2)}^(12/${$('f-months').value}) − 1 = <b>${pct(F.irr)}</b>/yr. Assumes all equity goes in on day one and comes out at the end, so a real IRR will be higher.`],
-    ['Break-even condo $/sf','$'+fmt(F.bePsf),'',`The condo price at which profit = $0: (total cost ${mm(F.total)} − net retail ${mm(F.retNet)}) ÷ (sellable ${fmt(p.net)} sf × (1 − ${$('f-scres').value}% sales costs)) = <b>$${fmt(F.bePsf)}/sf</b>.`],
+    [F.rental?'Break-even rent $/sf/yr':'Break-even condo $/sf',F.rental?'n/a for rentals':'$'+fmt(F.bePsf),'',`The condo price at which profit = $0: (total cost ${mm(F.total)} − net retail ${mm(F.retNet)}) ÷ (sellable ${fmt(p.net)} sf × (1 − ${$('f-scres').value}% sales costs)) = <b>$${fmt(F.bePsf)}/sf</b>.`],
     ['Land value for 15% margin',mm(F.residual),F.residual<0?' neg':'',`The most you could pay for the land and still earn a 15% margin on cost: net revenue ${mm(F.revenue)} ÷ 1.15, less all non-land costs and the financing they carry = <b>${mm(F.residual)}</b>. Compare it with your land basis of ${mm(F.land)}.`],
     ['Building efficiency',Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)+'%','',`(Condo sellable ${fmt(p.net)} sf + retail ${fmt(p.retail)} sf + occupiable outdoor ${fmt(p.outdoor)} sf) ÷ (gross above-grade ${fmt(p.gross)} sf + occupiable outdoor ${fmt(p.outdoor)} sf) = <b>${Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)}%</b>. Outdoor means loggias, setback terraces and roof decks; adding it to both sides keeps the ratio under 100%. Enclosed only: ${Math.round((p.net+p.retail)/p.gross*100)}%. Condo only: ${Math.round(p.net/p.gross*100)}%.`]
   ].map(tileHTML).join('');
@@ -1394,7 +1462,7 @@ function renderPlan(p){
   $('plan').innerHTML=o+'</svg>';
 }
 
-$('legend').innerHTML=[['res','Residential'],['stair','Core'],['mech','MEP / refuse'],['corr','Corridor'],['lobby','Lobby'],['retail','Retail'],['amen','Amenity'],['logg','Loggia / terrace']].map(([t,l])=>`<span><i class="sw" style="background:var(${TYPES[t].tok})"></i>${l}</span>`).join('')+`<span><i class="sw" style="background:var(--m-exist)"></i>727 Grand</span>`;
+$('legend').innerHTML=[['res','Market residential'],['aff','Affordable'],['stair','Core'],['mech','MEP / refuse'],['corr','Corridor'],['lobby','Lobby'],['retail','Retail'],['amen','Amenity'],['logg','Loggia / terrace']].map(([t,l])=>`<span><i class="sw" style="background:var(${TYPES[t].tok})"></i>${l}</span>`).join('')+`<span><i class="sw" style="background:var(--m-exist)"></i>727 Grand</span>`;
 
 let viewer=null;
 function build3D(p){
@@ -1846,6 +1914,9 @@ $('in-mode').addEventListener('change',()=>{
 $('in-exfloors').addEventListener('change',()=>{regen();renderMini();renderStudies(false);});
 $('in-mode2').addEventListener('change',()=>{ $('in-mode').value=$('in-mode2').value; $('in-mode').dispatchEvent(new Event('change')); });
 $('in-exfloors2').addEventListener('change',()=>{ $('in-exfloors').value=$('in-exfloors2').value; $('in-exfloors').dispatchEvent(new Event('change')); });
+$('in-bonus').addEventListener('change',()=>{ st.bonusSrc=$('in-bonus').value; regen(); renderStudies(true); });
+$('in-tenure').addEventListener('change',()=>{ st.tenure=$('in-tenure').value; regen(); renderStudies(true); });
+$('f-485').addEventListener('change',()=>{ regen(); renderStudies(true); });
 $('in-cut').addEventListener('change',()=>{st.cut=$('in-cut').checked;build3D(plans[st.scheme]);});
 const rethemed=()=>{renderMini();renderStudies(true);};
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rethemed);
@@ -1861,6 +1932,7 @@ regen(); renderMini(); renderStudies(false);
     if(!state||!state.values) return;
     fields().forEach(el=>{ if(!(el.id in state.values)) return; const v=state.values[el.id]; if(el.type==='checkbox') el.checked=!!v; else el.value=String(v); });
     st.exist=+$('in-exist').value; st.green=$('in-green').checked; st.strategy=$('in-strategy').value; st.circ=$('in-circ').value; st.cut=$('in-cut').checked;
+    st.mode=$('in-mode').value; st.bonusSrc=$('in-bonus').value; st.tenure=$('in-tenure').value;
     if(['A','B','C','D'].includes(state.scheme)) st.scheme=state.scheme;
     if(['A','B','C','D'].includes(state.mini)) st.mini=state.mini;
     st.ifit=true; regen(); renderMini(); renderStudies(false);
