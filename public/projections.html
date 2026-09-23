@@ -94,11 +94,11 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
 <header>
   <span class="kicker">725 Grand Street · Brooklyn · pro forma detail</span>
   <h1>Projections: Scheme B base case vs Scheme D upside</h1>
-  <p class="lede">Every number here comes from the same pro forma as the <a href="/">main study</a>, using its saved inputs, with both schemes built ground-up and sold as condos. Change the condo price or land basis below to see how the result moves. Changes on this page are not saved.</p>
+  <p class="lede">Every number here comes from the same pro forma as the <a href="/">main study</a>, with both schemes built ground-up and sold as condos. Change the condo price or land basis below to see how the result moves. Changes on this page are not saved.</p>
   <div class="controls">
     <label><span class="label">Condo $/sf</span><input id="c-price" type="number" step="25" min="0"></label>
     <label><span class="label">Land basis, 725 Grand $</span><input id="c-land" type="number" step="100000" min="0"></label>
-    <button id="c-reset" type="button">Reset to saved</button>
+    <button id="c-reset" type="button">Reset</button>
     <span class="hint" id="status">Loading the pro forma…</span>
   </div>
 </header>
@@ -163,6 +163,7 @@ const SCHEMES=[
   {k:'D',title:'Scheme D · upside',tag:'With 727 Grand',sub:'Zoning lot merger with 727 Grand + IH certificates on the merged lot.'}
 ];
 let G=null, W=null, saved={};
+const BASE_PRICE=1600; // the proposal's condo price assumption
 
 function compute(o){
   return SCHEMES.map(s=>{
@@ -301,9 +302,9 @@ function drawBars(per){
 function start(){
   W=$('engine').contentWindow; G=W.G725;
   G.st.mode='gu'; G.st.tenure='condo'; G.regen();
-  saved={'f-res':+inVal('f-res'),'f-land':+inVal('f-land')};
+  saved={'f-res':BASE_PRICE,'f-land':+inVal('f-land')};
   $('c-price').value=saved['f-res']; $('c-land').value=saved['f-land'];
-  $('status').textContent=`Saved inputs: ${psf(saved['f-res'])}/sf condo, ${mm(saved['f-land'])} land.`;
+  $('status').textContent=`Proposal assumption: ${psf(BASE_PRICE)}/sf condo. Land and every other input come from the pro forma.`;
   $('asof').textContent='Computed '+new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
   render();
 }
