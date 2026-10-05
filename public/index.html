@@ -292,7 +292,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     </div>
   </div>
   </div>
-  <p class="lede">Zoning analysis and test-fit buildings for the corner of Grand Street and Graham Avenue. The ground floor is full commercial. Residential floors above have recessed loggias on every level. Extra floor area comes from a merger with 727 Grand Street, and from Inclusionary Housing certificates or affordable units built on site. Each scheme can be built new or added onto the existing building, and sold as condos or held as rentals.</p>
+  <p class="lede">Zoning analysis and test-fit buildings for the corner of Grand Street and Graham Avenue. The ground floor is full commercial. Residential floors above have recessed loggias on every level. Extra floor area comes from a merger with 727 Grand Street (either buying its air rights or buying the building, demolishing it and building across the full 51 × 100 ft lot), from the other lots that touch 284 Graham Avenue, and from Inclusionary Housing certificates or affordable units built on site. Each scheme can be built new or added onto the existing building, and sold as condos or held as rentals.</p>
   <div class="facts">
     <span class="chip">Lot 3,034 sf · 25.17 × 100 ft + 25.83 × 20 ft rear arm</span>
     <span class="chip">Grand St 80 ft wide · Graham Ave 80 ft wide</span>
@@ -317,6 +317,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <button type="button" id="gt-B" data-s="B" aria-pressed="false"><b>B</b>+ certificates</button>
     <button type="button" id="gt-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
     <button type="button" id="gt-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
+    <button type="button" id="gt-E" data-s="E" aria-pressed="false"><b>E</b>Demo 727</button>
+    <button type="button" id="gt-F" data-s="F" aria-pressed="false"><b>F</b>Demo 727 + certs</button>
   </div>
   </div>
   <span class="where" id="topbar-where">Cover</span>
@@ -401,8 +403,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
 <section class="sheet" id="far">
   <div class="sheet-tag"><span class="no">Z-002</span><span class="label">Floor area</span></div>
   <div class="sheet-body">
-    <h2>Four ways to stack the floor area</h2>
-    <p>Each block is colored by where its floor area comes from: your lot at FAR 4.0, rights bought from 727 Grand, or IH certificates. This simple model assumes a 15 ft ground floor and 10 ft floors on the full 3,034 sf footprint. The detailed studies further down carve and stretch it.</p>
+    <h2>Six ways to stack the floor area</h2>
+    <p>Each block is colored by where its floor area comes from: your lot at FAR 4.0, rights bought from 727 Grand, or IH certificates. This simple model assumes a 15 ft ground floor and 10 ft floors on the full footprint: 3,034 sf for A to D, and the whole 5,101 sf merged lot for E and F, where 727 Grand is demolished. The detailed studies further down carve and stretch it.</p>
     <div class="mini">
       <div class="controls">
         <div class="field"><span class="label">Scheme</span>
@@ -411,6 +413,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
             <button type="button" id="ms-B" data-s="B" aria-pressed="false"><b>B</b>+ certificates</button>
             <button type="button" id="ms-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
             <button type="button" id="ms-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
+            <button type="button" id="ms-E" data-s="E" aria-pressed="false"><b>E</b>Demo 727</button>
+            <button type="button" id="ms-F" data-s="F" aria-pressed="false"><b>F</b>Demo + certs</button>
           </div>
         </div>
         <label class="field"><span class="label">727 Grand existing zoning sf</span>
@@ -447,7 +451,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   <div class="sheet-tag"><span class="no">Z-003</span><span class="label">Rights</span></div>
   <div class="sheet-body">
     <h2>Where the extra floor area comes from</h2>
-    <p class="note">Each parcel is a separate deal. Tick the ones you expect to close and every scheme, plan and number below follows. Schemes C and D merge whatever is ticked; A and B stay on 725 alone.</p>
+    <p class="note">Each parcel is a separate deal. Tick the ones you expect to close and every scheme, plan and number below follows. Schemes C and D merge whatever is ticked and buy only 727 Grand's air rights; A and B stay on 725 alone. <b>E and F buy 727 Grand outright, demolish it and build one building across the whole 51 × 100 ft lot</b>, so its full allowance transfers with nothing deducted for an existing building; they add any other ticked parcel the same way C and D do. A parcel only counts if it touches the zoning lot, directly or through another ticked parcel — most of the lots below reach 725 only through 284 Graham.</p>
         <div class="tbl"><table>
           <thead><tr><th>Parcel</th><th>In</th><th>Lot sf</th><th>FAR</th><th>Existing</th><th>Unused rights</th><th>Price</th><th>Cost</th><th>Deal</th></tr></thead>
           <tbody>
@@ -461,10 +465,10 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
               <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-727-mode" style="width:100%"><option value="lump" selected>lump sum</option><option value="psf">$/sf</option></select>
                 <input id="nb-727-price" type="number" step="25000" value="1000000" style="width:100%"></div></td>
               <td class="num" id="nb-727-cost">—</td>
-              <td class="num"><select id="nb-727-status" style="width:88px"><option value="talking" selected>talking</option><option value="loi">LOI</option><option value="contract">contract</option></select></td>
+              <td class="num"><select id="nb-727-status" style="width:118px"><option value="none">not yet contacted</option><option value="talking" selected>talking</option><option value="loi">LOI</option><option value="contract">contract</option><option value="no">not interested</option></select></td>
             </tr>
             <tr>
-              <td><b>284 Graham Ave</b><br><span class="note">3-02783-0002 · north</span></td>
+              <td><b>284 Graham Ave</b><br><span class="note">3-02783-0002 · north · touches 725, 731, 733, 737, 739, 286 Graham, 186 Powers</span></td>
               <td class="num"><input id="nb-284-on" type="checkbox" aria-label="Include 284 Graham Avenue"></td>
               <td class="num"><input id="nb-284-lot" type="number" step="1" value="2500" style="width:80px"></td>
               <td class="num"><input id="nb-284-far" type="number" step="0.01" value="4" style="width:62px"></td>
@@ -473,11 +477,87 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
               <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-284-mode" style="width:100%"><option value="lump">lump sum</option><option value="psf" selected>$/sf</option></select>
                 <input id="nb-284-price" type="number" step="25" value="200" style="width:100%"></div></td>
               <td class="num" id="nb-284-cost">—</td>
-              <td class="num"><select id="nb-284-status" style="width:88px"><option value="talking" selected>talking</option><option value="loi">LOI</option><option value="contract">contract</option></select></td>
+              <td class="num"><select id="nb-284-status" style="width:118px"><option value="none">not yet contacted</option><option value="talking" selected>talking</option><option value="loi">LOI</option><option value="contract">contract</option><option value="no">not interested</option></select></td>
+            </tr>
+            <tr>
+              <td><b>731 Grand St</b><br><span class="note">3-02783-0041 · touches 727, 725 arm, 284</span></td>
+              <td class="num"><input id="nb-731-on" type="checkbox" aria-label="Include 731 Grand St"></td>
+              <td class="num"><input id="nb-731-lot" type="number" step="1" value="2300" style="width:80px"></td>
+              <td class="num"><input id="nb-731-far" type="number" step="0.01" value="4" style="width:62px"></td>
+              <td class="num"><input id="nb-731-exist" type="number" step="100" value="5060" style="width:80px"></td>
+              <td class="num" id="nb-731-tr">—</td>
+              <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-731-mode" style="width:100%"><option value="lump">lump sum</option><option value="psf" selected>$/sf</option></select>
+                <input id="nb-731-price" type="number" step="25" value="200" style="width:100%"></div></td>
+              <td class="num" id="nb-731-cost">—</td>
+              <td class="num"><select id="nb-731-status" style="width:118px"><option value="none" selected>not yet contacted</option><option value="talking">talking</option><option value="loi">LOI</option><option value="contract">contract</option><option value="no">not interested</option></select></td>
+            </tr>
+            <tr>
+              <td><b>733 Grand St</b><br><span class="note">3-02783-0040 · touches 731, 284</span></td>
+              <td class="num"><input id="nb-733-on" type="checkbox" aria-label="Include 733 Grand St"></td>
+              <td class="num"><input id="nb-733-lot" type="number" step="1" value="2600" style="width:80px"></td>
+              <td class="num"><input id="nb-733-far" type="number" step="0.01" value="4" style="width:62px"></td>
+              <td class="num"><input id="nb-733-exist" type="number" step="100" value="5720" style="width:80px"></td>
+              <td class="num" id="nb-733-tr">—</td>
+              <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-733-mode" style="width:100%"><option value="lump">lump sum</option><option value="psf" selected>$/sf</option></select>
+                <input id="nb-733-price" type="number" step="25" value="200" style="width:100%"></div></td>
+              <td class="num" id="nb-733-cost">—</td>
+              <td class="num"><select id="nb-733-status" style="width:118px"><option value="none" selected>not yet contacted</option><option value="talking">talking</option><option value="loi">LOI</option><option value="contract">contract</option><option value="no">not interested</option></select></td>
+            </tr>
+            <tr>
+              <td><b>737 Grand St</b><br><span class="note">3-02783-0039 · touches 733, 284</span></td>
+              <td class="num"><input id="nb-737-on" type="checkbox" aria-label="Include 737 Grand St"></td>
+              <td class="num"><input id="nb-737-lot" type="number" step="1" value="2500" style="width:80px"></td>
+              <td class="num"><input id="nb-737-far" type="number" step="0.01" value="4" style="width:62px"></td>
+              <td class="num"><input id="nb-737-exist" type="number" step="100" value="3375" style="width:80px"></td>
+              <td class="num" id="nb-737-tr">—</td>
+              <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-737-mode" style="width:100%"><option value="lump">lump sum</option><option value="psf" selected>$/sf</option></select>
+                <input id="nb-737-price" type="number" step="25" value="200" style="width:100%"></div></td>
+              <td class="num" id="nb-737-cost">—</td>
+              <td class="num"><select id="nb-737-status" style="width:118px"><option value="none" selected>not yet contacted</option><option value="talking">talking</option><option value="loi">LOI</option><option value="contract">contract</option><option value="no">not interested</option></select></td>
+            </tr>
+            <tr>
+              <td><b>739 Grand St</b><br><span class="note">3-02783-0038 · touches 737, 284 (east end)</span></td>
+              <td class="num"><input id="nb-739-on" type="checkbox" aria-label="Include 739 Grand St"></td>
+              <td class="num"><input id="nb-739-lot" type="number" step="1" value="2250" style="width:80px"></td>
+              <td class="num"><input id="nb-739-far" type="number" step="0.01" value="4" style="width:62px"></td>
+              <td class="num"><input id="nb-739-exist" type="number" step="100" value="7722" style="width:80px"></td>
+              <td class="num" id="nb-739-tr">—</td>
+              <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-739-mode" style="width:100%"><option value="lump">lump sum</option><option value="psf" selected>$/sf</option></select>
+                <input id="nb-739-price" type="number" step="25" value="200" style="width:100%"></div></td>
+              <td class="num" id="nb-739-cost">—</td>
+              <td class="num"><select id="nb-739-status" style="width:118px"><option value="none" selected>not yet contacted</option><option value="talking">talking</option><option value="loi">LOI</option><option value="contract">contract</option><option value="no">not interested</option></select></td>
+            </tr>
+            <tr>
+              <td><b>286 Graham Ave</b><br><span class="note">3-02783-0003 · R6A / C4-4A · touches 284, 186 Powers</span></td>
+              <td class="num"><input id="nb-286-on" type="checkbox" aria-label="Include 286 Graham Ave"></td>
+              <td class="num"><input id="nb-286-lot" type="number" step="1" value="2000" style="width:80px"></td>
+              <td class="num"><input id="nb-286-far" type="number" step="0.01" value="3" style="width:62px"></td>
+              <td class="num"><input id="nb-286-exist" type="number" step="100" value="2176" style="width:80px"></td>
+              <td class="num" id="nb-286-tr">—</td>
+              <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-286-mode" style="width:100%"><option value="lump">lump sum</option><option value="psf" selected>$/sf</option></select>
+                <input id="nb-286-price" type="number" step="25" value="150" style="width:100%"></div></td>
+              <td class="num" id="nb-286-cost">—</td>
+              <td class="num"><select id="nb-286-status" style="width:118px"><option value="none" selected>not yet contacted</option><option value="talking">talking</option><option value="loi">LOI</option><option value="contract">contract</option><option value="no">not interested</option></select></td>
+            </tr>
+            <tr>
+              <td><b>186 Powers St</b><br><span class="note">3-02783-0008 · R6B · touches 284, 286 Graham</span></td>
+              <td class="num"><input id="nb-186-on" type="checkbox" aria-label="Include 186 Powers St"></td>
+              <td class="num"><input id="nb-186-lot" type="number" step="1" value="2000" style="width:80px"></td>
+              <td class="num"><input id="nb-186-far" type="number" step="0.01" value="2" style="width:62px"></td>
+              <td class="num"><input id="nb-186-exist" type="number" step="100" value="2580" style="width:80px"></td>
+              <td class="num" id="nb-186-tr">—</td>
+              <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-186-mode" style="width:100%"><option value="lump">lump sum</option><option value="psf" selected>$/sf</option></select>
+                <input id="nb-186-price" type="number" step="25" value="125" style="width:100%"></div></td>
+              <td class="num" id="nb-186-cost">—</td>
+              <td class="num"><select id="nb-186-status" style="width:118px"><option value="none" selected>not yet contacted</option><option value="talking">talking</option><option value="loi">LOI</option><option value="contract">contract</option><option value="no">not interested</option></select></td>
             </tr>
           </tbody>
           <tfoot id="nb-foot"></tfoot>
         </table></div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end">
+          <label class="field" style="width:230px"><span class="label">Buy 727 Grand outright $ (E, F)</span><input id="nb-727-buy" type="number" step="50000" value="3000000"></label>
+          <p class="note" style="flex:1;min-width:260px">Schemes E and F buy the whole of 727 Grand to demolish it, so they use this price instead of the air-rights price in the table. Placeholder until there is a number from the owner. Lot sizes, FARs and existing floor areas for the other parcels are from PLUTO; which lots touch which is read off their frontages and depths <span class="verify">confirm on the tax map</span>.</p>
+        </div>
         <p class="note" id="nb-note"></p>
     <div class="two">
       <div style="display:grid;gap:10px;align-content:start">
@@ -487,8 +567,9 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
           <li>727 Grand transfer = lot × FAR − its existing building = <b class="num" id="m-transfer">—</b>. Its existing floor area is the field-measurement / PLUTO switch in Z-002.</li>
           <li><b>284 Graham Avenue runs 125 ft deep</b>, so part of it sits more than 100 ft from the corner. The owner's position is that the merged portion carries the same corner-lot treatment as 725 and 727 — 100% coverage, no rear yard, the same setbacks — and that is how it is modelled here. <span class="verify">Owner's position · confirm with land-use counsel</span> The risk to test is that the portion beyond 100 ft is treated as an interior-lot portion needing a 30 ft rear yard, which would take buildable area out of the combination.</li>
           <li><b>The massing for 284 Graham is not drawn yet.</b> Its floor area is carried financially at the same efficiency and the same rates as the drawn building, and every section that shows it says so. The three-dimensional studies still show 725 + 727.</li>
-          <li>Later, and not modelled: 739 Grand, 286 Graham (R6A, FAR 3.0) and 186 Powers (R6B, FAR 2.0). The last two need 284 first and sit in a different district, so counsel has to say what can move.</li>
+          <li><b>Every lot that touches 284 Graham is in the table:</b> 731, 733, 737 and 739 Grand along its south side, 286 Graham to the north and 186 Powers at its north-east corner, plus 725 itself. A parcel only joins the merger if it connects to 725 through other ticked parcels: 731 Grand touches 725's rear arm directly, 733, 737 and 739 chain along Grand or connect through 284, and 286 Graham and 186 Powers can only come in through 284. 286 Graham is R6A (FAR 3.0, partly C4-4A) and 186 Powers is R6B (FAR 2.0), so moving their floor area across the district line into C4-4A needs counsel <span class="verify">ZR 77 · confirm with land-use counsel</span>. None of these parcels is drawn; their floor area is carried financially like 284.</li>
           <li>Recorded as a zoning lot description plus a development rights agreement, with waivers from the neighbor's lender and other interest holders.</li>
+          <li><b>Schemes E and F: 727 Grand is bought and demolished.</b> The transfer becomes the whole of 727's allowance, <b class="num" id="m-transfer-demo">—</b>, instead of what is left over its existing building. The price is the "Buy 727 outright" input under the table; its demolition is added to hard costs. The building is a full 51 × 100 ft plate with the core moved to the middle of the west party wall, where there is no light anyway, five units on each base floor, and retail on both streets. Tenants, leases and any rent-regulated units at 727 have to be cleared before demolition <span class="verify">verify occupancy and DHCR status</span>.</li>
           <li><b>The light and air easement starts at 30 ft.</b> Above that height the stem's east wall (facing 727) can have windows and loggias. In C and D the corner unit becomes a 3BR, and the corridor ending at it is fully exempt. Lot-line openings also need Building Code sign-off on fire separation distance <span class="verify">verify with expediter</span>.</li>
         </ul>
       </div>
@@ -532,6 +613,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
             <button type="button" id="tab-B" data-s="B" aria-pressed="false"><b>B</b>Own lot + certificates</button>
             <button type="button" id="tab-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
             <button type="button" id="tab-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certificates</button>
+            <button type="button" id="tab-E" data-s="E" aria-pressed="false"><b>E</b>727 demolished, 51 × 100</button>
+            <button type="button" id="tab-F" data-s="F" aria-pressed="false"><b>F</b>727 demolished + certificates</button>
           </div>
         </div>
         <label class="field"><span class="label">Method</span>
@@ -584,7 +667,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
 <section class="sheet" id="compare">
   <div class="sheet-tag"><span class="no">A-101</span><span class="label">Compare</span></div>
   <div class="sheet-body">
-    <h2>The four schemes side by side</h2>
+    <h2>The six schemes side by side</h2>
     <div class="tbl"><table>
       <thead><tr><th>Scheme</th><th>FAR cap</th><th>ZFA used</th><th>Gross above grade</th><th>Height · stories</th><th>Floor-to-floor</th><th>Units</th><th>Retail sf</th><th>Outdoor sf</th><th>Efficiency</th><th>Eff. + outdoor</th><th>Loss factor</th></tr></thead>
       <tbody id="cmp"></tbody>
@@ -592,7 +675,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <ul class="tight">
       <li><b>Every residential floor has private outdoor space.</b> There's a corner loggia at Grand and Graham, and 6 × 10 ft loggias on Graham. The first setback floor also gets the 10 ft setback terraces, and the roof has a deck. None of it counts as floor area.</li>
       <li><b>The core stays in the 20 ft rear arm:</b> scissor stair against the rear lot line, one elevator, and mechanical/electrical space. The elevator lobby and refuse room spill into the back of the stem, so the ground-floor retail can run the full Graham frontage down to the lobby entry.</li>
-      <li><b>The certificate schemes (B, D) have all market-rate units.</b> The bonus is bought off-site, so the plans show no affordable units.</li>
+      <li><b>E and F demolish 727 Grand</b> and build one 51 × 100 ft building. They are always ground-up: both existing buildings come down, so "Keep + add floors" doesn't apply to them.</li>
+      <li><b>The certificate schemes (B, D, F) have all market-rate units.</b> The bonus is bought off-site, so the plans show no affordable units.</li>
     </ul>
   </div>
 </section>
@@ -666,6 +750,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
         <button type="button" id="ft-B" data-s="B" aria-pressed="false"><b>B</b>+ certs</button>
         <button type="button" id="ft-C" data-s="C" aria-pressed="false"><b>C</b>Merged</button>
         <button type="button" id="ft-D" data-s="D" aria-pressed="true"><b>D</b>Merged + certs</button>
+        <button type="button" id="ft-E" data-s="E" aria-pressed="false"><b>E</b>Demo 727</button>
+        <button type="button" id="ft-F" data-s="F" aria-pressed="false"><b>F</b>Demo 727 + certs</button>
       </div>
     </div>
     <p id="sellout-intro"></p>
@@ -766,7 +852,11 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <p id="hard-intro"></p>
     <div class="tiles" id="hard-tiles"></div>
     <div class="fgrid">
-      <label class="field"><span class="label">Excavation + foundations $/sf</span><input id="h-exc" type="number" step="5" value="95"></label>
+      <label class="field"><span class="label">Cellar depth ft</span><input id="h-depth" type="number" step="1" value="12"></label>
+      <label class="field"><span class="label">Excavation $/cy</span><input id="h-excy" type="number" step="5" value="45"></label>
+      <label class="field"><span class="label">Dewatering + SOE $</span><input id="h-soe" type="number" step="5000" value="70000"></label>
+      <label class="field"><span class="label">Footings + foundation walls $/lf</span><input id="h-found" type="number" step="10" value="340"></label>
+      <label class="field"><span class="label">Cellar slab + waterproofing $/sf</span><input id="h-slab" type="number" step="1" value="18"></label>
       <label class="field"><span class="label">Underpinning $/lf lot line</span><input id="h-under" type="number" step="50" value="1200"></label>
       <label class="field"><span class="label">Superstructure $/gsf</span><input id="h-super" type="number" step="5" value="125"></label>
       <label class="field"><span class="label">Street window wall $/sf</span><input id="h-env" type="number" step="5" value="105"></label>
@@ -796,7 +886,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
         <p class="note">Wall areas are measured off each floor's occupancy grid, so the corner geometry is priced as it is drawn: the long Grand Street and Graham Avenue elevations get window wall, the walls against 727 Grand and the rear lot line get party-wall construction, and above the 30 ft easement line in schemes C and D that east wall switches to glazing. Fin count follows the spacing set in A-200.</p>
       </div>
     </div>
-    <p class="note">Every rate here is a planning-level placeholder for a non-union Brooklyn mid-rise, not a bid. The point of the build-up is that the $/gsf is now an <b>output</b>: change a rate, or the massing, and watch which lines move. Switch <b>Hard cost method</b> in F-200 to compare it against a single blended rate.</p>
+    <p class="note">Every rate here is a planning-level placeholder for a non-union Brooklyn mid-rise, not a bid. <b>The five foundation lines are the softest of them</b> — excavation, dewatering and support of excavation, underpinning, footings and the cellar slab all turn on what is actually under the building and what condition the neighbouring foundations are in, which is what the basement inspection at 725 is for. Their defaults are set to total roughly what the single blended cellar line used to, so splitting them out did not move the budget on its own. The point of the build-up is that the $/gsf is now an <b>output</b>: change a rate, or the massing, and watch which lines move. Switch <b>Hard cost method</b> in F-200 to compare it against a single blended rate.</p>
   </div>
 </section>
 
@@ -857,7 +947,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <div class="tbl"><table>
       <thead id="sens-head"></thead><tbody id="sens-body"></tbody>
     </table></div>
-    <h3>All four schemes</h3>
+    <h3>All six schemes</h3>
     <div class="tbl"><table>
       <thead><tr><th>Scheme</th><th>Net revenue</th><th>Total cost</th><th>Loan</th><th>Equity</th><th>Profit</th><th>Margin on cost</th><th>Equity multiple</th><th>Annualized</th></tr></thead>
       <tbody id="fin-cmp"></tbody>
@@ -971,6 +1061,8 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <h2>What would firm up these numbers</h2>
     <ol class="steps">
       <li><span><b>727 Grand CO or survey</b> to settle 4,133 vs 6,042 sf, which moves the transfer by about 1,900 sf.</span></li>
+      <li><span><b>727 Grand outright:</b> a price for the whole building, its leases and occupancy, and whether any units are rent-regulated — that decides whether schemes E and F are real.</span></li>
+      <li><span><b>284 Graham and the lots behind it:</b> confirm on the tax map which lots touch 284 (the model's adjacency is inferred from PLUTO frontages and depths), and have counsel say how much floor area can move out of the R6A and R6B lots.</span></li>
       <li><span><b>Inspect the basement and existing structure</b> at 725 Grand to find out how much it will cost to remove.</span></li>
       <li><span><b>Land-use counsel</b> to confirm the certificate path gets 5.01 FAR and 115 ft, and to find vested generating sites in CD 1 or within ½ mile.</span></li>
       <li><span><b>Expediter</b> to check the easement-side windows, the corridor exemption stacking, the loggia exemption, and the E-232 requirements.</span></li>
@@ -1000,8 +1092,23 @@ const st={scheme:'D',mini:'D',floor:null,green:true,exist:4133,cut:false,strateg
    massing studies actually draw that parcel; 284 Graham is carried financially until they do. */
 const NEIGHBORS=[
   {id:'727',short:'727 Grand',name:'727 Grand Street',bbl:'3-02783-0042',where:'east',drawn:true},
-  {id:'284',short:'284 Graham',name:'284 Graham Avenue',bbl:'3-02783-0002',where:'north',drawn:false}
+  {id:'284',short:'284 Graham',name:'284 Graham Avenue',bbl:'3-02783-0002',where:'north',drawn:false},
+  {id:'731',short:'731 Grand',name:'731 Grand Street',bbl:'3-02783-0041',where:'east',drawn:false},
+  {id:'733',short:'733 Grand',name:'733 Grand Street',bbl:'3-02783-0040',where:'east',drawn:false},
+  {id:'737',short:'737 Grand',name:'737 Grand Street',bbl:'3-02783-0039',where:'east',drawn:false},
+  {id:'739',short:'739 Grand',name:'739 Grand Street',bbl:'3-02783-0038',where:'east',drawn:false},
+  {id:'286',short:'286 Graham',name:'286 Graham Avenue',bbl:'3-02783-0003',where:'north',drawn:false},
+  {id:'186',short:'186 Powers',name:'186 Powers Street',bbl:'3-02783-0008',where:'north-east',drawn:false}
 ];
+/* Which lots touch which, read off PLUTO frontages and depths (confirm on the tax map). A parcel joins
+   the zoning lot only if it connects to 725 through other parcels that are also in the merger. */
+const STATUS={none:'not yet contacted',talking:'talking',loi:'LOI',contract:'contract',no:'not interested'};
+const TOUCH={'725':['727','284','731'],'727':['725','731'],'284':['725','731','733','737','739','286','186'],
+  '731':['725','727','284','733'],'733':['731','284','737'],'737':['733','284','739'],'739':['737','284'],
+  '286':['284','186'],'186':['284','286']};
+function connected(ids){ const want=new Set(ids), seen=new Set(['725']), q=['725'];
+  while(q.length){ const c=q.shift(); for(const n of TOUCH[c]||[]) if(want.has(n)&&!seen.has(n)){ seen.add(n); q.push(n); } }
+  seen.delete('725'); return seen; }
 function nbState(){
   return NEIGHBORS.map(n=>{
     const g=k=>$('nb-'+n.id+'-'+k);
@@ -1016,7 +1123,7 @@ function nbState(){
   });
 }
 function defs(nbs){
-  const all=nbs||nbState(), list=all.filter(n=>n.on);
+  const all=nbs||nbState(), reach=connected(all.filter(n=>n.on).map(n=>n.id)), list=all.filter(n=>n.on&&reach.has(n.id));
   const extra=list.reduce((s,n)=>s+n.lot,0), transfer=list.reduce((s,n)=>s+n.tr,0);
   const cost=list.reduce((s,n)=>s+n.cost,0), less=list.reduce((s,n)=>s+n.exist,0);
   const merged=LOT+extra, undrawn=list.filter(n=>!n.drawn);
@@ -1025,10 +1132,22 @@ function defs(nbs){
   const M=(k,bonus)=>({k,name:`Merged with ${names}${bonus?' + certificates':''}`,merged:true,ease,bonus,
     lot:merged,far:bonus?MAXF:STD,maxz:merged*(bonus?MAXF:STD),less,base:LOT*STD,tr:transfer,
     cert:bonus?merged*(MAXF-STD):0,nbs:list,nbCost:cost,undrawn});
+  /* E and F: 727 Grand is bought outright and demolished, so all of its allowance moves and the
+     building covers the whole 51 x 100 lot. Other parcels join the same way as in C and D. */
+  const n7=all.find(n=>n.id==='727'), buy=+(($('nb-727-buy')||{}).value)||0;
+  const d7={...n7,on:true,exist:0,demoSf:n7.exist,tr:n7.lot*n7.far,mode:'fee',price:buy,cost:buy,demo:true};
+  const reachD=connected(['727',...all.filter(n=>n.on&&n.id!=='727').map(n=>n.id)]);
+  const others=all.filter(n=>n.on&&n.id!=='727'&&reachD.has(n.id)), dl=[d7,...others];
+  const dLot=LOT+dl.reduce((s,n)=>s+n.lot,0);
+  const X=(k,bonus)=>({k,name:`727 Grand demolished${others.length?', merged with '+others.map(n=>n.short).join(' + '):''}${bonus?' + certificates':''}`,
+    merged:true,demo:true,ease:false,bonus,lot:dLot,far:bonus?MAXF:STD,maxz:dLot*(bonus?MAXF:STD),
+    less:others.reduce((s,n)=>s+n.exist,0),base:LOT*STD,tr:dl.reduce((s,n)=>s+n.tr,0),
+    cert:bonus?dLot*(MAXF-STD):0,nbs:dl,nbCost:dl.reduce((s,n)=>s+n.cost,0),undrawn:others.filter(n=>!n.drawn),demoSf:n7.exist});
   return {
     A:{k:'A',name:'Own lot, as-of-right',merged:false,ease:false,bonus:false,lot:LOT,far:STD,maxz:LOT*STD,less:0,base:LOT*STD,tr:0,cert:0,nbs:[],nbCost:0,undrawn:[]},
     B:{k:'B',name:'Own lot + certificates',merged:false,ease:false,bonus:true,lot:LOT,far:MAXF,maxz:LOT*MAXF,less:0,base:LOT*STD,tr:0,cert:LOT*(MAXF-STD),nbs:[],nbCost:0,undrawn:[]},
-    C:M('C',false), D:M('D',true)
+    C:M('C',false), D:M('D',true),
+    E:X('E',false), F:X('F',true)
   };
 }
 let D0=defs(); for(const k in D0) D0[k].cap=D0[k].base+D0[k].tr+D0[k].cert;
@@ -1068,11 +1187,11 @@ function makeViewer(canvas,opts){
     g2.fillStyle='#ffffff'; g2.fillText(text,96,62);
     const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false,transparent:true}));
     s.scale.set(17,8.5,1); s.position.set(x,y,z); s.renderOrder=20; v.group.add(s);};
-  v.context=()=>{ // streets, lot pad, 727 Grand existing
+  v.context=(exist=true)=>{ // streets, lot pad, 727 Grand existing (gone in schemes E and F)
     const street=new THREE.Mesh(new THREE.PlaneGeometry(320,320),new THREE.MeshBasicMaterial({color:css('--street')}));
     street.rotation.x=-Math.PI/2; street.position.set(40,-.4,50); v.group.add(street);
     v.box(0,0,S1,100,-.35,0,css('--paper'),{edge:.2});
-    v.box(0,0,S0,80,0,15,css('--m-exist'),{op:.9,edge:.3}); v.box(0,0,S0,40,15,35,css('--m-exist'),{op:.9,edge:.3});
+    if(exist){ v.box(0,0,S0,80,0,15,css('--m-exist'),{op:.9,edge:.3}); v.box(0,0,S0,40,15,35,css('--m-exist'),{op:.9,edge:.3}); }
   };
   let drag=null;
   canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);});
@@ -1084,6 +1203,7 @@ function makeViewer(canvas,opts){
 }
 const LFULL=[[0,80],[S0,80],[S0,0],[S1,0],[S1,100],[0,100]];
 const LSET=[[0,80],[S0,80],[S0,10],[SB,10],[SB,100],[0,100]];
+const RECT=[[0,0],[S1,0],[S1,100],[0,100]], RSET=[[0,10],[SB,10],[SB,100],[0,100]];   // 725 + 727 as one lot (E, F)
 
 /* ---------- simple massing widget ---------- */
 let mini=null;
@@ -1094,19 +1214,20 @@ function renderMini(){
   const p2=+$('in-p2').value||0, nbC=s.nbCost||0;
   $('c-1').textContent='$'+fmt(nbC); $('c-2').textContent='$'+fmt(s.cert*p2); $('c-t').textContent='$'+fmt(nbC+s.cert*p2);
   // what is kept when the method is "keep + add"
-  const enl=st.mode==='enl', exN=enl?Math.max(0,Math.min(3,+$('in-exfloors').value||0)):0;
+  const demo=!!s.demo, PL=demo?S1*100:LOT, FP=demo?RECT:LFULL, SP=demo?RSET:LSET;   // E, F build on the whole merged lot
+  const enl=st.mode==='enl'&&!demo, exN=enl?Math.max(0,Math.min(3,+$('in-exfloors').value||0)):0;
   const EX_G=3034, EX_U=2517, exGH=14, exUH=11;            // existing ground covers the lot; upper floors the stem
   const exZFA=enl?EX_G+exN*EX_U:0, exTop=enl?exGH+exN*exUH:0;
   const newZFA=Math.max(0,s.cap-exZFA);
-  const stories=enl?1+exN+Math.ceil(newZFA/LOT-1e-9):Math.ceil(s.cap/LOT-1e-9);
+  const stories=enl?1+exN+Math.ceil(newZFA/LOT-1e-9):Math.ceil(s.cap/PL-1e-9);
   const ht=enl?exTop+Math.ceil(newZFA/LOT-1e-9)*10:15+(stories-1)*10;
-  $('mr-name').textContent=s.k+' · '+s.name+(enl?' · keep + add':'');
+  $('mr-name').textContent=s.k+' · '+s.name+(enl?' · keep + add':demo&&st.mode==='enl'?' · always ground-up':'');
   $('mr-sf').textContent=fmt(s.cap)+' sf';
   $('mr-ht').textContent=enl?`${fmt(exZFA)} kept + ${fmt(newZFA)} new · ${stories} stories · ${Math.round(ht)} ft`:`${stories} stories · ${ht} ft`;
   $('scen-body').innerHTML=Object.values(D0).map(v=>`<tr class="${v.k===st.mini?'hi':''}"><td><b>${v.k}</b> · ${v.name}</td><td class="num">${fmt(v.lot)}</td><td class="num">${v.far.toFixed(2)}</td><td class="num">${fmt(v.maxz)}</td><td class="num">${v.less?'− '+fmt(v.less):'—'}</td><td class="num"><b>${fmt(v.cap)}</b></td><td class="num">${v.tr?fmt(v.tr):'—'}</td><td class="num">${v.cert?fmt(v.cert):'—'}</td></tr>`).join('');
   if(!window.THREE) return;
   if(!mini) mini=makeViewer($('mini'),{theta:-0.95,phi:1.05,radius:330});
-  mini.reset(); mini.context();
+  mini.reset(); mini.context(!demo);
   const STEM=[[S0,80],[S0,0],[S1,0],[S1,100],[S0,100]];    // the existing upper floors cover the stem only
   if(enl){
     // kept: the 1930 building, drawn in its own colour
@@ -1118,11 +1239,11 @@ function renderMini(){
     [[0,own,'--m-base'],[own,own+s.tr,'--m-transfer'],[own+s.tr,newZFA,'--m-bonus']]
       .forEach(([a,b,c])=>{ if(b-a>1) mini.prism(LFULL,hNew(a),hNew(b),css(c)); });
   } else {
-    const hAt=sf=>sf<=LOT?15*sf/LOT:15+10*(sf-LOT)/LOT;
-    [[0,s.base,'--m-base'],[s.base,s.base+s.tr,'--m-transfer'],[s.base+s.tr,s.cap,'--m-bonus']].forEach(([a,b,c])=>{if(b-a>1) mini.prism(LFULL,hAt(a),hAt(b),css(c));});
+    const hAt=sf=>sf<=PL?15*sf/PL:15+10*(sf-PL)/PL;
+    [[0,s.base,'--m-base'],[s.base,s.base+s.tr,'--m-transfer'],[s.base+s.tr,s.cap,'--m-bonus']].forEach(([a,b,c])=>{if(b-a>1) mini.prism(FP,hAt(a),hAt(b),css(c));});
   }
   const env=s.bonus?[85,115]:[75,85];
-  mini.wire(LFULL,0,env[0],css('--accent')); mini.wire(LSET,env[0],env[1],css('--accent'));
+  mini.wire(FP,0,env[0],css('--accent')); mini.wire(SP,env[0],env[1],css('--accent'));
   // floor lines and level tags, so each floor reads separately
   const keepEdge=css('--accent'), newEdge=css('--ink-2');
   const levels=[];
@@ -1132,8 +1253,8 @@ function renderMini(){
     const nNew=Math.ceil(newZFA/LOT-1e-9);
     for(let i=0;i<nNew;i++) levels.push({y0:exTop+i*10,y1:exTop+(i+1)*10,plan:LFULL,kept:false});
   } else {
-    levels.push({y0:0,y1:15,plan:LFULL,kept:false});
-    for(let i=1;i<stories;i++) levels.push({y0:15+(i-1)*10,y1:15+i*10,plan:LFULL,kept:false});
+    levels.push({y0:0,y1:15,plan:FP,kept:false});
+    for(let i=1;i<stories;i++) levels.push({y0:15+(i-1)*10,y1:15+i*10,plan:FP,kept:false});
   }
   levels.forEach((L,i)=>{
     const col=L.kept?keepEdge:newEdge;
@@ -1147,23 +1268,30 @@ function renderMini(){
 /* ---------- Z-003 neighbour table ---------- */
 function renderNeighbors(){
   if(!$('nb-foot')) return;
-  const list=nbState(), on=list.filter(n=>n.on);
+  const list=nbState(), reach=connected(list.filter(n=>n.on).map(n=>n.id));
+  const on=list.filter(n=>n.on&&reach.has(n.id)), stranded=list.filter(n=>n.on&&!reach.has(n.id));
   list.forEach(n=>{
     const tr=$('nb-'+n.id+'-tr'), c=$('nb-'+n.id+'-cost'), ex=$('nb-'+n.id+'-exist');
     if(tr) tr.textContent=fmt(n.tr)+' sf';
-    if(c) c.textContent=n.on?'$'+fmt(n.cost):'—';
+    if(c) c.textContent=n.on?('$'+fmt(n.cost)+(reach.has(n.id)?'':' · not reached')):'—';
     if(ex&&ex.tagName==='TD') ex.textContent=fmt(n.exist)+' sf';
-    const row=tr&&tr.closest('tr'); if(row) row.style.opacity=n.on?'':'.5';
+    const row=tr&&tr.closest('tr'); if(row) row.style.opacity=n.on&&reach.has(n.id)?'':'.5';
   });
   $('nb-foot').innerHTML=`<tr class="tot"><td>${on.length?on.map(n=>n.short).join(' + '):'725 Grand alone'}</td>`+
     `<td class="num">${on.length}</td><td class="num">${fmt(LOT+on.reduce((s,n)=>s+n.lot,0))}</td><td></td>`+
     `<td class="num">${fmt(on.reduce((s,n)=>s+n.exist,0))}</td><td class="num">${fmt(on.reduce((s,n)=>s+n.tr,0))}</td>`+
     `<td></td><td class="num">$${fmt(on.reduce((s,n)=>s+n.cost,0))}</td><td></td></tr>`;
   const undrawn=on.filter(n=>!n.drawn);
-  $('nb-note').textContent=on.length
-    ? `Merged zoning lot: ${fmt(LOT+on.reduce((s,n)=>s+n.lot,0))} sf (725 Grand ${fmt(LOT)} + ${on.map(n=>`${n.short} ${fmt(n.lot)}`).join(' + ')}), carrying ${fmt(on.reduce((s,n)=>s+n.tr,0))} sf of unused rights for ${'$'+fmt(on.reduce((s,n)=>s+n.cost,0))}. `
-      +(undrawn.length?`${undrawn.map(n=>n.short).join(' and ')} ${undrawn.length>1?'are':'is'} carried financially — the massing studies still draw 725 + 727 only.`:'Every parcel here is drawn in the massing studies.')
-    : 'No neighbour ticked: schemes C and D fall back to 725 Grand alone.';
+  const e=D0&&D0.E;
+  $('nb-note').textContent=(on.length
+    ? `Merged zoning lot for C and D: ${fmt(LOT+on.reduce((s,n)=>s+n.lot,0))} sf (725 Grand ${fmt(LOT)} + ${on.map(n=>`${n.short} ${fmt(n.lot)}`).join(' + ')}), carrying ${fmt(on.reduce((s,n)=>s+n.tr,0))} sf of unused rights for ${'$'+fmt(on.reduce((s,n)=>s+n.cost,0))}. `
+      +(undrawn.length?`${undrawn.map(n=>n.short).join(', ')} ${undrawn.length>1?'are':'is'} carried financially — the massing studies draw 725 + 727 only. `:'Every parcel here is drawn in the massing studies. ')
+    : 'No neighbour ticked: schemes C and D fall back to 725 Grand alone. ')
+    +(stranded.length?`${stranded.map(n=>n.short).join(', ')} ${stranded.length>1?'are':'is'} ticked but not counted: ${stranded.length>1?'they don\'t':'it doesn\'t'} touch the zoning lot unless 284 Graham (or the lot in between) is ticked too. `:'')
+    +(()=>{ const cold=on.filter(n=>n.status==='no'), unk=on.filter(n=>n.status==='none');
+        return (cold.length?`Counted although marked not interested: ${cold.map(n=>n.short).join(', ')} — untick ${cold.length>1?'them':'it'} to see the plan without ${cold.length>1?'them':'it'}. `:'')
+          +(unk.length?`No contact yet with ${unk.map(n=>n.short).join(', ')}. `:''); })()
+    +(e?`Schemes E and F: ${fmt(e.lot)} sf merged lot, ${fmt(e.tr)} sf moved in, $${fmt(e.nbCost)} including 727 Grand bought outright.`:'');
 }
 
 /* ---------- detailed studies ---------- */
@@ -1222,25 +1350,67 @@ function upperF(Au){
 }
 function topF(L){const out=core(false); if(L>=370){ out.push(R(31,80,S1,94,'amen','Lounge'),R(36,94,S1,100,'amen',''));
   const ex=Math.min(L-370,25.17*20); if(ex>5) out.push(R(S0,80-ex/25.17,S1,80,'amen',''));} return out;}
+
+/* ---------- schemes E and F: 727 Grand demolished, one building on the full 51 x 100 lot ----------
+   x 0 is the party wall with 729 Grand (no windows), x 51 is Graham Avenue, z 0 is Grand Street,
+   z 100 is the rear lot line with 284 Graham. The core moves to the dark middle of the west party
+   wall (x 0..10, z 38..100) with a corridor spine beside it (x 10..15), so every unit has a street wall. */
+function coreEF(ground){ return [R(0,38,10,64,'stair','Scissor stair'),R(0,64,10,72,'elev','Elev'),R(0,72,10,84,'mech','MEP'),
+  ...(ground?[R(0,84,10,100,'mech','')]:[R(0,84,10,88,'trash','Ref'),R(0,88,10,100,'mech','')])]; }
+const SPINE=()=>R(10,38,15,100,'corr','');
+const groundEF=()=>coreEF(true).concat([R(0,0,10,38,'lobby','Lobby'),R(10,30,15,72,'lobby',''),
+  R(15,0,S1,100,'retail','Retail'),R(10,0,15,30,'retail',''),R(10,72,15,100,'retail','')]);
+const cellarEF=()=>coreEF(false).concat([SPINE(),R(0,0,15,38,'amen','Bikes · storage'),R(15,0,S1,45,'retail','Retail storage'),
+  R(15,45,S1,70,'amen','Fitness · pkgs'),R(15,70,S1,100,'mech','MEP · meters')]);
+const U4R=k=>[R(15,60,45,80,'res','1BR','d'+k),R(45,60,S1,70,'res','','d'+k),R(45,70,S1,80,'logg','')];
+const U5R=k=>[R(15,80,45,100,'res','1BR','e'+k),R(45,80,S1,90,'res','','e'+k),R(45,90,S1,100,'logg','')];
+// base floor: 3BR corner, 1BR on Grand, three 1BRs on Graham, every one with a loggia
+function baseEF(){const k=++uid; return coreEF(false).concat([SPINE(),R(15,38,30,43,'corr',''),
+  R(21,0,43,38,'res','3BR','a'+k),R(43,12,S1,38,'res','','a'+k),R(43,0,S1,12,'logg',''),
+  R(0,8,21,38,'res','1BR','b'+k),R(0,0,11,8,'res','','b'+k),R(11,0,21,8,'logg',''),
+  R(15,43,45,60,'res','1BR','c'+k),R(30,38,S1,43,'res','','c'+k),R(45,43,S1,48,'res','','c'+k),R(45,58,S1,60,'res','','c'+k),R(45,48,S1,58,'logg',''),
+  ...U4R(k),...U5R(k)]);}
+// setback floor: 10 ft back from both streets, the two rear units stay in the 40 ft Graham dormer.
+// Units fill from the rear toward Grand; the last one takes whatever floor area is left.
+const UPMAX_EF=660+660+572+1148;
+function upperEF(Au){
+  const k=++uid, out=coreEF(false).concat([SPINE()]); let rem=Math.max(0,Math.min(UPMAX_EF,Au));
+  const part=(x0,zEnd,w,maxD,u)=>{ const d=Math.min(maxD,rem/w); if(d*w>=250) out.push(R(x0,zEnd-d,41,zEnd,'res',u==='a'&&d*w>=1000?'2BR':unitName(d*w),u+k));   /* the front unit fits two bedrooms on its 41 ft face */ rem=0; };
+  if(rem>=660){ out.push(...U5R(k)); rem-=660; } else part(15,100,26,20,'e');
+  if(rem>=660){ out.push(...U4R(k)); rem-=660; } else if(rem>0) part(15,80,26,20,'d');
+  if(rem>=572){ out.push(R(15,38,41,60,'res','1BR','c'+k)); rem-=572; } else if(rem>0) part(15,60,26,22,'c');
+  if(rem>0) part(0,38,41,28,'a');
+  return out;
+}
+function topEF(L){ const out=coreEF(false).concat([SPINE()]);
+  if(L>=370){ out.push(R(15,80,S1,100,'amen','Lounge')); const ex=Math.min(L-720,26*20); if(ex>5) out.push(R(15,80-ex/26,41,80,'amen','')); }
+  return out; }
 function counted(rects,corrFrac){let c=0;for(const r of rects){const k=TYPES[r.t].counts; c+= k==='corr'? r.area*corrFrac : k==='lobby'? (st.circ==='100'?0:r.area) : k? r.area:0;} return c;}
 const grossOf=rects=>rects.reduce((s,r)=>s+(TYPES[r.t].open?0:r.area),0);
 
+/* the floor-plate kit: the L-shaped 725 lot (A to D) or the full merged rectangle (E, F) */
+const KIT_L={core:()=>core(false),ground:groundF,cellar:cellarF,base:()=>baseCD(),upper:upperF,top:topF,UPMAX,
+  retailSf:2254,roofCore:517,bulk:[0,80,S0,100],full:LFULL,set:LSET,units:3,entry:'Graham Ave entry'};
+const KIT_EF={core:()=>coreEF(false).concat([SPINE()]),ground:groundEF,cellar:cellarEF,base:baseEF,upper:upperEF,top:topEF,UPMAX:UPMAX_EF,
+  retailSf:3890,roofCore:930,bulk:[0,38,10,84],full:RECT,set:RSET,units:5,entry:'Grand St entry'};
+const kitOf=p=>(p&&p.kit)||((p&&p.s&&p.s.demo)?KIT_EF:KIT_L);
 function generate(s){
   const env=s.bonus?{maxBase:85,H:115}:{maxBase:75,H:85};
   const gf=st.green?1.05:1, budget=s.cap*gf;
-  if(st.mode==='enl') return generateEnlargement(s,env,gf,budget);
+  const K=s.demo?KIT_EF:KIT_L;
+  if(st.mode==='enl'&&!s.demo) return generateEnlargement(s,env,gf,budget);   // E and F always demolish both buildings
   const ease=e=>s.ease&&e+3>=30;             // window sill above the 30 ft easement line
   // every base floor ends its corridor at a 3BR and is <100 ft long -> 100% exempt (ZR 23-232 a+b)
   const fracUp=st.circ==='100'?0:.5, frac=e=>0;
-  const G=counted(groundF(),0);
-  const baseRects=e=>baseCD();
+  const G=counted(K.ground(),0);
+  const baseRects=e=>K.base();
   let best=null, fallback=null;
   const eff=st.strategy==='eff';
   for(const g of eff?[15]:[15,18,20]){
     for(let N=4;N<=16;N++){
       const typ=eff?10:(env.H-g)/(N-1);
       if(eff){ if(g+(N-1)*typ>env.H+1e-6) break; } else if(typ<10-1e-6||typ>12.5+1e-6) continue;
-      const Rn=eff?N-1:N-2, topElev=g+(N-2)*typ, Ttop=eff?0:counted(topF(0),fracUp);
+      const Rn=eff?N-1:N-2, topElev=g+(N-2)*typ, Ttop=eff?0:counted(K.top(0),fracUp);
       let sum=0, cand=null;
       for(let nb=1;nb<=Rn;nb++){
         const e=g+(nb-1)*typ; sum+=counted(baseRects(e),frac(e));
@@ -1249,8 +1419,8 @@ function generate(s){
         if(baseTop>env.maxBase+1e-6) break;
         const upper=Rn-nb, remain=budget-G-Ttop-sum;
         if(upper===0){ if(remain>=-60&&(!eff||remain<150)) cand={g,N,typ,nb,Au:null,unused:Math.max(0,remain)}; break; }
-        const coreU=counted(core(false),fracUp), Au=remain/upper-coreU;
-        if(Au>UPMAX){ if(g+(nb+1)*typ>env.maxBase+1e-6||nb+1>Rn){cand={g,N,typ,nb,Au:UPMAX,unused:remain-upper*(UPMAX+coreU)};break;} continue; }
+        const coreU=counted(K.core(),fracUp), Au=remain/upper-coreU;
+        if(Au>K.UPMAX){ if(g+(nb+1)*typ>env.maxBase+1e-6||nb+1>Rn){cand={g,N,typ,nb,Au:K.UPMAX,unused:remain-upper*(K.UPMAX+coreU)};break;} continue; }
         if(Au<0) break;
         cand={g,N,typ,nb,Au,unused:0}; break;
       }
@@ -1266,14 +1436,14 @@ function generate(s){
   if(!best) return null;
   const {g,N,typ,nb,Au}=best;
   const floors=[];
-  floors.push({n:'C',elev:-12,h:12,rects:cellarF(),frac:0,cellar:true,prog:'MEP · fitness · packages · bikes · retail storage'});
-  floors.push({n:1,elev:0,h:g,rects:groundF(),frac:0,prog:'Retail (100% built) · Graham Ave entry'});
-  for(let i=0;i<nb;i++){const e=g+i*typ; floors.push({n:i+2,elev:e,h:typ,rects:baseRects(e),frac:frac(e),prog:ease(e)?'Base · 3 units · easement windows':'Base · 3 units'});}
-  for(let i=nb;i<(eff?N-1:N-2);i++){const e=g+i*typ; floors.push({n:i+2,elev:e,h:typ,rects:upperF(Au),frac:fracUp,prog:'Setback + Graham dormer',setback:true});}
-  const topE=g+(N-2)*typ, retailSf=2254, L=.05*(s.cap-retailSf);
-  if(!eff) floors.push({n:N,elev:topE,h:typ,rects:topF(L),frac:fracUp,prog:'Roof lounge · deck',setback:true,top:true});
+  floors.push({n:'C',elev:-12,h:12,rects:K.cellar(),frac:0,cellar:true,prog:'MEP · fitness · packages · bikes · retail storage'});
+  floors.push({n:1,elev:0,h:g,rects:K.ground(),frac:0,prog:'Retail (100% built) · '+K.entry});
+  for(let i=0;i<nb;i++){const e=g+i*typ; floors.push({n:i+2,elev:e,h:typ,rects:baseRects(e),frac:frac(e),prog:`Base · ${K.units} units`+(ease(e)?' · easement windows':'')});}
+  for(let i=nb;i<(eff?N-1:N-2);i++){const e=g+i*typ; floors.push({n:i+2,elev:e,h:typ,rects:K.upper(Au),frac:fracUp,prog:'Setback + Graham dormer',setback:true});}
+  const topE=g+(N-2)*typ, retailSf=K.retailSf, L=.05*(s.cap-retailSf);
+  if(!eff) floors.push({n:N,elev:topE,h:typ,rects:K.top(L),frac:fracUp,prog:'Roof lounge · deck',setback:true,top:true});
 
-  return tally({s,env,g,N,typ,nb,Au,floors,unused:best.unused,mode:'gu'},gf);
+  return tally({s,env,g,N,typ,nb,Au,floors,unused:best.unused,mode:'gu',kit:K},gf);
 }
 
 /* Which units are income-restricted:
@@ -1331,7 +1501,7 @@ function tally(P,gf){
   }
   const lounge=floors[floors.length-1].rects.filter(r=>r.t==='amen').reduce((s,r)=>s+r.area,0);
   outdoor+=lounge;
-  { const last=floors[floors.length-1]; if(!last.top) outdoor+=Math.max(0,last.gross-517); } // roof deck when the top floor is residential
+  { const last=floors[floors.length-1]; if(!last.top) outdoor+=Math.max(0,last.gross-((P.kit&&P.kit.roofCore)||517)); } // roof deck when the top floor is residential
   const refuse=Math.min(trash,3*units.size);
   const pre=cnt-refuse, zfa=pre/gf, greenEx=pre-zfa;
   const height=P.mode==='enl'?P.exTop+(P.N-1-P.exN)*P.typ:P.g+(P.N-1)*P.typ;
@@ -1399,7 +1569,7 @@ function planFor(opt){
   const want=new Set((opt&&opt.nb)||[]);
   const list=nbState().map(n=>({...n,on:want.has(n.id)}));
   const D=defs(list); for(const k in D) D[k].cap=D[k].base+D[k].tr+D[k].cert;
-  const key=(opt&&opt.cert)?(want.size?'D':'B'):(want.size?'C':'A');
+  const key=(opt&&opt.demo)?(opt.cert?'F':'E'):(opt&&opt.cert)?(want.size?'D':'B'):(want.size?'C':'A');
   return withApprox(generate(D[key]));
 }
 
@@ -1414,17 +1584,21 @@ function renderStudies(keepFloor){
   }
   if($('studies-intro')) $('studies-intro').textContent = p.mode==='enl'
     ? `Keep + add: the 1930 building stays — its ground-floor retail and ${p.exN} vacant floor${p.exN===1?'':'s'} above, ${fmt(p.exGross)} sf in total, which counts against the floor-area cap. A new core is cut through them in the rear arm, and ${fmt(p.newGross)} sf of new floors is built on top, following the same envelope as a new building: the 40 ft minimum base height, 10 ft setbacks from both streets and a 40 ft dormer on Graham. Floors above the 4th need new steel columns. Retained floors are drawn in grey. Pick a floor to see its plan.`
+    : p.s.demo ? `Scheme ${p.s.k} buys 727 Grand outright and demolishes both buildings, so this is one building on the full 51 × 100 ft lot. The core moves to the middle of the west party wall, where no unit could have windows anyway, and every unit gets a street wall and a loggia: a 3BR corner unit, a 1BR on Grand and three 1BRs on Graham on each base floor. The ground floor is retail on both streets with the lobby entered from Grand. Above the 40 ft minimum base the building sets back 10 ft from both streets, with the two rear units kept full width in the 40 ft Graham dormer. Pick a floor to see its plan.`
     : 'Each scheme is generated from its floor-area cap. The ground floor is 100% built, with retail wrapping the corner and a small lobby on Graham. Floor-to-floor heights stretch so the roof lands on the envelope: 85 ft standard, 115 ft with certificates. The building stays at the street line through the 40 ft minimum base height, then sets back 10 ft from both streets, with a 40 ft dormer on Graham. Pick a floor to see its plan. Blue lines are windows and hatched areas are outdoor space.';
   const SC=p.s;
   const ad={0:$('a-neighbor-l'),1:$('a-bonus-l'),2:$('a-total-l')};
   if(SC.tr>0){
     ad[0].textContent='Buy from '+(SC.nbs||[]).map(n=>n.short).join(' + ');
     $('a-neighbor').textContent=fmt(SC.tr)+' sf';
-    $('a-neighbor-p').textContent=(SC.nbs||[]).map(n=>`${n.short}: ${fmt(n.lot)} sf × ${n.far} − ${fmt(n.exist)} existing = ${fmt(n.tr)} sf for ${n.mode==='lump'?money(n.price)+' lump sum':'$'+n.price+'/sf, '+money(n.cost)}${n.drawn?'':' (massing not drawn)'}`).join('. ')+'. Merged by a zoning lot merger.';
+    ad[0].textContent=SC.demo?'Buy 727 Grand outright'+(SC.nbs.length>1?' + '+SC.nbs.slice(1).map(n=>n.short).join(' + '):''):ad[0].textContent;
+    $('a-neighbor-p').textContent=(SC.nbs||[]).map(n=>n.demo
+      ? `${n.short}: ${fmt(n.lot)} sf × ${n.far} = ${fmt(n.tr)} sf, nothing deducted because its ${fmt(n.demoSf)} sf building is demolished; bought outright for ${money(n.cost)}`
+      : `${n.short}: ${fmt(n.lot)} sf × ${n.far} − ${fmt(n.exist)} existing = ${fmt(n.tr)} sf for ${n.mode==='lump'?money(n.price)+' lump sum':'$'+n.price+'/sf, '+money(n.cost)}${n.drawn?'':' (massing not drawn)'}`).join('. ')+'. Merged by a zoning lot merger.';
   } else {
     ad[0].textContent='Neighbour air rights';
     $('a-neighbor').textContent='not used';
-    $('a-neighbor-p').textContent=`Scheme ${SC.k} builds on 725 Grand alone. The parcels ticked in Z-003 would add ${fmt(D0.C.tr)} sf — see schemes C and D.`;
+    $('a-neighbor-p').textContent=`Scheme ${SC.k} builds on 725 Grand alone. The parcels ticked in Z-003 would add ${fmt(D0.C.tr)} sf — see schemes C and D — and demolishing 727 Grand would add ${fmt(D0.E.tr)} sf — see E and F.`;
   }
   if(SC.cert>0){
     ad[1].textContent=SC.merged?'IH certificates (merged lot)':'IH certificates (own lot)';
@@ -1433,9 +1607,10 @@ function renderStudies(keepFloor){
   } else {
     ad[1].textContent='Inclusionary Housing certificates';
     $('a-bonus').textContent='not used';
-    $('a-bonus-p').textContent=`Scheme ${SC.k} stops at FAR 4.0. Certificates would add ${fmt(SC.merged?D0.D.cert:D0.B.cert)} sf — see schemes ${SC.merged?'D':'B and D'}.`;
+    const pair={A:'B',C:'D',E:'F'}[SC.k]||'D';
+    $('a-bonus-p').textContent=`Scheme ${SC.k} stops at FAR 4.0. Certificates would add ${fmt(D0[pair].cert)} sf — see scheme ${pair}.`;
   }
-  $('m-transfer').textContent=fmt(D0.C.tr)+' sf'; $('m-bonus').textContent=fmt(D0.D.cert)+' sf'; $('m-aff').textContent=fmt(D0.D.cert/1.25)+' sf';
+  $('m-transfer').textContent=fmt(D0.C.tr)+' sf'; if($('m-transfer-demo')) $('m-transfer-demo').textContent=fmt(D0.E.nbs[0].tr)+' sf'; $('m-bonus').textContent=fmt(D0.D.cert)+' sf'; $('m-aff').textContent=fmt(D0.D.cert/1.25)+' sf';
   ad[2].textContent=`Scheme ${SC.k} building · ${p.mode==='enl'?'keep + add':'ground-up'}`;
   $('a-total').textContent=`${p.N} story · ${Math.round(p.height)} ft`;
   $('a-total-p').textContent=`${fmt(p.zfa)} zoning sf, ${fmt(p.gross)} sf gross above grade${p.mode==='enl'?` (${fmt(p.exGross)} retained)`:''}, ${p.units} units, ${fmt(p.retail)} sf retail, ${fmt(p.outdoor)} sf outdoor.`;
@@ -1456,7 +1631,9 @@ function renderStudies(keepFloor){
     A:'The smallest building. Floors stretch to reach 85 ft, so the setback floors hold one generous unit each.',
     B:'Certificates add 3,064 sf of bonus floor area and the 115 ft envelope. The extra height goes into setback floors under the Graham dormer.',
     C:'The easement from 30 ft up turns base floors into 3BR corner layouts with a fully exempt corridor.',
-    D:'The largest scheme: 115 ft, certificate bonus, easement windows, loggias on every floor, and a roof lounge and deck.'
+    D:'The largest scheme that keeps 727 Grand standing: 115 ft, certificate bonus, easement windows, loggias on every floor, and a roof lounge and deck.',
+    E:`727 Grand is bought and demolished, so its whole ${fmt(p.s.nbs[0]?p.s.nbs[0].tr:0)} sf allowance moves, not just what is left over its building. One 51 × 100 ft plate, five units a floor, the core on the dark party wall.`,
+    F:`The largest scheme: 727 Grand demolished, certificates on the whole ${fmt(p.s.lot)} sf merged lot, and the 115 ft envelope.`
   };
   const bonusNote = p.s.cert>0
     ? (st.bonusSrc==='onsite'
@@ -1466,11 +1643,13 @@ function renderStudies(keepFloor){
   const tenureNote = st.tenure==='rental'
     ? ` Held as rental${$('f-485').checked?` with 485-x: 20% of units income-restricted (Option B, 6-99 units, 35-year benefit, permanently rent-stabilized), ${p.affUnits} of ${p.units} units here`:', no 485-x applied'}.`
     : '';
-  const modeNote=p.mode==='enl'
+  const modeNote=p.s.demo&&st.mode==='enl'
+    ? ' Keep + add does not apply here: E and F take down both buildings to build across the full lot, so they are always ground-up.'
+    : p.mode==='enl'
     ? ` Keep + add: the 1930 ground floor and ${p.exN} vacant floors above stay (${fmt(p.exGross)} sf, counted against the cap), a new core is cut through them in the rear arm, and ${fmt(p.newGross)} sf is built on top. Floors above the 4th sit on new steel columns and foundations. No demolition, but the whole building is brought up to code.`
     : '';
   $('scheme-note').textContent=notes[s.k]+bonusNote+tenureNote+modeNote+(p.unused>50?` About ${fmt(p.unused/(st.green?1.05:1))} sf doesn't fit inside the envelope.`:'');
-  $('cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${fmt(q.s.cap)}</td><td class="num">${fmt(q.zfa)}</td><td class="num">${fmt(q.gross)}</td><td class="num">${Math.round(q.height)}' · ${q.N}</td><td class="num">${ft(q.typ)}</td><td class="num">${q.units}${q.affUnits?` (${q.affUnits} aff)`:''}</td><td class="num">${fmt(q.retail)}</td><td class="num">${fmt(q.outdoor)}</td><td class="num">${Math.round((q.net+q.retail)/q.gross*100)}%</td><td class="num">${Math.round((q.net+q.retail+q.outdoor)/(q.gross+q.outdoor)*100)}%</td><td class="num">${Math.round((q.gross-q.net-q.retail)/q.gross*100)}%</td></tr>`;}).join('');
+  $('cmp').innerHTML=['A','B','C','D','E','F'].map(k=>{const q=plans[k]; if(!q) return ''; return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${fmt(q.s.cap)}</td><td class="num">${fmt(q.zfa)}</td><td class="num">${fmt(q.gross)}</td><td class="num">${Math.round(q.height)}' · ${q.N}</td><td class="num">${ft(q.typ)}</td><td class="num">${q.units}${q.affUnits?` (${q.affUnits} aff)`:''}</td><td class="num">${fmt(q.retail)}</td><td class="num">${fmt(q.outdoor)}</td><td class="num">${Math.round((q.net+q.retail)/q.gross*100)}%</td><td class="num">${Math.round((q.net+q.retail+q.outdoor)/(q.gross+q.outdoor)*100)}%</td><td class="num">${Math.round((q.gross-q.net-q.retail)/q.gross*100)}%</td></tr>`;}).join('');
   renderPlan(p); build3D(p); renderFinance(); renderZPlan(); renderFacade(); renderInterior();
 }
 
@@ -1538,7 +1717,8 @@ function fin(p,o={}){
                      :condoGross*(1-v('f-scres')/100)+affVal*(1-v('f-scret')/100);
   const rent=p.retail*v('f-rent'), noi=rent*(1-v('f-vac')/100-v('f-opex')/100), retVal=noi/(v('f-cap')/100), retNet=retVal*(1-v('f-scret')/100);
   const revenue=resNet+retNet;
-  const enl=p.mode==='enl';
+  const enl=p.mode==='enl', demo=!!p.s.demo;
+  const demoSf=5534+(demo?(p.s.demoSf||0):0), demoLbl=demo?'Demolition of 725 and 727 Grand':'Demolition of existing building';
   let items=enl?[
     ['New construction above the existing',`${fmt(p.newGross)} gsf × $${v('f-hard')}`,p.newGross*v('f-hard')],
     ['Renovate retained floors',`${fmt(p.exGross)} sf × $${v('f-reno')}`,p.exGross*v('f-reno')],
@@ -1554,7 +1734,7 @@ function fin(p,o={}){
     ['Rooftop MEP penthouse',`625 sf × $${v('f-hard')}`,625*v('f-hard')],
     ['Loggias, terraces, roof deck',`${fmt(p.outdoor)} sf × $${v('f-outc')}`,p.outdoor*v('f-outc')],
     ['Elevator stops, stair flights, risers',`${p.N+1} levels × $${fmt(v('f-story'))}`,(p.N+1)*v('f-story')],
-    ['Demolition of existing building','5,534 sf × $'+v('f-demo'),5534*v('f-demo')],
+    [demoLbl,fmt(demoSf)+' sf × $'+v('f-demo'),demoSf*v('f-demo')],
     ['E-232 testing and remediation','allowance',v('f-edes')]
   ];
   if(apxGross>1) items.push(['Floor area from the undrawn merge',`${fmt(apxGross)} gsf × $${v('f-hard')}`,apxGross*v('f-hard')]);
@@ -1566,7 +1746,7 @@ function fin(p,o={}){
     const a=f.occ; if(!a) return {st:0,lot:0};
     const on=(x,z)=>x>=0&&x<GW&&z>=0&&z<100&&a[z*GW+x];
     const ease=p.s.ease&&f.elev+3>=30;                         // easement windows above 30 ft
-    const isLot=(x,z)=>x<0||z>100||(x<GS0&&z<80&&!ease)||(x<GS0&&z>=80);
+    const isLot=demo?((x,z)=>x<0||z>100):((x,z)=>x<0||z>100||(x<GS0&&z<80&&!ease)||(x<GS0&&z>=80));
     let stl=0, lotl=0;
     for(let z=0;z<100;z++) for(let x=0;x<GW;x++){
       if(!on(x,z)) continue;
@@ -1577,16 +1757,16 @@ function fin(p,o={}){
     }
     return {st:stl,lot:lotl};
   };
-  let faceSt=0, facePty=0, faceLf=0, terrSf=0, cellarLot=0;
+  let faceSt=0, facePty=0, faceLf=0, terrSf=0, cellarLot=0, cellarLf=0;
   p.floors.forEach(f=>{
     const w=wallsOf(f);
-    if(f.cellar){ cellarLot=w.lot; return; }
+    if(f.cellar){ cellarLot=w.lot; cellarLf=w.st+w.lot; return; }
     if(!f.existing){ faceSt+=w.st*f.h; facePty+=w.lot*f.h; if(f.n!==1) faceLf+=w.st; }   // fins skip the storefront
     terrSf+=Math.max(0,(f.outdoor||0)-(f.logg||0));
   });
   const roofSf=(p.floors[p.floors.length-1].gross||0)+terrSf;
   const resGsf=Math.max(0,p.gross-p.retail), commonSf=Math.max(0,p.gross-p.net-p.retail);
-  const frontage=(GW-GS0)+100;                                  // Grand Street + Graham Avenue
+  const frontage=(demo?GW:GW-GS0)+100;                          // Grand Street + Graham Avenue
   const finSp=Math.max(1,+(($('fc-spacing')||{}).value)||2.5), finCount=Math.round(faceLf/finSp);
   let kitchens=0, baths=0;
   p.floors.forEach(f=>{ if(typeof f.n!=='number'||f.n<2) return;
@@ -1594,8 +1774,9 @@ function fin(p,o={}){
     Object.keys(by).forEach(u=>{ kitchens++; baths+=unitName(by[u])==='3BR'?2:1; });
   });
   const stops=p.N+1, allG=p.gross+p.cellar;
+  const cellarCy=p.cellar*Math.max(0,v('h-depth'))/27;
   const qty={gross:p.gross,cellar:p.cellar,net:p.net,retail:p.retail,outdoor:p.outdoor,resGsf,commonSf,
-    faceSt,facePty,faceLf,finCount,roofSf,terrSf,frontage,kitchens,baths,stops,
+    faceSt,facePty,faceLf,finCount,roofSf,terrSf,frontage,kitchens,baths,stops,cellarLf,cellarLot,cellarCy,
     exGross:p.exGross,newGross:p.newGross,newAbove4:p.newAbove4,units:p.units};
 
   /* ---- detailed hard cost build-up ---- */
@@ -1608,9 +1789,12 @@ function fin(p,o={}){
     hl('Substructure and shell','New superstructure above the existing',`${fmt(p.newGross)} gsf new`,`$${v('h-super')}/gsf`,p.newGross*v('h-super'));
     hl('Substructure and shell','New steel columns + foundations above floor 4',`${fmt(p.newAbove4)} gsf`,`$${v('f-steel')}/gsf`,p.newAbove4*v('f-steel'));
   } else {
-    hl('Substructure and shell','Excavation, foundations and cellar slab',`${fmt(p.cellar)} sf footprint`,`$${v('h-exc')}/sf`,p.cellar*v('h-exc'));
-    hl('Substructure and shell','Underpinning and shoring at the shared lot lines',`${fmt(cellarLot)} lf`,`$${fmt(v('h-under'))}/lf`,cellarLot*v('h-under'));
-    hl('Substructure and shell','Demolition of the existing building','5,534 sf',`$${v('f-demo')}/sf`,5534*v('f-demo'));
+    hl('Substructure and shell','Excavation and soil removal',`${fmt(cellarCy)} cy, ${v('h-depth')} ft deep`,`$${v('h-excy')}/cy`,cellarCy*v('h-excy'));
+    hl('Substructure and shell','Dewatering and support of excavation','allowance','—',v('h-soe'));
+    hl('Substructure and shell','Underpinning and shoring at the shared lot lines',`${fmt(cellarLot)} lf of shared line`,`$${fmt(v('h-under'))}/lf`,cellarLot*v('h-under'));
+    hl('Substructure and shell','Footings and foundation walls',`${fmt(cellarLf)} lf of perimeter`,`$${fmt(v('h-found'))}/lf`,cellarLf*v('h-found'));
+    hl('Substructure and shell','Cellar slab, waterproofing and vapour barrier',`${fmt(p.cellar)} sf`,`$${v('h-slab')}/sf`,p.cellar*v('h-slab'));
+    hl('Substructure and shell',demo?'Demolition of 725 and 727 Grand':'Demolition of the existing building',`${fmt(demoSf)} sf`,`$${v('f-demo')}/sf`,demoSf*v('f-demo'));
     hl('Substructure and shell','Superstructure, ground to roof',`${fmt(p.gross)} gsf`,`$${v('h-super')}/gsf`,p.gross*v('h-super'));
     hl('Substructure and shell','Rooftop MEP penthouse','625 gsf',`$${v('h-super')}/gsf`,625*v('h-super'));
   }
@@ -1853,7 +2037,7 @@ function renderFinance(){
     +row('Total hard costs',`${fmt(allG)} sf incl. cellar`,F.hard,'tot')
     +row('Soft costs',$('f-soft').value+'% of hard',F.soft)
     +row('Land basis, 725 Grand','placeholder',F.land)
-    +(p.s.nbs||[]).map(n=>row(`Air rights from ${n.name}`,n.mode==='lump'?'lump sum':`${fmt(n.tr)} sf × $${n.price}`,n.cost)).join('')
+    +(p.s.nbs||[]).map(n=>n.demo?row(`Buy ${n.name} outright, to demolish`,'placeholder, Z-003',n.cost):row(`Air rights from ${n.name}`,n.mode==='lump'?'lump sum':`${fmt(n.tr)} sf × $${n.price}`,n.cost)).join('')
     +(p.s.cert?row('IH certificates',`${fmt(p.s.cert)} sf × $${$('in-p2').value}`,F.certs):'')
     +row('Financing: interest reserve + fees',`${$('f-rate').value}% · ${$('f-months').value} mo`,F.financing)
     +row('Total project cost','',F.total,'tot');
@@ -1887,7 +2071,7 @@ function renderFinance(){
   const hb=+$('f-hard').value||0, prices=[-200,-100,0,100,200].map(d=>psf+d), hards=[-50,0,50,100].map(d=>hb+d);
   $('sens-head').innerHTML=`<tr><th>Average condo $/sf ↓ · hard $/gsf →</th>${hards.map(h=>`<th>$${fmt(h)}</th>`).join('')}</tr>`;
   $('sens-body').innerHTML=prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${hards.map(h=>{const m=fin(p,{'f-res':pr,'f-hard':h}).margin;return `<td class="num ${m<0?'cellbad':m>=.15?'cellgood':''}"${pr===psf&&h===hb?' style="font-weight:700;outline:1.5px solid var(--ink);outline-offset:-2px"':''}>${pct(m)}</td>`;}).join('')}</tr>`).join('');
-  $('fin-cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; const G=fin(q); const c=G.profit<0?'neg':'';
+  $('fin-cmp').innerHTML=['A','B','C','D','E','F'].map(k=>{const q=plans[k]; if(!q) return ''; const G=fin(q); const c=G.profit<0?'neg':'';
     return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${mm(G.revenue)}</td><td class="num">${mm(G.total)}</td><td class="num">${mm(G.loan)}</td><td class="num">${mm(G.equity)}</td><td class="num ${c}">${mm(G.profit)}</td><td class="num ${c}">${pct(G.margin)}</td><td class="num ${c}">${G.em.toFixed(2)}×</td><td class="num ${c}">${pct(G.irr)}</td></tr>`;}).join('');
   $('costs-intro').textContent=`Hard costs are ${F.hDetail?`built up line by line in F-210 off this scheme's own floor plates, landing at $${fmt(F.gsfRate)}/gsf`:`a single blended $${$('f-hard').value}/gsf above grade, plus the cellar, core and outdoor lines`}. Soft costs are ${F.sDetail?'built up line by line in F-220':`a flat ${$('f-soft').value}% of hard`}. Every rate is a planning-level placeholder for a non-union Brooklyn mid-rise, not a bid — swap in a GC's budget, your land basis and your acquisition prices when you have them.`;
   renderHard(p);
@@ -1928,6 +2112,7 @@ function renderHard(p){
   const q=F.qty;
   $('hard-qty').innerHTML=[
     ['Gross above grade',fmt(q.gross)+' gsf'],['Cellar',fmt(q.cellar)+' sf'],
+    ...(p.mode==='enl'?[]:[['Excavation volume',fmt(q.cellarCy)+' cy'],['Cellar perimeter',fmt(q.cellarLf)+' lf'],['Shared lot line',fmt(q.cellarLot)+' lf']]),
     ...(p.mode==='enl'?[['Retained',fmt(q.exGross)+' sf'],['New above',fmt(q.newGross)+' gsf']]:[]),
     ['Needs new steel (above fl. 4)',fmt(q.newAbove4)+' gsf'],
     ['Street-facing wall',fmt(q.faceSt)+' sf'],['Party / lot-line wall',fmt(q.facePty)+' sf'],
@@ -1972,11 +2157,17 @@ function renderPlan(p){
   o+=`<rect x="0" y="0" width="${W}" height="${H}" style="fill:var(--paper)"/>`;
   o+=`<rect x="0" y="${Z(-12)}" width="${W}" height="${12*S-4}" style="fill:var(--street)"/><text x="${X(1)}" y="${Z(-4)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)">GRAND STREET · 80'</text>`;
   o+=`<rect x="${X(S1)+4}" y="${Z(-12)}" width="${W-X(S1)-4}" height="${H-Z(-12)}" style="fill:var(--street)"/><text x="${X(S1+8)}" y="${Z(92)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)" transform="rotate(-90 ${X(S1+8)} ${Z(92)})">GRAHAM AVENUE · 80'</text>`;
+  const demo=!!p.s.demo;
+  if(demo){
+    o+=`<rect x="${X(0)}" y="${Z(0)}" width="${S1*S}" height="${100*S}" style="fill:none;stroke:var(--ink)" stroke-width="2"/>`;
+    o+=`<line x1="${X(S0)}" y1="${Z(0)}" x2="${X(S0)}" y2="${Z(80)}" style="stroke:var(--ink-2)" stroke-dasharray="2 4"/>`;
+  } else {
   o+=`<rect x="${X(0)}" y="${Z(0)}" width="${S0*S}" height="${80*S}" style="fill:var(--m-exist);fill-opacity:.25;stroke:var(--ink-2)" stroke-dasharray="4 3"/>`;
   o+=`<text x="${X(2)}" y="${Z(6)}" font-size="10" style="fill:var(--ink-2);font-family:var(--mono)">727 GRAND</text><text x="${X(2)}" y="${Z(9.5)}" font-size="9" style="fill:var(--ink-2);font-family:var(--mono)">${p.s.ease?(ease?'easement: windows OK':'easement starts 30\''):'separate lot'}</text>`;
   o+=`<path d="M${X(S0)} ${Z(0)} H${X(S1)} V${Z(100)} H${X(0)} V${Z(80)} H${X(S0)} Z" style="fill:none;stroke:var(--ink)" stroke-width="2"/>`;
+  }
   if(f.setback){
-    o+=`<line x1="${X(S0)}" y1="${Z(10)}" x2="${X(S1)}" y2="${Z(10)}" style="stroke:var(--warn)" stroke-dasharray="5 4"/><line x1="${X(SB)}" y1="${Z(0)}" x2="${X(SB)}" y2="${Z(100)}" style="stroke:var(--warn)" stroke-dasharray="5 4"/>`;
+    o+=`<line x1="${X(demo?0:S0)}" y1="${Z(10)}" x2="${X(S1)}" y2="${Z(10)}" style="stroke:var(--warn)" stroke-dasharray="5 4"/><line x1="${X(SB)}" y1="${Z(0)}" x2="${X(SB)}" y2="${Z(100)}" style="stroke:var(--warn)" stroke-dasharray="5 4"/>`;
     o+=`<text x="${X(SB+1)}" y="${Z(5)}" font-size="9" style="fill:var(--warn);font-family:var(--mono)">10' setbacks</text>`;
     o+=`<line x1="${X(S1)+2}" y1="${Z(60)}" x2="${X(S1)+2}" y2="${Z(100)}" style="stroke:var(--warn)" stroke-width="3"/><text x="${X(S1)-4}" y="${Z(58.5)}" text-anchor="end" font-size="9" style="fill:var(--warn);font-family:var(--mono)">dormer 40'</text>`;
   }
@@ -1991,7 +2182,7 @@ function renderPlan(p){
   // windows
   const solid=f.rects.filter(r=>!TYPES[r.t].open);
   const inRect=(x,z)=>solid.some(r=>x>r.x0&&x<r.x1&&z>r.z0&&z<r.z1);
-  const lotLine=(x,z)=>x<0||z>100||(x<S0&&z<80);
+  const lotLine=demo?((x,z)=>x<0||z>100):((x,z)=>x<0||z>100||(x<S0&&z<80));
   const neighborSide=(x,z)=>x>0&&x<S0&&z<80;
   if(!f.cellar) for(const r of f.rects){
     if(!['res','amen','retail','lobby'].includes(r.t)) continue;
@@ -2014,7 +2205,7 @@ function renderPlan(p){
     if(!r.label) continue;
     const cx=X((r.x0+r.x1)/2), cz=Z((r.z0+r.z1)/2), w=(r.x1-r.x0)*S, h=(r.z1-r.z0)*S;
     const group=r.u?byU[r.u].reduce((s,q)=>s+q.area,0):r.area;
-    if(r.t==='stair'){o+=`<text x="${cx}" y="${cz+3}" text-anchor="middle" font-size="9" style="fill:var(--paper);font-family:var(--mono);font-weight:500">SCISSOR STAIR</text>`;continue;}
+    if(r.t==='stair'){o+=`<text x="${cx}" y="${cz+3}" text-anchor="middle" font-size="9" style="fill:var(--paper);font-family:var(--mono);font-weight:500"${h>w?` transform="rotate(-90 ${cx} ${cz})"`:''}>SCISSOR STAIR</text>`;continue;}
     if(w<34||h<26){o+=`<text x="${cx}" y="${cz+3}" text-anchor="middle" font-size="7.5" style="fill:var(--ink);font-family:var(--mono)">${r.label}</text>`;continue;}
     const tf=h>w*1.6&&w<80?` transform="rotate(-90 ${cx} ${cz})"`:'';
     o+=`<text x="${cx}" y="${cz-2}" text-anchor="middle" font-size="11" style="fill:var(--ink);font-family:var(--mono);font-weight:500"${tf}>${r.label}</text>`;
@@ -2031,7 +2222,7 @@ let viewer=null;
 function build3D(p){
   if(!window.THREE) return;
   if(!viewer) viewer=makeViewer($('massing'),{theta:-0.95,phi:1.08,radius:370,zoom:true});
-  const v=viewer; v.reset(); v.context();
+  const v=viewer; v.reset(); v.context(!p.s.demo); const K=kitOf(p);
   const selIdx=p.floors.findIndex(f=>f.n===st.floor);
   p.floors.forEach((f,i)=>{
     if(f.cellar) return;
@@ -2046,9 +2237,9 @@ function build3D(p){
   const top=p.height, lastIdx=p.floors.length-1;
   if(!(st.cut&&selIdx<lastIdx)){
     for(const r of p.floors[lastIdx].rects) if(!TYPES[r.t].open) v.box(r.x0,r.z0,r.x1,r.z1,top,top+1,css('--t-serv'),{edge:.3});
-    v.box(0,80,S0,100,top+1,top+15,css('--t-serv'),{edge:.4});
+    v.box(K.bulk[0],K.bulk[1],K.bulk[2],K.bulk[3],top+1,top+15,css('--t-serv'),{edge:.4});
   }
-  v.wire(LFULL,0,p.env.maxBase,css('--accent')); v.wire(LSET,p.env.maxBase,p.env.H,css('--accent'));
+  v.wire(K.full,0,p.env.maxBase,css('--accent')); v.wire(K.set,p.env.maxBase,p.env.H,css('--accent'));
   v.target.set(26,Math.min(60,top/2),50); v.draw();
 }
 
@@ -2090,8 +2281,11 @@ function renderZPlan(){
   o+=`<rect x="0" y="0" width="${W}" height="${H}" style="fill:var(--paper)"/>`;
   o+=`<rect x="0" y="${Z(-12)}" width="${W}" height="${12*S-4}" style="fill:var(--street)"/><text x="${X(1)}" y="${Z(-4)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)">GRAND STREET</text>`;
   o+=`<rect x="${X(S1)+4}" y="${Z(-12)}" width="${W-X(S1)-4}" height="${H-Z(-12)}" style="fill:var(--street)"/><text x="${X(S1+8)}" y="${Z(80)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)" transform="rotate(-90 ${X(S1+8)} ${Z(80)})">GRAHAM AVENUE</text>`;
+  if(p.s.demo) o+=`<rect x="${X(0)}" y="${Z(0)}" width="${S1*S}" height="${100*S}" style="fill:none;stroke:var(--ink)" stroke-width="2"/>`;
+  else {
   o+=`<rect x="${X(0)}" y="${Z(0)}" width="${S0*S}" height="${80*S}" style="fill:var(--m-exist);fill-opacity:.2;stroke:var(--ink-2)" stroke-dasharray="4 3"/>`;
   o+=`<path d="M${X(S0)} ${Z(0)} H${X(S1)} V${Z(100)} H${X(0)} V${Z(80)} H${X(S0)} Z" style="fill:none;stroke:var(--ink)" stroke-width="2"/>`;
+  }
   for(const [x0,z0,x1,z1] of (f.terr||[])) o+=`<rect x="${X(x0)}" y="${Z(z0)}" width="${(x1-x0)*S+.4}" height="${(z1-z0)*S+.4}" fill="url(#zo)"/>`;
   const sums={};
   for(const r of f.rects){
@@ -2135,7 +2329,7 @@ function renderFacade(){
   const depth=val('fc-depth'), spacing=val('fc-spacing'), amp=val('fc-amp')*Math.PI/180, freq=val('fc-freq'), pattern=$('fc-pattern').value, mat=$('fc-mat').value;
   $('fc-depth-v').textContent=depth.toFixed(2)+' ft'; $('fc-spacing-v').textContent=spacing.toFixed(2)+' ft'; $('fc-amp-v').textContent=val('fc-amp')+'°'; $('fc-freq-v').textContent=freq.toFixed(2);
   if(!fview) fview=makeViewer($('facade3d'),{theta:-0.85,phi:1.2,radius:300,zoom:true});
-  const v=fview; v.reset(); v.context();
+  const v=fview; v.reset(); v.context(!p.s.demo); const K=kitOf(p), demo=!!p.s.demo;
   const floors=p.floors.filter(f=>!f.cellar), top=p.height;
   // glass volumes and slab edges
   floors.forEach(f=>{
@@ -2146,13 +2340,13 @@ function renderFacade(){
     }
   });
   floors[floors.length-1].rects.forEach(r=>{ if(!TYPES[r.t].open) v.box(r.x0,r.z0,r.x1,r.z1,top,top+1.2,css('--f-slab'),{edge:0}); });
-  v.box(0,80,S0,100,top+1.2,top+14,css('--t-serv'),{edge:.25});
+  v.box(K.bulk[0],K.bulk[1],K.bulk[2],K.bulk[3],top+1.2,top+14,css('--t-serv'),{edge:.25});
   // façade segments from occupancy
   const segs=[];
   floors.forEach((f,fi)=>{
     if(f.n===1) return;
     const occ=f.occ, ease=p.s.ease&&f.elev+3>=30;
-    const lot=(x,z)=>x<0||z>100||(x<S0&&z<80&&!ease)||(x<S0&&z>=80);
+    const lot=demo?((x,z)=>x<0||z>100):((x,z)=>x<0||z>100||(x<S0&&z<80&&!ease)||(x<S0&&z>=80));
     const on=(x,z)=>x>=0&&x<S1&&z>=0&&z<100&&occ[z*S1+x];
     const runs={};
     const push=(key,pos,meta)=>{(runs[key]=runs[key]||{meta,list:[]}).list.push(pos);};
@@ -2194,7 +2388,7 @@ function renderFacade(){
   fins.forEach((F,i)=>{ q.setFromAxisAngle(up,F.yaw); m4.compose(new THREE.Vector3(F.x,F.y,F.z),q,new THREE.Vector3(0.28,F.h,F.d)); im.setMatrixAt(i,m4); });
   v.group.add(im);
   // storefront canopy band on the two streets
-  v.box(S0,-1.5,S1,0,13,14.2,mat,{edge:0}); v.box(S1,0,S1+1.5,100,13,14.2,mat,{edge:0});
+  v.box(demo?0:S0,-1.5,S1,0,13,14.2,mat,{edge:0}); v.box(S1,0,S1+1.5,100,13,14.2,mat,{edge:0});
   v.target.set(30,top*.45,45); v.draw();
   $('fc-stats').innerHTML=[['Fins',fmt(fins.length)],['Fin wall length',fmt(linear)+' lf'],['Avg per floor',fmt(fins.length/Math.max(1,nF-1))],['Floor area impact','0 sf (ZR 12-10)']]
     .map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('');
@@ -2203,6 +2397,7 @@ function renderFacade(){
 /* ---------- A-300 interiors ---------- */
 let iview=null;
 function interiorPlan(p,f){
+  if(p.s.demo) return interiorPlanEF(p,f);
   const G=[], D=[];
   const add=(id,name,kind,rects,extra)=>G.push({id,name,kind,rects,...(extra||{})});
   const door=(x,z)=>D.push([x,z]);
@@ -2267,6 +2462,82 @@ function interiorPlan(p,f){
   }
   return {G,D};
 }
+/* furnished layouts for the full-lot plates of schemes E and F */
+function interiorPlanEF(p,f){
+  const G=[], D=[];
+  const add=(id,name,kind,rects,extra)=>G.push({id,name,kind,rects,...(extra||{})});
+  const door=(x,z)=>D.push([x,z]);
+  const circ=f.rects.filter(r=>r.t==='corr'||r.t==='lobby');
+  if(circ.length) add('common',f.n===1?'Lobby':'Corridor','hall',circ);
+  f.rects.forEach((r,i)=>{
+    if(r.t==='stair') add('stair','Scissor stair','stair',[r]);
+    if(r.t==='elev') add('elev','Elevator','elev',[r]);
+    if(r.t==='mech') add('mech'+i,'MEP','mech',[r]);
+    if(r.t==='trash') add('trash','Refuse','mech',[r]);
+  });
+  door(10,50); door(10,68); door(10,78); door(10,86);
+  const retail=f.rects.filter(r=>r.t==='retail'); if(retail.length) add('retail','Retail','retail',retail);
+  const amen=f.rects.filter(r=>r.t==='amen'); if(amen.length&&!f.cellar){ add('lounge','Resident lounge','lounge',amen); door(15,90); }
+  const byU={}; f.rects.forEach(r=>{ if((r.t==='res'||r.t==='aff')&&r.u) (byU[r.u]=byU[r.u]||[]).push(r); });
+  const has=(rs,x0,z0,x1,z1)=>rs.some(r=>r.x0===x0&&r.z0===z0&&r.x1===x1&&r.z1===z1);
+  for(const u in byU){
+    const rs=byU[u], t=u[0];
+    const rm=(key,name,kind,rects,extra)=>add(u+':'+key,name,kind,rects,{unit:u,...(extra||{})});
+    const ds=list=>list.forEach(d=>door(...d));
+    // a part-width unit on a setback floor: x 15..41, facing the terrace on the Graham side
+    const eastUnit=r=>{ const a=r.z0,b=r.z1,w=b-a;
+      if(w<16){ const m=a+w/2; rm('bath','Bath','bath',[R(15,a,21,m)]); rm('hall','Hall','hall',[R(15,m,21,b)]);
+        rm('liv','Studio','liv',[R(21,a,41,b)],{kit:[21,a+.5,23,b-.5]}); ds([[15,(m+b)/2],[21,(m+b)/2],[18,m]]); return; }
+      rm('bath','Bath','bath',[R(15,a,23,a+8)]); rm('hall','Hall','hall',[R(15,a+8,23,b)]);
+      if(w>=22){ rm('br','Bedroom','br',[R(23,a,41,a+11)]); rm('liv','Living · kitchen','liv',[R(23,a+11,41,b)],{kit:[23,a+11.5,25,b-.5]}); ds([[32,a+11],[23,(a+11+b)/2]]); }
+      else { rm('liv','Living · kitchen','liv',[R(23,a,41,b)],{kit:[23,a+.5,25,b-.5]}); ds([[23,(a+8+b)/2]]); }
+      ds([[15,(a+8+b)/2],[19,a+8]]); };
+    // the front unit on a setback floor: x 0..41, facing the Grand Street setback terrace
+    const frontUnit=r=>{ const zf=r.z0, D2=38-zf;
+      if(D2>=16){ const nb={Studio:0,'1BR':1,'2BR':2,'3BR':2}[unitName(r.area)];
+        rm('bath','Bath','bath',[R(0,31,8,38)]); rm('hall','Hall','hall',[R(8,31,20,38)]);
+        for(let i=0;i<nb;i++) rm('br'+i,i?'Bedroom':'Primary bedroom','br',[R(i*12,zf,i*12+12,31)]);
+        rm('liv','Living · kitchen','liv',[R(nb*12,zf,41,31),R(20,31,41,38)],{kit:[24,35.6,36,38]});
+        ds([[12.5,38],[8,34.5],[20,34.5]]); if(nb>=1) door(10,31); if(nb>=2) door(16,31); }
+      else { rm('bath','Bath','bath',[R(0,zf,8,38)]); rm('liv','Studio','liv',[R(8,zf,41,38)],{kit:[8.5,zf+.5,10.5,37.5]}); ds([[12.5,38],[8,(zf+38)/2]]); } };
+    if(t==='a'&&!f.setback){            // corner 3BR
+      rm('br3','Bedroom','br',[R(21,0,30,13)]);
+      rm('liv','Living · kitchen','liv',[R(30,0,43,18),R(43,12,S1,18)],{kit:[30,15.6,40,18]});
+      rm('hall','Hall','hall',[R(21,13,30,18),R(26,18,30,38)]);
+      rm('b1','Bath','bath',[R(21,18,26,26)]); rm('b2','Bath','bath',[R(21,26,26,33)]); rm('cl','W/D · closet','cl',[R(21,33,26,38)]);
+      rm('br1','Primary bedroom','br',[R(30,18,S1,28)]); rm('br2','Bedroom','br',[R(30,28,S1,38)]);
+      ds([[28,38],[30,15.5],[25.5,13],[26,22],[26,29.5],[26,35.5],[30,23],[30,33]]);
+    } else if(t==='a'){ frontUnit(rs[0]); }
+    else if(t==='b'){                   // 1BR on Grand
+      rm('liv','Living · kitchen','liv',[R(0,0,11,22)],{kit:[0,14,2,22]});
+      rm('br','Bedroom','br',[R(11,8,21,22)]);
+      rm('bath','Bath','bath',[R(0,22,8,30)]); rm('cl','W/D · closet','cl',[R(0,30,8,38)]);
+      rm('den','Dining · den','liv',[R(8,22,21,38)]);
+      ds([[14,38],[10,22],[17,22],[8,26],[8,34]]);
+    } else if(t==='c'&&has(rs,15,43,45,60)){
+      rm('liv','Living · kitchen','liv',[R(30,48,45,60),R(45,58,S1,60),R(30,38,38,48)],{kit:[30,52,32,60]});
+      rm('br','Bedroom','br',[R(38,38,S1,48)]);
+      rm('bath','Bath','bath',[R(15,43,23,51)]); rm('cl','Closet','cl',[R(15,51,23,60)]); rm('hall','Hall','hall',[R(23,43,30,60)]);
+      ds([[30,40.5],[30,55],[23,47],[23,55.5],[38,44]]);
+    } else if(t==='c'&&has(rs,15,38,41,60)){
+      rm('br','Bedroom','br',[R(28,38,41,49)]); rm('liv','Living · kitchen','liv',[R(23,49,41,60)],{kit:[23,50,25,60]});
+      rm('bath','Bath','bath',[R(15,38,23,46)]); rm('cl','Closet','cl',[R(15,46,23,51)]); rm('hall','Hall','hall',[R(15,51,23,60)]);
+      rm('den','Dining','liv',[R(23,38,28,49)]);
+      ds([[15,55.5],[23,55],[25.5,49],[28,43.5],[23,42],[19,51]]);
+    } else if(t==='d'&&has(rs,15,60,45,80)){
+      rm('br','Bedroom','br',[R(36,60,S1,70)]); rm('liv','Living · kitchen','liv',[R(30,70,45,80),R(30,60,36,70)],{kit:[30,71,32,80]});
+      rm('bath','Bath','bath',[R(15,60,23,68)]); rm('cl','Closet','cl',[R(15,68,23,73)]); rm('hall','Hall','hall',[R(15,73,23,80)]);
+      rm('den','Dining','liv',[R(23,60,30,80)]);
+      ds([[15,76.5],[23,76.5],[30,75],[40,70],[23,64],[19,73]]);
+    } else if(t==='e'&&has(rs,15,80,45,100)){
+      rm('br','Bedroom','br',[R(34,80,S1,90)]); rm('liv','Living · kitchen','liv',[R(28,90,45,100),R(28,80,34,90)],{kit:[28,91,30,100]});
+      rm('bath','Bath','bath',[R(15,80,23,88)]); rm('cl','Closet','cl',[R(15,88,23,93)]); rm('hall','Hall','hall',[R(15,93,23,100)]);
+      rm('den','Dining','liv',[R(23,80,28,100)]);
+      ds([[15,96.5],[23,96.5],[28,95],[40,90],[23,84],[19,93]]);
+    } else eastUnit(rs[0]);
+  }
+  return {G,D};
+}
 const short$=v=>v>=1e6?'$'+(v/1e6).toFixed(2)+'m':'$'+Math.round(v/1e3)+'k';
 function renderInterior(){
   const p=plans[st.scheme]; if(!p||!window.THREE||!$('interior3d')) return;
@@ -2290,7 +2561,7 @@ function renderInterior(){
   }));
   const at=(i,j)=>i<0||j<0||i>=GW||j>=GH?0:grid[j*GW+i];
   const ease=p.s.ease&&f.elev+3>=30;
-  const lot=(x,z)=>x<0||z>100||(x<S0&&z<80&&!ease)||(x<S0&&z>=80);
+  const lot=p.s.demo?((x,z)=>x<0||z>100):((x,z)=>x<0||z>100||(x<S0&&z<80&&!ease)||(x<S0&&z>=80));
   const isDoor=(vert,line,pos)=>D.some(([dx,dz])=>vert?(Math.abs(dx-line)<.3&&Math.abs(dz-pos)<1.5):(Math.abs(dz-line)<.3&&Math.abs(dx-pos)<1.5));
   const H=f.n===1?Math.min(14,f.h-1):9;
   const glassKinds=['liv','br','lounge','retail','hall'];
@@ -2329,7 +2600,8 @@ function renderInterior(){
     g.rects.forEach(r=>v.box(r.x0,r.z0,r.x1,r.z1,-.6,0,col,{edge:0}));
     const r=big(g), w=r.x1-r.x0, d=r.z1-r.z0, cx=(r.x0+r.x1)/2, cz=(r.z0+r.z1)/2;
     const fb=(x0,z0,x1,z1,y1,c)=>v.box(Math.max(r.x0+.2,x0),Math.max(r.z0+.2,z0),Math.min(r.x1-.2,x1),Math.min(r.z1-.2,z1),0,y1,c,{edge:.2});
-    if(g.kind==='stair'){ for(let s=0;s<8;s++) v.box(r.x0+1+s*2.9,r.z0+.5,r.x0+3.9+s*2.9,r.z1-.5,0,1+s*1.05,coreC,{edge:.25}); }
+    if(g.kind==='stair'){ if(w>=d) for(let s=0;s<8;s++) v.box(r.x0+1+s*2.9,r.z0+.5,r.x0+3.9+s*2.9,r.z1-.5,0,1+s*1.05,coreC,{edge:.25});
+      else for(let s=0;s<8;s++) v.box(r.x0+.5,r.z0+1+s*2.9,r.x1-.5,r.z0+3.9+s*2.9,0,1+s*1.05,coreC,{edge:.25}); }
     else if(g.kind==='elev'||g.kind==='mech'){ v.box(r.x0+.3,r.z0+.3,r.x1-.3,r.z1-.3,0,H,coreC,{op:.55,edge:.3}); }
     else if(g.kind==='br'){
       const king=r.area>=150, bw=king?6.3:5, bl=6.8, eastWin=r.x1>=SB-.01;
@@ -2604,12 +2876,13 @@ function renderSummary(){
   sumTimer=setTimeout(()=>{
     const keep={mode:st.mode,strategy:st.strategy,bonusSrc:st.bonusSrc,tenure:st.tenure,scheme:st.scheme};
     const runs=[];
-    for(const scheme of ['A','B','C','D'])
+    for(const scheme of ['A','B','C','D','E','F'])
       for(const mode of ['gu','enl'])
         for(const strategy of ['eff','height'])
           for(const bonusSrc of ['cert','onsite'])
             for(const tenure of ['condo','rental']){
-              if(bonusSrc==='onsite'&&(scheme==='A'||scheme==='C')) continue;   // no bonus to deliver
+              if(bonusSrc==='onsite'&&(scheme==='A'||scheme==='C'||scheme==='E')) continue;   // no bonus to deliver
+              if(mode==='enl'&&(scheme==='E'||scheme==='F')) continue;                      // always ground-up
               st.mode=mode; st.strategy=strategy; st.bonusSrc=bonusSrc; st.tenure=tenure;
               const defsNow=defs(); for(const k in defsNow) defsNow[k].cap=defsNow[k].base+defsNow[k].tr+defsNow[k].cert;
               const q=generate(defsNow[scheme]); if(!q) continue;
@@ -2654,8 +2927,10 @@ function renderSummary(){
     const rows=[
       ['Average condo price to break even',`$${fmt(F.bePsf)}/sf`,`$${fmt(+$('f-res').value||0)}/sf average assumed, bands $${fmt(F.psfT.lo)}–$${fmt(F.psfT.ph)}`],
       ['Land basis for a 15% margin',mm(F.residual),`${mm(F.land)} assumed`],
-      ...(nbState().filter(n=>n.on).map(n=>[`Air rights from ${n.name}`,`${fmt(n.tr)} sf`,
-        `${n.mode==='lump'?money(n.price)+' lump sum':'$'+n.price+'/sf = '+money(n.cost)} · ${n.status}${n.drawn?'':' · massing not drawn'}`])),
+      ...(()=>{ const all=nbState(), reach=connected(all.filter(n=>n.on).map(n=>n.id));
+        return all.filter(n=>n.on).map(n=>[`Air rights from ${n.name}`,`${fmt(n.tr)} sf`,
+        reach.has(n.id)?`${n.mode==='lump'?money(n.price)+' lump sum':'$'+n.price+'/sf = '+money(n.cost)} · ${STATUS[n.status]||n.status}${n.drawn?'':' · massing not drawn'}`:'ticked but not touching the zoning lot — tick 284 Graham or the lot in between']); })(),
+      ['727 Grand bought outright (E, F)',`${fmt(D0.E.nbs[0].tr)} sf moves, nothing deducted`,`${money(D0.E.nbs[0].cost)} placeholder + demolition of ${fmt(D0.E.demoSf)} sf`],
       ['IH certificates for the merged bonus',`${fmt(D0.D.cert)} sf`,`$${$('in-p2').value}/sf assumed, market is finite and the option ends around 2034`],
       ['Hard cost',`$${$('f-hard').value}/gsf above grade`,'placeholder until a GC bid']
     ];
@@ -2746,21 +3021,32 @@ document.querySelectorAll('#ftabs button').forEach(b=>b.addEventListener('click'
    below so renderFinance sees the new band values, not the old ones. */
 const PSF_BANDS=['f-res-lo','f-res-mid','f-res-up','f-res-ph'];
 const PSF_KEY={'f-res-lo':'lo','f-res-mid':'mid','f-res-up':'up','f-res-ph':'ph'};
-$('f-res').addEventListener('input',()=>{
-  const a=+$('f-res').value||0, prev=+$('f-res').dataset.prev||0;
-  if(a>0&&prev>0&&a!==prev) PSF_BANDS.forEach(id=>{ const e=$(id); e.value=Math.round((+e.value||0)*a/prev/5)*5; });
-  if(a>0) $('f-res').dataset.prev=a;
-});
+/* The bands are held as ratios to the average (REL), captured whenever the bands settle, so the
+   average can be typed one keystroke at a time ("1", "15", "150", "1500") without the in-between
+   values wiping the bands out. Values under $200/sf are treated as still being typed. */
+let REL=null;
+const MIN_AVG=200;
+function captureRel(){ const a=+$('f-res').value||0; if(a<MIN_AVG) return;
+  const r=PSF_BANDS.map(id=>(+$(id).value||0)/a); if(r.every(x=>x>0)) REL=r; }
+const applyAvg=()=>{ const a=+$('f-res').value||0; if(a<MIN_AVG) return;
+  if(!REL) captureRel();
+  if(REL) PSF_BANDS.forEach((id,i)=>{ $(id).value=Math.round(REL[i]*a/5)*5; });
+  $('f-res').dataset.prev=a; };
+$('f-res').addEventListener('input',applyAvg);
+$('f-res').addEventListener('change',applyAvg);
+PSF_BANDS.forEach(id=>$(id).addEventListener('change',()=>setTimeout(captureRel,0)));
 let normBusy=false;
 function normalizeBands(){
   if(normBusy||!$('f-res')) return;
   if(PSF_BANDS.some(id=>$(id)===document.activeElement)) return;   // leave the field being typed in alone
+  if((+$('f-res').value||0)<MIN_AVG) return;                          // the average is still being typed
   const p=plans[st.scheme]; if(!p) return;
   normBusy=true;
   const F=fin(p);
   PSF_BANDS.forEach(id=>{ const e=$(id), x=F.psfT[PSF_KEY[id]];
-    if(e&&isFinite(x)&&x>0) e.value=Math.round(x); });
+    if(e&&isFinite(x)&&x>=1) e.value=Math.round(x); });
   $('f-res').dataset.prev=+$('f-res').value||0;
+  captureRel();
   normBusy=false;
 }
 $('f-res').dataset.prev=+$('f-res').value||0;
@@ -2809,8 +3095,8 @@ window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,planFor,nbState,NE
     // the loaded bands settle onto the loaded average through normalizeBands() in renderFinance
     st.exist=+$('in-exist').value; st.green=$('in-green').checked; st.strategy=$('in-strategy').value; st.circ=$('in-circ').value; st.cut=$('in-cut').checked;
     st.mode=$('in-mode').value; st.bonusSrc=$('in-bonus').value; st.tenure=$('in-tenure').value;
-    if(['A','B','C','D'].includes(state.scheme)) st.scheme=state.scheme;
-    if(['A','B','C','D'].includes(state.mini)) st.mini=state.mini;
+    if(['A','B','C','D','E','F'].includes(state.scheme)) st.scheme=state.scheme;
+    if(['A','B','C','D','E','F'].includes(state.mini)) st.mini=state.mini;
     st.ifit=true; regen(); renderMini(); renderStudies(false);
   }
   const esc=s=>String(s).replace(/[<&"]/g,c=>({'<':'&lt;','&':'&amp;','"':'&quot;'}[c]));
@@ -2952,6 +3238,5 @@ window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,planFor,nbState,NE
 })();
 })();
 </script>
-
 </body>
 </html>
