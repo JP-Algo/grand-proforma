@@ -94,7 +94,7 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
 <header>
   <span class="kicker">725 Grand Street · Brooklyn · pro forma detail</span>
   <h1>Projections: Scheme A base case vs Scheme D upside</h1>
-  <p class="lede">Every number here comes from the same pro forma as the <a href="/">main study</a>, with both schemes built ground-up and sold as condos. Change the condo price, land basis or construction costs below to see how the result moves. Changes on this page are not saved.</p>
+  <p class="lede">Every number here comes from the same pro forma as the <a href="https://grand-proforma.vercel.app/" target="_blank" rel="noopener">main study</a>, with both schemes built ground-up and sold as condos. Change the condo price, land basis or construction costs below to see how the result moves. Changes on this page are not saved.</p>
   <div class="controls">
     <label><span class="label">Condo $/sf</span><input id="c-price" type="number" step="25" min="0"></label>
     <label><span class="label">Land basis, 725 Grand $</span><input id="c-land" type="number" step="100000" min="0"></label>
@@ -150,7 +150,7 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
   <span class="status" id="asof"></span>
 </footer>
 </div>
-<iframe id="engine" src="/" title="Pro forma engine" aria-hidden="true" tabindex="-1"></iframe>
+<iframe id="engine" title="Pro forma engine" aria-hidden="true" tabindex="-1"></iframe>
 <script>
 (function(){
 const $=id=>document.getElementById(id);
@@ -316,6 +316,8 @@ function setControls(){ $('c-price').value=saved['f-res']; $('c-land').value=sav
 ['c-price','c-land','c-hard','c-soft'].forEach(id=>$(id).addEventListener('input',()=>G&&render()));
 $('c-reset').addEventListener('click',()=>{ if(!G) return; setControls(); render(); });
 let rT; addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>G&&render(),150); });
+// the pro forma engine: a bundled copy (study.html) when published as a claude.ai artifact, else the site's main page
+(async()=>{ let src='/'; try{ const r=await fetch('study.html',{method:'HEAD',cache:'no-store'}); if(r.ok&&(r.headers.get('content-type')||'').includes('html')) src='study.html'; }catch(e){} $('engine').src=src; })();
 const t0=Date.now();
 (function wait(){
   let g=null; try{ g=$('engine').contentWindow.G725; }catch(e){}

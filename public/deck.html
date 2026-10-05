@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>725 Grand Investor Deck</title>
-<meta name="description" content="Investor presentation for 725 Grand Street, Brooklyn: base case (Scheme B) and upside (Scheme D), with live figures from the pro forma.">
+<meta name="description" content="Investor presentation for 725 Grand Street, Brooklyn: base case (Scheme A, as of right) and upside (Scheme D), with live figures from the pro forma.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -105,7 +105,7 @@ svg text{font-family:var(--mono)}
   <button id="next" type="button" aria-label="Next slide">→</button>
   <button id="print" type="button">Save as PDF</button>
 </div>
-<iframe id="engine" src="/" title="Pro forma engine" aria-hidden="true" tabindex="-1"></iframe>
+<iframe id="engine" title="Pro forma engine" aria-hidden="true" tabindex="-1"></iframe>
 <script>
 (function(){
 /* ---- deck settings: the proposal's own assumptions ---- */
@@ -345,8 +345,10 @@ function go(i){ cur=Math.max(0,Math.min(N-1,i)); document.querySelectorAll('.sli
 function fit(){ const vw=innerWidth, vh=innerHeight-48, s=Math.min(vw/1280,vh/720)*.96; $('stage').style.transform=`translate(-50%,-50%) scale(${s})`; }
 addEventListener('resize',fit); fit();
 addEventListener('keydown',e=>{ if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1);} if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);} if(e.key==='Home')go(0); if(e.key==='End')go(N-1); });
-$('prev').onclick=()=>go(cur-1); $('next').onclick=()=>go(cur+1); $('print').onclick=()=>print();
+$('prev').onclick=()=>go(cur-1); $('next').onclick=()=>go(cur+1); if($('print')) $('print').onclick=()=>print();
 let tx=null; addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true}); addEventListener('touchend',e=>{ if(tx==null) return; const d=e.changedTouches[0].clientX-tx; if(Math.abs(d)>50) go(cur+(d<0?1:-1)); tx=null; });
+// the pro forma engine: a bundled copy (study.html) when published as a claude.ai artifact, else the site's main page
+(async()=>{ let src='/'; try{ const r=await fetch('study.html',{method:'HEAD',cache:'no-store'}); if(r.ok&&(r.headers.get('content-type')||'').includes('html')) src='study.html'; }catch(e){} $('engine').src=src; })();
 const t0=Date.now();
 (function wait(){
   let g=null; try{ g=$('engine').contentWindow.G725; }catch(e){}
