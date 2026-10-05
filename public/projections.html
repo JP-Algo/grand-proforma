@@ -213,7 +213,7 @@ function render(){
   // per sellable sf
   const per=R.map(r=>{ const F=r.F, n=Math.max(1,F.mktSf);
     return {k:r.k, n, cost:[['Hard costs',F.hard/n,'--c-hard'],['Soft costs',F.soft/n,'--c-soft'],['Land',F.land/n,'--c-land'],['Air rights + certificates',(F.nb+F.certs)/n,'--c-rights'],['Financing',F.financing/n,'--c-fin']],
-      rev:[['Condo sales, net of '+Math.round(sc*100)+'% selling costs',(F.revenue-F.retNet)/n,'--c-condo'],['Retail (sold at cap rate)',F.retNet/n,'--c-retail']],
+      rev:[['Condo sales, net of '+Math.round(sc*100)+'% selling costs',(F.revenue-F.retNet)/n,'--c-condo'],['Retail, net of sale costs',F.retNet/n,'--c-retail']],
       costT:F.total/n, revT:F.revenue/n, gross:r.p.gross, eff:F.mktSf/r.p.gross}; });
   const b=per[0], d=per[1], B=R[0].F;
   $('why').innerHTML=`<p><b>The short version:</b> the condo price is per <i>sellable</i> square foot, but costs are paid on every square foot built. Scheme ${R[0].k} builds ${fmt(b.gross)} sf above grade, plus a ${fmt(R[0].p.cellar)} sf cellar, to get <b>${fmt(b.n)} sf of sellable condos</b> (${pct(b.eff)} of above-grade area). The rest is retail, lobby, stairs, elevator, corridors, walls and mechanical space.</p>
@@ -262,7 +262,8 @@ function render(){
     <tr class="grp"><td colspan="3">Revenue</td></tr>
     ${both('Condo sales, gross',r=>M(r.F.condoGross),'',null,r=>['prop',`${bandText(r.F)} = ${M(r.F.condoGross)}${r.F.psfBlend?`, a blended ${psf(r.F.psfBlend)}/sf`:''}. The prices scale from the ${psf(price)}/sf base set at the top of this page.`])}
     ${both('Less condo selling costs',r=>M(-(r.F.condoGross-(r.F.revenue-r.F.retNet))),'',null,r=>['ph',`${M(r.F.condoGross)} × ${inVal('f-scres')}% = ${M(r.F.condoGross-(r.F.revenue-r.F.retNet))} for brokerage, marketing, closing and transfer taxes.`])}
-    ${both('Retail, sold at cap rate',r=>M(r.F.retNet),'',null,r=>['calc',`${fmt(r.p.retail)} sf × $${inVal('f-rent')} = ${M(r.F.rent)} rent; less ${inVal('f-vac')}% vacancy and ${inVal('f-opex')}% expenses = ${M(r.F.noi)} NOI; ÷ ${inVal('f-cap')}% cap = ${M(r.F.retVal)}; less ${inVal('f-scret')}% sale costs = ${M(r.F.retNet)}. Rent and cap rate are study placeholders.`])}
+    ${both('Retail condo value, at cap rate',r=>M(r.F.retVal),'',null,r=>['calc',`${fmt(r.p.retail)} sf × $${inVal('f-rent')} = ${M(r.F.rent)} rent; less ${inVal('f-vac')}% vacancy and ${inVal('f-opex')}% expenses = ${M(r.F.noi)} NOI; ÷ ${inVal('f-cap')}% cap = ${M(r.F.retVal)}. The ground-floor retail is sold as a commercial condo; rent and cap rate are study placeholders.`])}
+    ${both('Less retail sale costs',r=>M(-(r.F.retVal-r.F.retNet)),'',null,r=>['ph',`${M(r.F.retVal)} × ${inVal('f-scret')}% = ${M(r.F.retVal-r.F.retNet)} for brokerage, closing and transfer taxes on the retail condo sale. The ${inVal('f-scret')}% is the main study's placeholder.`])}
     ${both('Net revenue',r=>M(r.F.revenue),'tot',null,r=>['calc',`${M(r.F.revenue-r.F.retNet)} condos after selling costs + ${M(r.F.retNet)} retail = ${M(r.F.revenue)}.`])}
     <tr class="grp"><td colspan="3">Hard costs</td></tr>
     ${itemRows}
