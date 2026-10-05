@@ -361,7 +361,7 @@ function bridge(){ // runs inside the engine frame
       if(G&&(G.loaded||(G.plans&&Date.now()-t0>8000))){
         try{
           Object.assign(G.st,e.data.set||{}); G.regen();
-          const vals={}; document.querySelectorAll('input[id],select[id]').forEach(el=>{ vals[el.id]={type:el.type,value:el.value,checked:el.checked}; });
+          const vals={}; document.querySelectorAll('input[id],select[id],textarea[id]').forEach(el=>{ vals[el.id]={type:el.type,value:el.value,checked:el.checked}; });
           parent.postMessage({g725:'engine',fns:['fin','investorOf','developerOf','unitsOf'].map(n=>G[n].toString()),
             plans:JSON.parse(JSON.stringify(G.plans)),st:JSON.parse(JSON.stringify(G.st)),vals},'*');
         }catch(err){ parent.postMessage({g725:'error',msg:String(err&&err.message||err)},'*'); }
