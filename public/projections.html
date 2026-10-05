@@ -74,6 +74,8 @@ td .sub{display:block;color:var(--ink-2);font-size:.8rem;font-family:var(--mono)
 tr.grp td{font:600 .74rem var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--accent);padding-top:18px;border-bottom:1px solid var(--ink-2)}
 tr.tot td{font-weight:600;border-bottom:2px solid var(--ink)}
 tr.tot td.num{font-weight:500}
+tr.part td{font-size:.85rem;color:var(--ink-2);border-bottom-style:dotted}
+tr.part td:first-child{padding-left:26px}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.84rem;color:var(--ink-2)}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 svg text{font-family:var(--mono);fill:var(--ink)}
@@ -261,6 +263,16 @@ function render(){
     ${both('Less condo selling costs',r=>M(-(r.F.condoGross-(r.F.revenue-r.F.retNet))),'',null,r=>['ph',`${M(r.F.condoGross)} × ${inVal('f-scres')}% = ${M(r.F.condoGross-(r.F.revenue-r.F.retNet))} for brokerage, marketing, closing and transfer taxes.`])}
     ${both('Retail condo value, at cap rate',r=>M(r.F.retVal),'',null,r=>['calc',`${fmt(r.p.retail)} sf × $${inVal('f-rent')} = ${M(r.F.rent)} rent; less ${inVal('f-vac')}% vacancy and ${inVal('f-opex')}% expenses = ${M(r.F.noi)} NOI; ÷ ${inVal('f-cap')}% cap = ${M(r.F.retVal)}. The ground-floor retail is sold as a commercial condo; rent and cap rate are study placeholders.`])}
     ${both('Less retail sale costs',r=>M(-(r.F.retVal-r.F.retNet)),'',null,r=>['ph',`${M(r.F.retVal)} × ${inVal('f-scret')}% = ${M(r.F.retVal-r.F.retNet)} for brokerage, closing and transfer taxes on the retail condo sale. The ${inVal('f-scret')}% is the main study's placeholder.`])}
+    ${(()=>{ // typical NYC seller costs on a commercial condo sale; whatever the scenario's total rate exceeds them by shows as "other"
+      const tot=iv('f-scret'), nys=r=>r.F.retVal>=2e6?0.65:0.4;
+      const P=[['Brokerage commission',r=>6,'Commercial investment sales of this size usually pay 4–6%; 6% is conservative.'],
+               ['NYC Real Property Transfer Tax',r=>r.F.retVal>500000?2.625:1.425,'NYC commercial rate: 2.625% above $500K, 1.425% at or below.'],
+               ['NYS transfer tax',nys,'In NYC, 0.65% on commercial sales of $2M or more, 0.4% below. The mansion tax applies only to residential sales.'],
+               ['Seller legal fees',r=>0.5,'About 0.5%; a commercial condo unit sale typically runs $15–25K in seller legal fees.']];
+      const other=r=>tot-P.reduce((a,[,f])=>a+f(r),0);
+      const rows=P.map(([l,f,why])=>row(l,'',cell(M(-R[0].F.retVal*f(R[0])/100),['calc',`${M(R[0].F.retVal)} × ${f(R[0])}% = ${M(R[0].F.retVal*f(R[0])/100)}. ${why}`]),cell(M(-R[1].F.retVal*f(R[1])/100),['calc',`${M(R[1].F.retVal)} × ${f(R[1])}% = ${M(R[1].F.retVal*f(R[1])/100)}. ${why}`]),'part'));
+      rows.push(row(other(R[0])>=0?'Title, recording, condo fees, other':'Shortfall vs. the components above','',cell(M(-R[0].F.retVal*other(R[0])/100),['calc',`${M(R[0].F.retVal)} × ${other(R[0]).toFixed(3)}% = ${M(R[0].F.retVal*other(R[0])/100)}: the scenario's ${tot}% total less the four lines above. Covers title clearance, recording, condo board and managing agent fees.`]),cell(M(-R[1].F.retVal*other(R[1])/100),['calc',`${M(R[1].F.retVal)} × ${other(R[1]).toFixed(3)}% = ${M(R[1].F.retVal*other(R[1])/100)}: the scenario's ${tot}% total less the four lines above.`]),'part'));
+      return rows.join(''); })()}
     ${both('Net revenue',r=>M(r.F.revenue),'tot',null,r=>['calc',`${M(r.F.revenue-r.F.retNet)} condos after selling costs + ${M(r.F.retNet)} retail = ${M(r.F.revenue)}.`])}
     <tr class="grp"><td colspan="3">Hard costs</td></tr>
     ${itemRows}
