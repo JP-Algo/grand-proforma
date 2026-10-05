@@ -347,15 +347,66 @@ addEventListener('resize',fit); fit();
 addEventListener('keydown',e=>{ if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1);} if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);} if(e.key==='Home')go(0); if(e.key==='End')go(N-1); });
 $('prev').onclick=()=>go(cur-1); $('next').onclick=()=>go(cur+1); if($('print')) $('print').onclick=()=>print();
 let tx=null; addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true}); addEventListener('touchend',e=>{ if(tx==null) return; const d=e.changedTouches[0].clientX-tx; if(Math.abs(d)>50) go(cur+(d<0?1:-1)); tx=null; });
-// the pro forma engine: a bundled copy (study.html) when published as a claude.ai artifact, else the site's main page
-(async()=>{ let src='/'; try{ const r=await fetch('study.html',{method:'HEAD',cache:'no-store'}); if(r.ok&&(r.headers.get('content-type')||'').includes('html')) src='study.html'; }catch(e){} $('engine').src=src; })();
-const t0=Date.now();
-(function wait(){
-  let g=null; try{ g=$('engine').contentWindow.G725; }catch(e){}
-  if(g&&g.loaded){ W=$('engine').contentWindow; G=g; G.st.mode='gu'; G.st.tenure='condo'; G.st.bonusSrc='cert'; G.regen(); cur=Math.max(0,(parseInt(location.hash.slice(1))||1)-1); build(); $('loading').remove(); return; }
-  if(Date.now()-t0>25000){ $('loading').textContent='Could not load the pro forma. Reload the page.'; return; }
-  setTimeout(wait,200);
+// The pro forma engine is the main study page, loaded into a hidden frame. claude.ai isolates every
+// frame's origin, so the frame sends its own calculation functions, building plans and input values
+// here by message, and this page runs the same functions locally.
+const ENG={mode:'starting',err:''};
+const SETTINGS={mode:'gu',tenure:'condo',bonusSrc:'cert'}; // ground-up, condo sale, IH certificates
+function bridge(){ // runs inside the engine frame
+  addEventListener('message',e=>{
+    if(e.source!==parent||!e.data||e.data.g725!=='get') return;
+    const t0=Date.now();
+    (function wait(){
+      const G=window.G725;
+      if(G&&(G.loaded||(G.plans&&Date.now()-t0>8000))){
+        try{
+          Object.assign(G.st,e.data.set||{}); G.regen();
+          const vals={}; document.querySelectorAll('input[id],select[id]').forEach(el=>{ vals[el.id]={type:el.type,value:el.value,checked:el.checked}; });
+          parent.postMessage({g725:'engine',fns:['fin','investorOf','developerOf','unitsOf'].map(n=>G[n].toString()),
+            plans:JSON.parse(JSON.stringify(G.plans)),st:JSON.parse(JSON.stringify(G.st)),vals},'*');
+        }catch(err){ parent.postMessage({g725:'error',msg:String(err&&err.message||err)},'*'); }
+        return;
+      }
+      setTimeout(wait,150);
+    })();
+  });
+}
+function engineFrom(d){
+  const vals=d.vals, el=id=>vals[id]?{...vals[id]}:null;
+  // fmt and unitName are copied from the study page (its hook does not export them)
+  const body='const fmt=n=>Math.round(n).toLocaleString("en-US");const unitName=a=>a<560?"Studio":a<760?"1BR":a<1000?"2BR":"3BR";\n'
+    +d.fns.join('\n')+'\nreturn {fin,investorOf,developerOf,unitsOf};';
+  let mk=null;
+  try{ const sc=document.createElement('script'); sc.textContent='window.__g725mk=function($,st){'+body+'};'; document.head.appendChild(sc); sc.remove(); mk=window.__g725mk; }catch(e){}
+  if(!mk){ try{ mk=new Function('$','st',body); }catch(e){ throw new Error('this view blocks running the pro forma code'); } }
+  const f=mk(el,d.st);
+  return {G:{st:d.st,plans:d.plans,regen(){},fin:f.fin,investorOf:f.investorOf,developerOf:f.developerOf,unitsOf:f.unitsOf},
+          W:{document:{getElementById:el}}};
+}
+async function engineHtml(){
+  const emb=document.getElementById('study-src');
+  if(emb){ const b=atob(emb.textContent.trim()), u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); ENG.mode='embedded'; return new TextDecoder().decode(u); }
+  for(const [mode,url] of [['bundled','study.html'],['site','/']]){
+    try{ const r=await fetch(url,{cache:'no-store'}); const t=r.ok?await r.text():''; if(t.includes('window.G725')){ ENG.mode=mode; return t; } ENG.err=url+' '+(r.ok?'has no engine hook':'returned '+r.status); }
+    catch(e){ ENG.err=url+': '+(e&&e.message||e); }
+  }
+  throw new Error(ENG.err||'no pro forma found');
+}
+let ready=false, ask=null;
+addEventListener('message',e=>{
+  const fr=$('engine'); if(!fr||e.source!==fr.contentWindow||!e.data) return;
+  if(e.data.g725==='error'){ ENG.err=e.data.msg; return; }
+  if(e.data.g725!=='engine'||ready) return;
+  try{ const x=engineFrom(e.data); G=x.G; W=x.W; ready=true; clearInterval(ask); cur=Math.max(0,(parseInt(location.hash.slice(1))||1)-1); build(); $('loading').remove(); }
+  catch(err){ ENG.err=String(err&&err.message||err); }
+});
+(async()=>{
+  try{ const html=await engineHtml(); $('engine').srcdoc=html.replace(/<\/body>\s*<\/html>\s*$/i,'')+'<scr'+'ipt>('+bridge.toString()+')();</scr'+'ipt>'; }
+  catch(e){ ENG.err=String(e&&e.message||e); }
+  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS},'*'); }catch(e){} },500);
 })();
+setTimeout(()=>{ if(ready) return; clearInterval(ask);
+  $('loading').textContent=`Could not load the pro forma. Reload the page. (${ENG.mode}${ENG.err?': '+ENG.err:''})`; },30000);
 })();
 </script>
 </body>
