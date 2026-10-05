@@ -39,6 +39,9 @@ function toArtifact(name) {
        .replace(/\s*<button id="print"[^>]*>[^<]*<\/button>/, '');
   if (/<html|<body|<\/head>/i.test(s)) throw new Error(`${name}: document wrapper not fully stripped`);
   s = s.replace('<iframe id="engine"', embedded + scenarioTag + '<iframe id="engine"');
+  // claude.ai pages cannot load the site's images, so embed each local image as a data URI
+  s = s.replace(/src="(images\/[^"]+\.(jpe?g|png))"/g, (m, f, ext) =>
+    `src="data:image/${ext === 'png' ? 'png' : 'jpeg'};base64,${readFileSync(new URL('../public/' + f, import.meta.url)).toString('base64')}"`);
   writeFileSync(new URL(name, out), s);
 }
 
