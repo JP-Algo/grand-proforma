@@ -107,7 +107,7 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
   <h1>Projections: Scheme A base case vs Scheme D upside</h1>
   <p class="lede">Every number here comes from the same pro forma as the <a href="https://grand-proforma.vercel.app/" target="_blank" rel="noopener">main study</a>, with both schemes built ground-up and sold as condos. Change the condo price, land basis or construction costs below to see how the result moves. Changes on this page are not saved.</p>
   <div class="controls">
-    <label><span class="label">Condo $/sf</span><input id="c-price" type="number" step="25" min="0"></label>
+    <label><span class="label">Base condo $/sf</span><input id="c-price" type="number" step="25" min="0"></label>
     <label><span class="label">Land basis, 725 Grand $</span><input id="c-land" type="number" step="100000" min="0"></label>
     <label><span class="label">Hard $/gsf above grade</span><input id="c-hard" type="number" step="5" min="0"></label>
     <label><span class="label">Soft costs % of hard</span><input id="c-soft" type="number" step="0.5" min="0"></label>
@@ -133,7 +133,7 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
 <section aria-labelledby="h-lines">
   <span class="kicker">03 · Line by line</span>
   <h2 id="h-lines">Program, revenue, costs, capital and returns</h2>
-  <p class="status">Tap or hover <span class="ti" aria-hidden="true" style="cursor:default">i</span> on a line to see how it is derived. Sources: <span class="src src-prop">Proposal assumption</span> <span class="src src-ph">Study placeholder</span> <span class="src src-plan">From the plans</span> <span class="src src-calc">Calculated</span></p>
+  <p class="status">Tap or hover <span class="ti" aria-hidden="true" style="cursor:default">i</span> next to any value to see how that figure is calculated. Sources: <span class="src src-prop">Proposal assumption</span> <span class="src src-ph">Study placeholder</span> <span class="src src-plan">From the plans</span> <span class="src src-calc">Calculated</span></p>
   <div class="scroll"><table id="lines"></table></div>
 </section>
 
@@ -202,7 +202,7 @@ function render(){
     <div class="kpis">
       <div><span class="label">Margin on cost</span><span class="v ${sign(F.margin)}">${pct(F.margin)}</span></div>
       <div><span class="label">Equity multiple</span><span class="v">${F.em.toFixed(2)}×</span></div>
-      <div><span class="label">Break-even $/sf</span><span class="v">${psf(F.bePsf)}</span></div>
+      <div><span class="label">Break-even base $/sf</span><span class="v">${psf(F.bePsf)}</span></div>
       <div><span class="label">Total cost</span><span class="v">${mm(F.total)}</span></div>
       <div><span class="label">Net revenue</span><span class="v">${mm(F.revenue)}</span></div>
       <div><span class="label">Equity needed</span><span class="v">${mm(F.equity)}</span></div>
@@ -217,63 +217,77 @@ function render(){
       costT:F.total/n, revT:F.revenue/n, gross:r.p.gross, eff:F.mktSf/r.p.gross}; });
   const b=per[0], d=per[1], B=R[0].F;
   $('why').innerHTML=`<p><b>The short version:</b> the condo price is per <i>sellable</i> square foot, but costs are paid on every square foot built. Scheme ${R[0].k} builds ${fmt(b.gross)} sf above grade, plus a ${fmt(R[0].p.cellar)} sf cellar, to get <b>${fmt(b.n)} sf of sellable condos</b> (${pct(b.eff)} of above-grade area). The rest is retail, lobby, stairs, elevator, corridors, walls and mechanical space.</p>
-  <p>Spread over those ${fmt(b.n)} sellable sf, Scheme ${R[0].k} costs <b>${psf(b.costT)}/sf</b> all-in: hard ${psf(b.cost[0][1])}, soft ${psf(b.cost[1][1])}, land ${psf(b.cost[2][1])}, air rights and certificates ${psf(b.cost[3][1])}, financing ${psf(b.cost[4][1])}. At ${psf(price)}/sf, each sellable sf brings in <b>${psf(b.revT)}</b>: ${psf(b.rev[0][1])} from the condo after selling costs, plus ${psf(b.rev[1][1])} of retail value. The gap of ${psf(b.revT-b.costT)} per sf × ${fmt(b.n)} sf is the ${mm(B.profit)} result.</p>
+  <p>Spread over those ${fmt(b.n)} sellable sf, Scheme ${R[0].k} costs <b>${psf(b.costT)}/sf</b> all-in: hard ${psf(b.cost[0][1])}, soft ${psf(b.cost[1][1])}, land ${psf(b.cost[2][1])}, air rights and certificates ${psf(b.cost[3][1])}, financing ${psf(b.cost[4][1])}. At a ${psf(price)}/sf base price (floor bands blend to ${psf(R[0].F.psfBlend||price)}/sf here), each sellable sf brings in <b>${psf(b.revT)}</b>: ${psf(b.rev[0][1])} from the condo after selling costs, plus ${psf(b.rev[1][1])} of retail value. The gap of ${psf(b.revT-b.costT)} per sf × ${fmt(b.n)} sf is the ${mm(B.profit)} result.</p>
   <p>Scheme D spreads the same ${money(o['f-land'])} land basis over ${fmt(d.n)} sellable sf instead of ${fmt(b.n)}, so land drops from ${psf(b.cost[2][1])} to ${psf(d.cost[2][1])} per sf. Fixed costs like the cellar, demolition and the ground floor are spread over more sellable area too, which is why the larger building earns a much higher margin.</p>`;
   const cols=[...new Set(per[0].cost.concat(per[0].rev).map(x=>x[0]+'|'+x[2]))];
   $('legend').innerHTML=cols.map(c=>{const [l,v]=c.split('|'); return `<span><i style="background:var(${v})"></i>${l.replace(/, net of.*/,'')}</span>`;}).join('');
   drawBars(per);
 
-  // line by line
-  const row=(l,sub,a,bv,cls='',note)=>`<tr class="${cls}"><td>${l}${note?tipBtn(note):''}${sub?`<span class="sub">${sub}</span>`:''}</td><td class="num">${a}</td><td class="num">${bv}</td></tr>`;
-  const both=(l,f,cls,subf,note)=>row(l,subf?subf(R[0]):'',f(R[0]),f(R[1]),cls,note);
-  const kA=R[0].k, kD=R[1].k, P=R[0].p, Q=R[1].p;
-  const itemNote=name=>/Above-grade/.test(name)?['prop',`Gross area above grade from the plans × $${inVal('f-hard')}/gsf, the proposal's hard-cost rate set at the top of this page (the main study's default is a $450/gsf placeholder).`]
-    :/Cellar/.test(name)?['ph',`Full-lot cellar area from the plans × $${inVal('f-cellar')}/sf. The rate is the main study's planning placeholder, not a bid.`]
-    :/penthouse/.test(name)?['ph',`A fixed 625 sf rooftop mechanical penthouse priced at the above-grade rate.`]
-    :/Loggias/.test(name)?['ph',`Outdoor area from the plans × $${inVal('f-outc')}/sf for decking, railings and drainage. Study placeholder rate.`]
-    :/Elevator/.test(name)?['ph',`$${fmt(+inVal('f-story'))} per level for elevator stops, stair flights and risers, one per floor plus the cellar. Study placeholder; a GC may include this in the $/gsf rate.`]
-    :/Demolition/.test(name)?['ph',`The existing 5,534 sf building at 725 Grand × $${inVal('f-demo')}/sf. Study placeholder until the existing structure and basement are inspected.`]
-    :/E-232/.test(name)?['ph',`Allowance for the site's E-232 environmental designation from the 2009 rezoning: Phase I/II testing, window-wall noise attenuation and alternate ventilation. Study placeholder.`]
-    :['ph','Main study cost line: quantity from the plans × the study\'s placeholder unit cost.'];
-  const itemRows=R[0].F.items.map((it,i)=>row(it[0],`${kA}: ${it[1]} · ${kD}: ${R[1].F.items[i][1]}`,money(it[2]),money(R[1].F.items[i][2]),'',itemNote(it[0]))).join('');
-  $('lines').innerHTML=`<thead><tr><th>Line</th><th class="num">Scheme ${R[0].k}</th><th class="num">Scheme ${R[1].k}</th></tr></thead><tbody>
+  // line by line: every value carries its own tooltip with that scheme's own calculation
+  const iv=id=>+inVal(id)||0, M=money, kA=R[0].k, kD=R[1].k;
+  const cell=(v,note)=>`${v}${note?tipBtn(note):''}`;
+  const row=(l,sub,a,bv,cls='')=>`<tr class="${cls}"><td>${l}${sub?`<span class="sub">${sub}</span>`:''}</td><td class="num">${a}</td><td class="num">${bv}</td></tr>`;
+  // both(label, value(r), cls, sub(r), note(r) -> [source, text])
+  const both=(l,f,cls,subf,note)=>row(l,subf?subf(R[0]):'',cell(f(R[0]),note&&note(R[0])),cell(f(R[1]),note&&note(R[1])),cls);
+  const floorsText=pl=>{ const fl=pl.floors.filter(f=>typeof f.n==='number'); const out=[]; let k=0;
+    while(k<fl.length){ let m=k; while(m+1<fl.length&&Math.round(fl[m+1].gross)===Math.round(fl[k].gross)) m++;
+      const name=fl[k].n===1?'ground':(m>k?`floors ${fl[k].n}–${fl[m].n}`:`floor ${fl[k].n}`);
+      out.push(m>k?`${name} ${m-k+1} × ${fmt(fl[k].gross)}`:`${name} ${fmt(fl[k].gross)}`); k=m+1; }
+    return out.join(' + '); };
+  const bandText=F=>{ if(!F.tierSf||!F.psfT) return `${fmt(F.mktSf)} sf × ${psf(price)}`;
+    const L={lo:'lower floors',base:'typical floors',up:'upper floors',ph:'penthouse'};
+    return ['lo','base','up','ph'].filter(t=>F.tierSf[t]>0).map(t=>`${L[t]} ${fmt(F.tierSf[t])} sf × ${psf(F.psfT[t])}`).join(' + '); };
+  const itemNote=(name,it,r)=>{ const calc=`${it[1]} = ${M(it[2])}.`;
+    return /Above-grade/.test(name)?['prop',`${calc} The rate is the proposal's hard cost set at the top of this page.`]
+      :/Cellar/.test(name)?['ph',`${calc} The rate is a main-study placeholder, not a bid.`]
+      :/penthouse/.test(name)?['ph',`${calc} A fixed rooftop mechanical penthouse priced at the above-grade rate.`]
+      :/Loggias/.test(name)?['ph',`${calc} Decking, railings and drainage. Study placeholder rate.`]
+      :/Elevator/.test(name)?['ph',`${calc} One per floor plus the cellar, for elevator stops, stair flights and risers. Study placeholder; a GC may include this in the $/gsf rate.`]
+      :/Demolition/.test(name)?['ph',`${calc} The existing building at 725 Grand. Study placeholder until it is inspected.`]
+      :/E-232/.test(name)?['ph',`${calc} Allowance for the E-232 environmental designation: testing, noise attenuation, alternate ventilation. Study placeholder.`]
+      :['ph',`${calc} Main study cost line.`]; };
+  const itemRows=R[0].F.items.map((it,i)=>row(it[0],'',cell(M(it[2]),itemNote(it[0],it,R[0])),cell(M(R[1].F.items[i][2]),itemNote(it[0],R[1].F.items[i],R[1])))).join('');
+  const kOf=()=>iv('f-rate')/100*(iv('f-months')/12)*(iv('f-util')/100)+iv('f-fee')/100;
+  $('lines').innerHTML=`<thead><tr><th>Line</th><th class="num">Scheme ${kA}</th><th class="num">Scheme ${kD}</th></tr></thead><tbody>
     <tr class="grp"><td colspan="3">Program</td></tr>
-    ${both('Stories / height',r=>`${r.p.N} / ${fmt(r.p.height)} ft`,'',null,['plan',`From each scheme's massing in the main study: a 15 ft ground floor and 10 ft residential floors, stacked and set back until the zoning floor area cap is used.`])}
-    ${both('Zoning floor area',r=>fmt(r.p.zfa||0)+' sf','',null,['plan',`Floor area that counts toward FAR, summed from the plans. Corridors and loggias are exempt under the study's reading of ZR 12-10. Caps: ${kA} = 3,034 sf × 4.0 = ${fmt(P.s.cap)} sf as of right; ${kD} = ${fmt(Q.s.cap)} sf with the 727 Grand merger and certificates to FAR 5.01. The plans use slightly less than each cap.`])}
-    ${both('Gross above grade',r=>fmt(r.p.gross)+' sf','',null,['plan','Every built square foot above grade, including exterior walls, core, corridors, lobby and retail. The above-grade hard cost is priced on this area.'])}
-    ${both('Cellar',r=>fmt(r.p.cellar)+' sf','',null,['plan','A full-lot cellar for MEP, meters, storage, bikes and a fitness room. Not zoning floor area; priced separately in hard costs.'])}
-    ${both('Sellable condo area',r=>fmt(r.F.mktSf)+' sf','',null,['plan','Interior area of the condo units from the plans. Core, corridors, lobby and amenity space are excluded. The condo price applies to this area only.'])}
-    ${both('Condo units',r=>String(r.units.length),'',null,['plan','Units counted from the plans. Size bands: studio under 560 sf, 1BR under 760 sf, 2BR under 1,000 sf, 3BR above.'])}
-    ${both('Retail',r=>fmt(r.p.retail)+' sf','',null,['plan','Ground-floor retail on the Grand and Graham corner, from the plans.'])}
-    ${both('Loggias, terraces, roof deck',r=>fmt(r.p.outdoor)+' sf','',null,['plan',`Outdoor area from the plans. Excluded from zoning floor area. Costed in hard costs; private outdoor space adds $${inVal('f-out')}/sf to condo revenue.`])}
+    ${both('Stories / height',r=>`${r.p.N} / ${fmt(r.p.height)} ft`,'',null,r=>['plan',`A 15 ft ground floor + ${r.p.N-1} residential floors × 10 ft = ${fmt(15+(r.p.N-1)*10)} ft, from this scheme's massing in the main study.`])}
+    ${both('Zoning floor area',r=>fmt(r.p.zfa||0)+' sf','',null,r=>{ const s=r.p.s, cap=[`own lot ${fmt(s.base)}`].concat(s.tr?[`727 Grand transfer ${fmt(s.tr)}`]:[]).concat(s.cert?[`certificates ${fmt(s.cert)}`]:[]).join(' + ');
+      return ['plan',`${fmt(r.p.zfa||0)} sf counts toward FAR in the plans, against a cap of ${fmt(s.cap)} sf (${cap}). ${fmt(Math.max(0,s.cap-(r.p.zfa||0)))} sf of the cap is unused. Corridors and loggias are exempt under the study's reading of ZR 12-10.`]; })}
+    ${both('Gross above grade',r=>fmt(r.p.gross)+' sf','',null,r=>['plan',`${floorsText(r.p)} = ${fmt(r.p.gross)} sf, including walls, core, corridors and retail.`])}
+    ${both('Cellar',r=>fmt(r.p.cellar)+' sf','',null,r=>['plan',`The full lot footprint, ${fmt(r.p.cellar)} sf, for MEP, storage, bikes and fitness. Not zoning floor area.`])}
+    ${both('Sellable condo area',r=>fmt(r.F.mktSf)+' sf','',null,r=>['plan',`Unit interiors from the plans: ${fmt(r.F.mktSf)} sf, ${pct(r.F.mktSf/r.p.gross)} of the ${fmt(r.p.gross)} sf above grade. Core, corridors, lobby and amenities are excluded.`])}
+    ${both('Condo units',r=>String(r.units.length),'',null,r=>{ const m={}; r.units.forEach(u=>{m[u.label]=(m[u.label]||0)+1;}); return ['plan',`${['Studio','1BR','2BR','3BR'].filter(t=>m[t]).map(t=>`${m[t]} × ${t}`).join(', ')}. Size bands: studio under 560 sf, 1BR under 760, 2BR under 1,000, 3BR above.`]; })}
+    ${both('Retail',r=>fmt(r.p.retail)+' sf','',null,r=>['plan',`Ground-floor retail on the Grand and Graham corner: ${fmt(r.p.retail)} sf from the plans.`])}
+    ${both('Loggias, terraces, roof deck',r=>fmt(r.p.outdoor)+' sf','',null,r=>['plan',`${fmt(r.p.outdoor)} sf of outdoor space from the plans. Excluded from zoning floor area.`])}
     <tr class="grp"><td colspan="3">Revenue</td></tr>
-    ${both('Condo sales, gross',r=>money(r.F.condoGross),'',()=>`sellable sf × ${psf(price)}`,['prop',`Sellable condo area × ${psf(price)}/sf, the proposal's price set at the top of this page. It is an assumption, not a comp-based appraisal.`])}
-    ${both('Less condo selling costs',r=>money(-(r.F.condoGross-(r.F.revenue-r.F.retNet))),'',()=>`${inVal('f-scres')}% brokerage + transfer tax`,['prop',`${inVal('f-scres')}% of gross condo sales for brokerage and seller transfer taxes, the proposal's rate (the main study used 6%).`])}
-    ${both('Retail, sold at cap rate',r=>money(r.F.retNet),'',()=>`${fmt(R[0].p.retail)} sf × $${inVal('f-rent')} rent, ${inVal('f-cap')}% cap, less ${inVal('f-scret')}% costs`,['calc',`The retail is sold as a commercial condo: ${fmt(P.retail)} sf × $${inVal('f-rent')}/sf/yr rent, less ${inVal('f-vac')}% vacancy and credit and ${inVal('f-opex')}% unreimbursed expenses, divided by a ${inVal('f-cap')}% cap rate, less ${inVal('f-scret')}% sale costs. Rent and cap rate are study placeholders.`])}
-    ${both('Net revenue',r=>money(r.F.revenue),'tot',null,['calc','Condo sales after selling costs, plus the retail sale.'])}
+    ${both('Condo sales, gross',r=>M(r.F.condoGross),'',null,r=>['prop',`${bandText(r.F)} = ${M(r.F.condoGross)}${r.F.psfBlend?`, a blended ${psf(r.F.psfBlend)}/sf`:''}. The prices scale from the ${psf(price)}/sf base set at the top of this page.`])}
+    ${both('Less condo selling costs',r=>M(-(r.F.condoGross-(r.F.revenue-r.F.retNet))),'',null,r=>['ph',`${M(r.F.condoGross)} × ${inVal('f-scres')}% = ${M(r.F.condoGross-(r.F.revenue-r.F.retNet))} for brokerage, marketing, closing and transfer taxes.`])}
+    ${both('Retail, sold at cap rate',r=>M(r.F.retNet),'',null,r=>['calc',`${fmt(r.p.retail)} sf × $${inVal('f-rent')} = ${M(r.F.rent)} rent; less ${inVal('f-vac')}% vacancy and ${inVal('f-opex')}% expenses = ${M(r.F.noi)} NOI; ÷ ${inVal('f-cap')}% cap = ${M(r.F.retVal)}; less ${inVal('f-scret')}% sale costs = ${M(r.F.retNet)}. Rent and cap rate are study placeholders.`])}
+    ${both('Net revenue',r=>M(r.F.revenue),'tot',null,r=>['calc',`${M(r.F.revenue-r.F.retNet)} condos after selling costs + ${M(r.F.retNet)} retail = ${M(r.F.revenue)}.`])}
     <tr class="grp"><td colspan="3">Hard costs</td></tr>
     ${itemRows}
-    ${both('Green / ULE premium',r=>money(r.F.green),'',()=>`${inVal('f-green')}% of the above`,['ph',`${inVal('f-green')}% on top of the cost lines above for energy and sustainability upgrades. Main study placeholder.`])}
-    ${both('Hard-cost contingency',r=>money(r.F.cont),'',()=>`${inVal('f-cont')}%`,['ph',`${inVal('f-cont')}% of hard costs including the green premium. Main study placeholder.`])}
-    ${both('Total hard costs',r=>money(r.F.hard),'tot',r=>`${psf(r.F.hard/r.p.gross)}/gsf above grade all-in`,['calc','Sum of the cost lines, green premium and contingency. The all-in rate per gsf is higher than the base rate because the cellar, core, terraces, demolition and allowances are added on top.'])}
+    ${both('Green / ULE premium',r=>M(r.F.green),'',null,r=>['ph',`${inVal('f-green')}% × ${M(r.F.sub)} of cost lines = ${M(r.F.green)}. Study placeholder.`])}
+    ${both('Hard-cost contingency',r=>M(r.F.cont),'',null,r=>['ph',`${inVal('f-cont')}% × (${M(r.F.sub)} + ${M(r.F.green)}) = ${M(r.F.cont)}. Study placeholder.`])}
+    ${both('Total hard costs',r=>M(r.F.hard),'tot',null,r=>['calc',`${M(r.F.sub)} cost lines + ${M(r.F.green)} green + ${M(r.F.cont)} contingency = ${M(r.F.hard)}, or ${psf(r.F.hard/r.p.gross)} per gsf above grade.`])}
     <tr class="grp"><td colspan="3">Other costs</td></tr>
-    ${both('Soft costs',r=>money(r.F.soft),'',()=>`${inVal('f-soft')}% of hard: design, legal, insurance, permits, dev fee, marketing`,['prop',`${inVal('f-soft')}% of total hard costs, the proposal's rate set at the top of this page (the main study's default is 20%). Covers design, legal, insurance, permits, the development fee and marketing.`])}
-    ${both('Land, 725 Grand',r=>money(r.F.land),'',null,['prop',`The land basis set at the top of this page, ${money(o['f-land'])}, from your figure for 725 Grand. The main study's $3.5M was a placeholder.`])}
-    ${both('Air rights from 727 Grand',r=>money(r.F.nb),'',()=>`$${inVal('in-p1')}/sf`,['ph',`Upside only. Transfer of ${fmt(Q.s.tr)} sf (2,067 sf × 4.0 less 727 Grand's existing building, about 4,133 sf by field measurement) × $${inVal('in-p1')}/sf. The price is a study placeholder; a CO or survey of 727 Grand will settle the area.`])}
-    ${both('IH certificates',r=>money(r.F.certs),'',()=>`$${inVal('in-p2')}/sf of bonus floor area`,['ph',`Upside only. ${fmt(Q.s.cert)} sf of bonus floor area to reach FAR 5.01 on the merged lot × $${inVal('in-p2')}/sf. The price is a study placeholder; supply from vested generating sites is limited.`])}
-    ${both('Financing: interest reserve + fees',r=>money(r.F.financing),'',()=>`${inVal('f-rate')}% on ${inVal('f-util')}% avg drawn over ${inVal('f-months')} mo + ${inVal('f-fee')}% fee`,['calc',`Interest at ${inVal('f-rate')}% on an average ${inVal('f-util')}% of the loan drawn over ${inVal('f-months')} months, plus a ${inVal('f-fee')}% origination fee. The interest reserve is itself part of the loan, so it is solved for. Rate, draw and term are study placeholders.`])}
-    ${both('Total project cost',r=>money(r.F.total),'tot',null,['calc','Hard + soft + land + air rights + certificates + financing.'])}
+    ${both('Soft costs',r=>M(r.F.soft),'',null,r=>['prop',`${inVal('f-soft')}% × ${M(r.F.hard)} hard = ${M(r.F.soft)}: design, legal, insurance, permits, development fee, marketing. The rate is the proposal's, set at the top of this page.`])}
+    ${both('Land, 725 Grand',r=>M(r.F.land),'',null,r=>['prop',`The land basis set at the top of this page: ${M(r.F.land)}.`])}
+    ${both('Air rights from 727 Grand',r=>M(r.F.nb),'',null,r=>r.p.s.tr?['ph',`${fmt(r.p.s.tr)} sf × $${inVal('in-p1')} = ${M(r.F.nb)}. Transfer = 2,067 sf × 4.0 less 727 Grand's existing building (about 4,133 sf, field measurement). Price is a study placeholder.`]:['calc',`None. Scheme ${r.k} builds on 725 Grand alone.`])}
+    ${both('IH certificates',r=>M(r.F.certs),'',null,r=>r.p.s.cert?['ph',`${fmt(r.p.s.cert)} sf of bonus × $${inVal('in-p2')} = ${M(r.F.certs)}, to reach FAR 5.01. Price is a study placeholder; supply is limited.`]:['calc',`None. Scheme ${r.k} stays at FAR 4.0, as of right.`])}
+    ${both('Financing: interest reserve + fees',r=>M(r.F.financing),'',null,r=>{ const k=kOf(), ltc=iv('f-ltc')/100, ex=r.F.total-r.F.financing;
+      return ['calc',`Costs before financing ${M(ex)}. Carry = ${inVal('f-rate')}% × ${inVal('f-months')}/12 × ${inVal('f-util')}% drawn + ${inVal('f-fee')}% fee = ${(k*100).toFixed(2)}%. Financing = ${inVal('f-ltc')}% × ${(k*100).toFixed(2)}% × ${M(ex)} ÷ (1 − ${inVal('f-ltc')}% × ${(k*100).toFixed(2)}%) = ${M(r.F.financing)}, which includes interest on the reserve itself.`]; })}
+    ${both('Total project cost',r=>M(r.F.total),'tot',null,r=>['calc',`${M(r.F.hard)} hard + ${M(r.F.soft)} soft + ${M(r.F.land)} land + ${M(r.F.nb+r.F.certs)} rights + ${M(r.F.financing)} financing = ${M(r.F.total)}.`])}
     <tr class="grp"><td colspan="3">Capital</td></tr>
-    ${both('Construction loan',r=>money(r.F.loan),'',()=>`${inVal('f-ltc')}% of total cost`,['calc',`${inVal('f-ltc')}% loan-to-cost on total project cost, including land and the loan's own interest reserve. The ${inVal('f-ltc')}% is a study placeholder; lenders often size on land at cost or appraised value.`])}
-    ${both('Equity',r=>money(r.F.equity),'',null,['calc','Total project cost less the construction loan.'])}
+    ${both('Construction loan',r=>M(r.F.loan),'',null,r=>['calc',`${inVal('f-ltc')}% × ${M(r.F.total)} = ${M(r.F.loan)}. The loan-to-cost is a study placeholder.`])}
+    ${both('Equity',r=>M(r.F.equity),'',null,r=>['calc',`${M(r.F.total)} − ${M(r.F.loan)} loan = ${M(r.F.equity)}.`])}
     <tr class="grp"><td colspan="3">Returns</td></tr>
-    ${both('Profit',r=>`<span class="${sign(r.F.profit)}">${money(r.F.profit)}</span>`,'tot',null,['calc','Net revenue less total project cost. The loan is repaid from sales, so this is what remains for equity above its capital.'])}
-    ${both('Margin on cost',r=>pct(r.F.margin),'',null,['calc','Profit ÷ total project cost. Ground-up condo investors commonly look for roughly 15–20%.'])}
-    ${both('Return on equity',r=>pct(r.F.roe),'',null,['calc','Profit ÷ equity, over the whole project, not per year.'])}
-    ${both('Equity multiple',r=>r.F.em.toFixed(2)+'×','',null,['calc','(Equity + profit) ÷ equity: what each equity dollar returns before any preferred return or promote.'])}
-    ${both('Annualized (simplified)',r=>pct(r.F.irr),'',()=>`over ${inVal('f-months')} months`,['calc',`Equity multiple ^ (12 ÷ ${inVal('f-months')}) − 1. Assumes all equity goes in at the start and comes out at the end, so it understates a true IRR with staged draws.`])}
-    ${both('Break-even condo price',r=>psf(r.F.bePsf)+'/sf','',null,['calc','The condo price per sellable sf at which profit is zero, with every other input held fixed.'])}
-    ${both('Price for a 15% margin',r=>psf(solve(r.k,F=>F.margin>=.15,o))+'/sf','',null,['calc','The condo price per sellable sf at which profit reaches 15% of total cost, solved by search with every other input held fixed.'])}
+    ${both('Profit',r=>`<span class="${sign(r.F.profit)}">${M(r.F.profit)}</span>`,'tot',null,r=>['calc',`${M(r.F.revenue)} net revenue − ${M(r.F.total)} total cost = ${M(r.F.profit)}.`])}
+    ${both('Margin on cost',r=>pct(r.F.margin),'',null,r=>['calc',`${M(r.F.profit)} ÷ ${M(r.F.total)} = ${pct(r.F.margin)}. Ground-up condo investors commonly look for roughly 15–20%.`])}
+    ${both('Return on equity',r=>pct(r.F.roe),'',null,r=>['calc',`${M(r.F.profit)} ÷ ${M(r.F.equity)} equity = ${pct(r.F.roe)}, over the whole project.`])}
+    ${both('Equity multiple',r=>r.F.em.toFixed(2)+'×','',null,r=>['calc',`(${M(r.F.equity)} + ${M(r.F.profit)}) ÷ ${M(r.F.equity)} = ${r.F.em.toFixed(2)}×, before any preferred return or promote.`])}
+    ${both('Annualized (simplified)',r=>pct(r.F.irr),'',null,r=>['calc',`${r.F.em.toFixed(2)} ^ (12 ÷ ${inVal('f-months')}) − 1 = ${pct(r.F.irr)} per year, assuming all equity goes in at the start and comes out at the end.`])}
+    ${both('Break-even base price',r=>psf(r.F.bePsf)+'/sf','',null,r=>['calc',`At a ${psf(r.F.bePsf)}/sf base price, with the floor bands scaled from it, net revenue equals total cost (${M(r.F.total)}). Every other input is held fixed.`])}
+    ${both('Base price for a 15% margin',r=>psf(solve(r.k,F=>F.margin>=.15,o))+'/sf','',null,r=>{ const pr=solve(r.k,F=>F.margin>=.15,o); return ['calc',`At a ${psf(pr)}/sf base price, profit reaches 15% of total cost, with every other input held fixed (found by search).`]; })}
   </tbody>`;
 
   // investor
@@ -297,7 +311,7 @@ function render(){
   }</tbody></table></div></div>`).join('');
 
   // assumptions
-  const A=[['Condo price',psf(price)+'/sf','set above','prop'],['Land basis, 725 Grand',money(o['f-land']),'set above','prop'],['Condo selling costs',inVal('f-scres')+'%','','prop'],['Retail rent',`$${inVal('f-rent')}/sf/yr, ${inVal('f-vac')}% vacancy, ${inVal('f-cap')}% cap`],
+  const A=[['Base condo price',psf(price)+'/sf','set above; floor bands scale from it','prop'],['Land basis, 725 Grand',money(o['f-land']),'set above','prop'],['Condo selling costs',inVal('f-scres')+'%','','prop'],['Retail rent',`$${inVal('f-rent')}/sf/yr, ${inVal('f-vac')}% vacancy, ${inVal('f-cap')}% cap`],
     ['Hard cost above grade',`$${inVal('f-hard')}/gsf`,'set above','prop'],['Cellar',`$${inVal('f-cellar')}/sf`],['Terraces',`$${inVal('f-outc')}/sf`],['Core per level',money(+inVal('f-story'))],['Demolition',`$${inVal('f-demo')}/sf`],['E-232 remediation',money(+inVal('f-edes'))],
     ['Green premium',inVal('f-green')+'% of hard'],['Contingency',inVal('f-cont')+'% of hard'],['Soft costs',inVal('f-soft')+'% of hard','set above','prop'],['IH certificates',`$${inVal('in-p2')}/sf`],['727 Grand air rights',`$${inVal('in-p1')}/sf`],
     ['Loan-to-cost',inVal('f-ltc')+'%'],['Interest rate',inVal('f-rate')+'%'],['Avg loan drawn',inVal('f-util')+'%'],['Origination fee',inVal('f-fee')+'%'],['Project length',inVal('f-months')+' months'],
@@ -347,7 +361,7 @@ function drawBars(per){
 function start(){
   saved={'f-res':BASE_PRICE,'f-land':+inVal('f-land'),...BASE_COSTS};
   setControls();
-  $('status').textContent=`Proposal assumptions: ${psf(BASE_PRICE)}/sf condo, ${mm(BASE_COSTS['f-land'])} land, $${BASE_COSTS['f-hard']}/gsf hard, ${BASE_COSTS['f-soft']}% soft. Every other input comes from the pro forma.`;
+  $('status').textContent=`Proposal assumptions: ${psf(BASE_PRICE)}/sf base condo price (lower floors priced below it, upper floors and penthouse above), ${mm(BASE_COSTS['f-land'])} land, $${BASE_COSTS['f-hard']}/gsf hard, ${BASE_COSTS['f-soft']}% soft. Every other input comes from the pro forma.`;
   $('asof').textContent='Computed '+new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
   render();
 }

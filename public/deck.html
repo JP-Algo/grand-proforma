@@ -213,7 +213,7 @@ function slides(){
           <div class="stat"><span class="label">Building</span><span class="v">${D.p.N} stories</span></div>
           <div class="stat"><span class="label">Condos</span><span class="v">${D.units.length}</span></div>
           <div class="stat"><span class="label">Project cost</span><span class="v">${mm(D.F.total)}</span></div></div></div>
-        <p class="note">Figures at $${fmt(DECK.price)}/sf condo pricing, ${ltc}% loan-to-cost, ${months}-month project. See the returns and sensitivity slides.</p>
+        <p class="note">Figures at a $${fmt(DECK.price)}/sf base condo price, banded by floor, ${ltc}% loan-to-cost, ${months}-month project. See the returns and sensitivity slides.</p>
       </div></div>`});
 
   S.push({html:`<div class="kicker">Why 725 Grand</div><h2>A corner site with room to grow</h2>
@@ -295,21 +295,22 @@ function slides(){
 
   const rr=(l,f,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="n">${f(B)}</td><td class="n">${f(D)}</td></tr>`;
   const prices=[1500,1600,1700,1800,1900,2000];
-  S.push({html:`<div class="kicker">Returns</div><h2>Projected returns at $${fmt(DECK.price)}/sf</h2>
+  S.push({html:`<div class="kicker">Returns</div><h2>Projected returns at a $${fmt(DECK.price)}/sf base price</h2>
     <div class="cols c2"><table><thead><tr><th>Project</th><th class="n">Base · ${B.k}</th><th class="n">Upside · ${D.k}</th></tr></thead><tbody>
       ${rr('Net sales revenue',r=>mm2(r.F.revenue))}
       ${rr('Total project cost',r=>mm2(r.F.total))}
       ${rr('Profit',r=>`<span class="${sg(r.F.profit)}">${mm2(r.F.profit)}</span>`,'tot')}
       ${rr('Margin on cost',r=>pct(r.F.margin))}
       ${rr('Equity multiple',r=>r.F.em.toFixed(2)+'×')}
-      ${rr('Break-even condo price',r=>'$'+fmt(r.k===B.k?beB:beD)+'/sf')}
+      ${rr('Blended condo price',r=>'$'+fmt(r.F.psfBlend||DECK.price)+'/sf')}
+      ${rr('Break-even base price',r=>'$'+fmt(r.k===B.k?beB:beD)+'/sf')}
       <tr class="grp"><td colspan="3">${mm(inv)} LP investment</td></tr>
       ${rr('Total distributions',r=>mm2(r.V.total))}
       ${rr('LP profit',r=>`<span class="${sg(r.V.profit)}">${mm2(r.V.profit)}</span>`)}
       ${rr('LP equity multiple',r=>r.V.em.toFixed(2)+'×')}
       ${rr('LP annualized (simplified)',r=>pct(r.V.irr))}
     </tbody></table>
-    <div><h3 style="margin-bottom:10px">Sensitivity to condo price</h3><table><thead><tr><th>Condo $/sf</th><th class="n">Base margin</th><th class="n">Base LP ×</th><th class="n">Upside margin</th><th class="n">Upside LP ×</th></tr></thead><tbody>
+    <div><h3 style="margin-bottom:10px">Sensitivity to condo price</h3><table><thead><tr><th>Base $/sf</th><th class="n">Base margin</th><th class="n">Base LP ×</th><th class="n">Upside margin</th><th class="n">Upside LP ×</th></tr></thead><tbody>
       ${prices.map(pr=>{const b=scheme(B.k,{'f-res':pr}), d=scheme(D.k,{'f-res':pr}); return `<tr style="${pr===DECK.price?'background:var(--accent-soft)':''}"><td class="n" style="text-align:left">$${fmt(pr)}</td><td class="n ${sg(b.F.margin)}">${pct(b.F.margin)}</td><td class="n">${b.V.em.toFixed(2)}×</td><td class="n ${sg(d.F.margin)}">${pct(d.F.margin)}</td><td class="n">${d.V.em.toFixed(2)}×</td></tr>`;}).join('')}
     </tbody></table><p class="note" style="margin-top:10px">LP returns after a ${pref}% preferred return and a ${100-promote}/${promote} split above it, over ${months} months. Full line-by-line detail: <b>grand-proforma.vercel.app/projections</b></p></div></div>`});
 
