@@ -166,7 +166,7 @@ const SCHEMES=[
 ];
 let G=null, W=null, saved={};
 const BASE_PRICE=1600; // the proposal's condo price assumption
-const BASE_COSTS={'f-hard':375,'f-soft':15}; // the proposal's construction cost assumptions
+const BASE_COSTS={'f-land':4500000,'f-hard':375,'f-soft':15}; // the proposal's land and construction cost assumptions
 let CUR={};
 
 function compute(o){
@@ -268,7 +268,7 @@ function render(){
   </tbody>`;
 
   // sensitivity
-  const prices=[1500,1600,1700,1800,1900,2000,2100], lands=[3500000,3000000,2500000,2000000,1500000];
+  const prices=[1500,1600,1700,1800,1900,2000,2100], lands=[5000000,4500000,4000000,3500000,3000000,2500000];
   $('sens').innerHTML=SCHEMES.map(s=>`<div><h3>Scheme ${s.k}</h3><div class="scroll"><table class="grid-sens" style="min-width:420px"><thead><tr><th>$/sf ↓ · land →</th>${lands.map(l=>`<th class="num">${mm(l).replace('.00M','M').replace(/0M$/,'M')}</th>`).join('')}</tr></thead><tbody>${
     prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${lands.map(l=>{const F=G.fin(G.plans[s.k],{...o,'f-res':pr,'f-land':l}); const hi=pr===price&&l===o['f-land']; return `<td class="num ${F.margin<0?'cell-neg':'cell-pos'}${hi?' cell-hi':''}">${pct(F.margin)}</td>`;}).join('')}</tr>`).join('')
   }</tbody></table></div></div>`).join('');
@@ -306,7 +306,7 @@ function drawBars(per){
 function start(){
   saved={'f-res':BASE_PRICE,'f-land':+inVal('f-land'),...BASE_COSTS};
   setControls();
-  $('status').textContent=`Proposal assumptions: ${psf(BASE_PRICE)}/sf condo, $${BASE_COSTS['f-hard']}/gsf hard, ${BASE_COSTS['f-soft']}% soft. Every other input comes from the pro forma.`;
+  $('status').textContent=`Proposal assumptions: ${psf(BASE_PRICE)}/sf condo, ${mm(BASE_COSTS['f-land'])} land, $${BASE_COSTS['f-hard']}/gsf hard, ${BASE_COSTS['f-soft']}% soft. Every other input comes from the pro forma.`;
   $('asof').textContent='Computed '+new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
   render();
 }
