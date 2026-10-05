@@ -250,9 +250,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .viewbtns button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 /* finance */
 .fbar{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;justify-content:space-between}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 14px;padding:14px 16px;background:var(--paper);border:1px solid var(--rule);border-radius:4px}
-.fgrid .field input{width:100%}
-.fgrid .field .label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px 14px;padding:14px 16px;background:var(--paper);border:1px solid var(--rule);border-radius:4px}
+.fgrid .field input,.fgrid .field select{width:100%}
+.fgrid .field{align-content:end}                 /* label grows upward, inputs stay on one line */
+.fgrid .field .label{white-space:normal;overflow-wrap:break-word;line-height:1.3}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:2px solid var(--ink)}
 .tiles div{padding:14px 16px 14px 0;display:grid;gap:2px;border-bottom:1px solid var(--rule)}
 .tiles .v{font-family:var(--display);font-stretch:76%;font-size:2rem;font-weight:720;line-height:1}
@@ -729,10 +730,10 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     <p id="hard-intro"></p>
     <div class="tiles" id="hard-tiles"></div>
     <div class="fgrid">
-      <label class="field"><span class="label">Excavation + foundations $/cellar sf</span><input id="h-exc" type="number" step="5" value="95"></label>
-      <label class="field"><span class="label">Underpinning $/lf of lot line</span><input id="h-under" type="number" step="50" value="1200"></label>
+      <label class="field"><span class="label">Excavation + foundations $/sf</span><input id="h-exc" type="number" step="5" value="95"></label>
+      <label class="field"><span class="label">Underpinning $/lf lot line</span><input id="h-under" type="number" step="50" value="1200"></label>
       <label class="field"><span class="label">Superstructure $/gsf</span><input id="h-super" type="number" step="5" value="125"></label>
-      <label class="field"><span class="label">Street window wall $/sf of wall</span><input id="h-env" type="number" step="5" value="105"></label>
+      <label class="field"><span class="label">Street window wall $/sf</span><input id="h-env" type="number" step="5" value="105"></label>
       <label class="field"><span class="label">Lot-line / party wall $/sf</span><input id="h-party" type="number" step="2" value="42"></label>
       <label class="field"><span class="label">Façade fin $ each</span><input id="h-fin" type="number" step="10" value="320"></label>
       <label class="field"><span class="label">Roofing + waterproofing $/sf</span><input id="h-roof" type="number" step="2" value="38"></label>
@@ -775,7 +776,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
       <label class="field"><span class="label">Surveys + inspections $/gsf</span><input id="s-insp" type="number" step="0.5" value="3.5"></label>
       <label class="field"><span class="label">Phase I/II + E-232 oversight $</span><input id="s-env" type="number" step="10000" value="60000"></label>
       <label class="field"><span class="label">Builder's risk + GL % of hard</span><input id="s-ins" type="number" step="0.1" value="2.2"></label>
-      <label class="field"><span class="label">Construction-period taxes %/yr of land</span><input id="s-tax" type="number" step="0.1" value="1.4"></label>
+      <label class="field"><span class="label">Carrying taxes %/yr of land</span><input id="s-tax" type="number" step="0.1" value="1.4"></label>
       <label class="field"><span class="label">Legal: acquisition, loan, ZLDA $</span><input id="s-legal" type="number" step="10000" value="220000"></label>
       <label class="field"><span class="label">Offering plan + sponsor legal $</span><input id="s-offer" type="number" step="10000" value="180000"></label>
       <label class="field"><span class="label">Offering plan $ per unit</span><input id="s-offeru" type="number" step="500" value="2500"></label>
