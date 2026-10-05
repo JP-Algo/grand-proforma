@@ -415,7 +415,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
         </div>
         <label class="field"><span class="label">727 Grand existing zoning sf</span>
           <select id="in-exist"><option value="4133" selected>4,133 · field measurement</option><option value="6042">6,042 · PLUTO</option></select></label>
-        <label class="field"><span class="label">Neighbor rights $/sf</span><input id="in-p1" type="number" min="0" step="5" value="150"></label>
+        <input id="in-p1" type="hidden" value="150">
         <label class="field"><span class="label">IH certificate $/sf of bonus</span><input id="in-p2" type="number" min="0" step="5" value="100"></label>
         <p class="note">Prices are placeholders, not market data.</p>
         <div class="tbl" style="border:0;background:transparent"><table><tbody>
@@ -447,11 +447,47 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   <div class="sheet-tag"><span class="no">Z-003</span><span class="label">Rights</span></div>
   <div class="sheet-body">
     <h2>Where the extra floor area comes from</h2>
+    <p class="note">Each parcel is a separate deal. Tick the ones you expect to close and every scheme, plan and number below follows. Schemes C and D merge whatever is ticked; A and B stay on 725 alone.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Parcel</th><th>In</th><th>Lot sf</th><th>FAR</th><th>Existing</th><th>Unused rights</th><th>Price</th><th>Cost</th><th>Deal</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>727 Grand St</b><br><span class="note">3-02783-0042 · east</span></td>
+              <td class="num"><input id="nb-727-on" type="checkbox" checked aria-label="Include 727 Grand Street"></td>
+              <td class="num"><input id="nb-727-lot" type="number" step="1" value="2067" style="width:80px"></td>
+              <td class="num"><input id="nb-727-far" type="number" step="0.01" value="4" style="width:62px"></td>
+              <td class="num" id="nb-727-exist">—</td>
+              <td class="num" id="nb-727-tr">—</td>
+              <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-727-mode" style="width:100%"><option value="lump" selected>lump sum</option><option value="psf">$/sf</option></select>
+                <input id="nb-727-price" type="number" step="25000" value="1000000" style="width:100%"></div></td>
+              <td class="num" id="nb-727-cost">—</td>
+              <td class="num"><select id="nb-727-status" style="width:88px"><option value="talking" selected>talking</option><option value="loi">LOI</option><option value="contract">contract</option></select></td>
+            </tr>
+            <tr>
+              <td><b>284 Graham Ave</b><br><span class="note">3-02783-0002 · north</span></td>
+              <td class="num"><input id="nb-284-on" type="checkbox" aria-label="Include 284 Graham Avenue"></td>
+              <td class="num"><input id="nb-284-lot" type="number" step="1" value="2500" style="width:80px"></td>
+              <td class="num"><input id="nb-284-far" type="number" step="0.01" value="4" style="width:62px"></td>
+              <td class="num"><input id="nb-284-exist" type="number" step="100" value="4000" style="width:80px"></td>
+              <td class="num" id="nb-284-tr">—</td>
+              <td class="num"><div style="display:grid;gap:3px;width:106px"><select id="nb-284-mode" style="width:100%"><option value="lump">lump sum</option><option value="psf" selected>$/sf</option></select>
+                <input id="nb-284-price" type="number" step="25" value="200" style="width:100%"></div></td>
+              <td class="num" id="nb-284-cost">—</td>
+              <td class="num"><select id="nb-284-status" style="width:88px"><option value="talking" selected>talking</option><option value="loi">LOI</option><option value="contract">contract</option></select></td>
+            </tr>
+          </tbody>
+          <tfoot id="nb-foot"></tfoot>
+        </table></div>
+        <p class="note" id="nb-note"></p>
     <div class="two">
       <div style="display:grid;gap:10px;align-content:start">
-        <h3>727 Grand: zoning lot merger + light and air easement</h3>
+        <h3>727 Grand, 284 Graham and the merger</h3>
+        
         <ul class="tight">
-          <li>Transfer = 2,067 sf × 4.0 − existing building = <b class="num" id="m-transfer">—</b>.</li>
+          <li>727 Grand transfer = lot × FAR − its existing building = <b class="num" id="m-transfer">—</b>. Its existing floor area is the field-measurement / PLUTO switch in Z-002.</li>
+          <li><b>284 Graham Avenue runs 125 ft deep</b>, so part of it sits more than 100 ft from the corner. The owner's position is that the merged portion carries the same corner-lot treatment as 725 and 727 — 100% coverage, no rear yard, the same setbacks — and that is how it is modelled here. <span class="verify">Owner's position · confirm with land-use counsel</span> The risk to test is that the portion beyond 100 ft is treated as an interior-lot portion needing a 30 ft rear yard, which would take buildable area out of the combination.</li>
+          <li><b>The massing for 284 Graham is not drawn yet.</b> Its floor area is carried financially at the same efficiency and the same rates as the drawn building, and every section that shows it says so. The three-dimensional studies still show 725 + 727.</li>
+          <li>Later, and not modelled: 739 Grand, 286 Graham (R6A, FAR 3.0) and 186 Powers (R6B, FAR 2.0). The last two need 284 first and sit in a different district, so counsel has to say what can move.</li>
           <li>Recorded as a zoning lot description plus a development rights agreement, with waivers from the neighbor's lender and other interest holders.</li>
           <li><b>The light and air easement starts at 30 ft.</b> Above that height the stem's east wall (facing 727) can have windows and loggias. In C and D the corner unit becomes a 3BR, and the corridor ending at it is fully exempt. Lot-line openings also need Building Code sign-off on fire separation distance <span class="verify">verify with expediter</span>.</li>
         </ul>
@@ -960,13 +996,39 @@ const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim
 const st={scheme:'D',mini:'D',floor:null,green:true,exist:4133,cut:false,strategy:'eff',circ:'100',mode:'gu',bonusSrc:'cert',tenure:'condo',openUnits:new Set(),ifit:true};
 
 /* ---------- scheme caps ---------- */
-function defs(){
-  const transfer=Math.max(0,NEIGH*STD-st.exist), merged=LOT+NEIGH;
+/* Air rights can come from more than one neighbour, each its own deal. "drawn" says whether the
+   massing studies actually draw that parcel; 284 Graham is carried financially until they do. */
+const NEIGHBORS=[
+  {id:'727',short:'727 Grand',name:'727 Grand Street',bbl:'3-02783-0042',where:'east',drawn:true},
+  {id:'284',short:'284 Graham',name:'284 Graham Avenue',bbl:'3-02783-0002',where:'north',drawn:false}
+];
+function nbState(){
+  return NEIGHBORS.map(n=>{
+    const g=k=>$('nb-'+n.id+'-'+k);
+    const num=(k,d)=>{ const e=g(k); return e?(+e.value||0):d; };
+    const on=g('on')?g('on').checked:false;
+    const lot=num('lot',0), far=num('far',0);
+    const exist=n.id==='727'?st.exist:num('exist',0);          // 727 uses the Z-002 field/PLUTO switch
+    const tr=Math.max(0,lot*far-exist);
+    const mode=(g('mode')||{}).value||'psf', price=num('price',0);
+    return {...n,on,lot,far,exist,tr,mode,price,cost:mode==='lump'?price:price*tr,
+      status:(g('status')||{}).value||'talking'};
+  });
+}
+function defs(nbs){
+  const all=nbs||nbState(), list=all.filter(n=>n.on);
+  const extra=list.reduce((s,n)=>s+n.lot,0), transfer=list.reduce((s,n)=>s+n.tr,0);
+  const cost=list.reduce((s,n)=>s+n.cost,0), less=list.reduce((s,n)=>s+n.exist,0);
+  const merged=LOT+extra, undrawn=list.filter(n=>!n.drawn);
+  const names=list.length?list.map(n=>n.short).join(' + '):'no neighbour';
+  const ease=list.some(n=>n.id==='727');          // the light-and-air easement comes with 727, not with any merger
+  const M=(k,bonus)=>({k,name:`Merged with ${names}${bonus?' + certificates':''}`,merged:true,ease,bonus,
+    lot:merged,far:bonus?MAXF:STD,maxz:merged*(bonus?MAXF:STD),less,base:LOT*STD,tr:transfer,
+    cert:bonus?merged*(MAXF-STD):0,nbs:list,nbCost:cost,undrawn});
   return {
-    A:{k:'A',name:'Own lot, as-of-right',merged:false,bonus:false,lot:LOT,far:STD,maxz:LOT*STD,less:0,base:LOT*STD,tr:0,cert:0},
-    B:{k:'B',name:'Own lot + certificates',merged:false,bonus:true,lot:LOT,far:MAXF,maxz:LOT*MAXF,less:0,base:LOT*STD,tr:0,cert:LOT*(MAXF-STD)},
-    C:{k:'C',name:'Merged with 727 Grand',merged:true,bonus:false,lot:merged,far:STD,maxz:merged*STD,less:st.exist,base:LOT*STD,tr:transfer,cert:0},
-    D:{k:'D',name:'Merged + certificates',merged:true,bonus:true,lot:merged,far:MAXF,maxz:merged*MAXF,less:st.exist,base:LOT*STD,tr:transfer,cert:merged*(MAXF-STD)}
+    A:{k:'A',name:'Own lot, as-of-right',merged:false,ease:false,bonus:false,lot:LOT,far:STD,maxz:LOT*STD,less:0,base:LOT*STD,tr:0,cert:0,nbs:[],nbCost:0,undrawn:[]},
+    B:{k:'B',name:'Own lot + certificates',merged:false,ease:false,bonus:true,lot:LOT,far:MAXF,maxz:LOT*MAXF,less:0,base:LOT*STD,tr:0,cert:LOT*(MAXF-STD),nbs:[],nbCost:0,undrawn:[]},
+    C:M('C',false), D:M('D',true)
   };
 }
 let D0=defs(); for(const k in D0) D0[k].cap=D0[k].base+D0[k].tr+D0[k].cert;
@@ -1028,8 +1090,9 @@ let mini=null;
 function renderMini(){
   const s=D0[st.mini];
   document.querySelectorAll('#mtabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.mini));
-  const p1=+$('in-p1').value||0, p2=+$('in-p2').value||0;
-  $('c-1').textContent='$'+fmt(s.tr*p1); $('c-2').textContent='$'+fmt(s.cert*p2); $('c-t').textContent='$'+fmt(s.tr*p1+s.cert*p2);
+  renderNeighbors();
+  const p2=+$('in-p2').value||0, nbC=s.nbCost||0;
+  $('c-1').textContent='$'+fmt(nbC); $('c-2').textContent='$'+fmt(s.cert*p2); $('c-t').textContent='$'+fmt(nbC+s.cert*p2);
   // what is kept when the method is "keep + add"
   const enl=st.mode==='enl', exN=enl?Math.max(0,Math.min(3,+$('in-exfloors').value||0)):0;
   const EX_G=3034, EX_U=2517, exGH=14, exUH=11;            // existing ground covers the lot; upper floors the stem
@@ -1079,6 +1142,28 @@ function renderMini(){
   });
   $('mini-keep').hidden=!enl;
   mini.target.set(26,enl?Math.max(38,exTop):38,50); mini.draw();
+}
+
+/* ---------- Z-003 neighbour table ---------- */
+function renderNeighbors(){
+  if(!$('nb-foot')) return;
+  const list=nbState(), on=list.filter(n=>n.on);
+  list.forEach(n=>{
+    const tr=$('nb-'+n.id+'-tr'), c=$('nb-'+n.id+'-cost'), ex=$('nb-'+n.id+'-exist');
+    if(tr) tr.textContent=fmt(n.tr)+' sf';
+    if(c) c.textContent=n.on?'$'+fmt(n.cost):'—';
+    if(ex&&ex.tagName==='TD') ex.textContent=fmt(n.exist)+' sf';
+    const row=tr&&tr.closest('tr'); if(row) row.style.opacity=n.on?'':'.5';
+  });
+  $('nb-foot').innerHTML=`<tr class="tot"><td>${on.length?on.map(n=>n.short).join(' + '):'725 Grand alone'}</td>`+
+    `<td class="num">${on.length}</td><td class="num">${fmt(LOT+on.reduce((s,n)=>s+n.lot,0))}</td><td></td>`+
+    `<td class="num">${fmt(on.reduce((s,n)=>s+n.exist,0))}</td><td class="num">${fmt(on.reduce((s,n)=>s+n.tr,0))}</td>`+
+    `<td></td><td class="num">$${fmt(on.reduce((s,n)=>s+n.cost,0))}</td><td></td></tr>`;
+  const undrawn=on.filter(n=>!n.drawn);
+  $('nb-note').textContent=on.length
+    ? `Merged zoning lot: ${fmt(LOT+on.reduce((s,n)=>s+n.lot,0))} sf (725 Grand ${fmt(LOT)} + ${on.map(n=>`${n.short} ${fmt(n.lot)}`).join(' + ')}), carrying ${fmt(on.reduce((s,n)=>s+n.tr,0))} sf of unused rights for ${'$'+fmt(on.reduce((s,n)=>s+n.cost,0))}. `
+      +(undrawn.length?`${undrawn.map(n=>n.short).join(' and ')} ${undrawn.length>1?'are':'is'} carried financially — the massing studies still draw 725 + 727 only.`:'Every parcel here is drawn in the massing studies.')
+    : 'No neighbour ticked: schemes C and D fall back to 725 Grand alone.';
 }
 
 /* ---------- detailed studies ---------- */
@@ -1144,7 +1229,7 @@ function generate(s){
   const env=s.bonus?{maxBase:85,H:115}:{maxBase:75,H:85};
   const gf=st.green?1.05:1, budget=s.cap*gf;
   if(st.mode==='enl') return generateEnlargement(s,env,gf,budget);
-  const ease=e=>s.merged&&e+3>=30;           // window sill above the 30 ft easement line
+  const ease=e=>s.ease&&e+3>=30;             // window sill above the 30 ft easement line
   // every base floor ends its corridor at a 3BR and is <100 ft long -> 100% exempt (ZR 23-232 a+b)
   const fracUp=st.circ==='100'?0:.5, frac=e=>0;
   const G=counted(groundF(),0);
@@ -1300,7 +1385,23 @@ function generateEnlargement(s,env,gf,budget){
 }
 
 let plans={};
-function regen(){D0=defs(); for(const k in D0) D0[k].cap=D0[k].base+D0[k].tr+D0[k].cert; plans={}; for(const k in D0) plans[k]=generate(D0[k]);}
+function withApprox(P){
+  // floor area bought from a neighbour the studies do not draw yet: carried financially, flagged everywhere
+  if(!P) return P;
+  const undr=(P.s.undrawn||[]).reduce((s,n)=>s+n.tr,0);
+  const gap=Math.max(0,P.s.cap-P.zfa);
+  if(undr>1&&gap>1) P.approx={sf:Math.min(undr,gap),from:(P.s.undrawn||[]).map(n=>n.name)};
+  return P;
+}
+function regen(){D0=defs(); for(const k in D0) D0[k].cap=D0[k].base+D0[k].tr+D0[k].cert; plans={}; for(const k in D0) plans[k]=withApprox(generate(D0[k]));}
+/* a plan for any combination, without touching the page state - used by the deck pages */
+function planFor(opt){
+  const want=new Set((opt&&opt.nb)||[]);
+  const list=nbState().map(n=>({...n,on:want.has(n.id)}));
+  const D=defs(list); for(const k in D) D[k].cap=D[k].base+D[k].tr+D[k].cert;
+  const key=(opt&&opt.cert)?(want.size?'D':'B'):(want.size?'C':'A');
+  return withApprox(generate(D[key]));
+}
 
 function renderStudies(keepFloor){
   const p=plans[st.scheme]; if(!p) return;
@@ -1317,13 +1418,13 @@ function renderStudies(keepFloor){
   const SC=p.s;
   const ad={0:$('a-neighbor-l'),1:$('a-bonus-l'),2:$('a-total-l')};
   if(SC.tr>0){
-    ad[0].textContent='Buy from 727 Grand';
+    ad[0].textContent='Buy from '+(SC.nbs||[]).map(n=>n.short).join(' + ');
     $('a-neighbor').textContent=fmt(SC.tr)+' sf';
-    $('a-neighbor-p').textContent=`2,067 sf × 4.0 − ${fmt(st.exist)} sf existing (${st.exist===4133?'field measurement':'PLUTO'}), merged via a zoning lot merger.`;
+    $('a-neighbor-p').textContent=(SC.nbs||[]).map(n=>`${n.short}: ${fmt(n.lot)} sf × ${n.far} − ${fmt(n.exist)} existing = ${fmt(n.tr)} sf for ${n.mode==='lump'?money(n.price)+' lump sum':'$'+n.price+'/sf, '+money(n.cost)}${n.drawn?'':' (massing not drawn)'}`).join('. ')+'. Merged by a zoning lot merger.';
   } else {
-    ad[0].textContent='727 Grand air rights';
+    ad[0].textContent='Neighbour air rights';
     $('a-neighbor').textContent='not used';
-    $('a-neighbor-p').textContent=`Scheme ${SC.k} builds on 725 Grand alone. Merging with 727 Grand would add ${fmt(D0.C.tr)} sf — see schemes C and D.`;
+    $('a-neighbor-p').textContent=`Scheme ${SC.k} builds on 725 Grand alone. The parcels ticked in Z-003 would add ${fmt(D0.C.tr)} sf — see schemes C and D.`;
   }
   if(SC.cert>0){
     ad[1].textContent=SC.merged?'IH certificates (merged lot)':'IH certificates (own lot)';
@@ -1390,10 +1491,14 @@ function fin(p,o={}){
   const privOut=p.floors.filter(f=>typeof f.n==='number'&&f.n>1&&!f.top).reduce((s,f)=>s+f.outdoor,0);
   const rental=st.tenure==='rental', use485=rental&&$('f-485')&&$('f-485').checked;
   const taxPsf=use485?v('f-tax485'):v('f-taxno');
-  const affSf=p.affNet||0, mktSf=Math.max(0,p.net-affSf);
+  // floor area from a neighbour whose massing is not drawn yet: same efficiency, same rates, flagged
+  const apxZ=(p.approx&&p.approx.sf)||0;
+  const apxNet=p.zfa>0?apxZ*(p.net/p.zfa):0, apxGross=p.zfa>0?apxZ*(p.gross/p.zfa):0;
+  const netAll=p.net+apxNet;
+  const affSf=p.affNet||0, mktSf=Math.max(0,netAll-affSf);
   // rents: market and income-restricted, both $/sf/year
   const rentRoll=mktSf*v('f-mrent')+affSf*v('f-arent');
-  const resOpex=p.net*(v('f-ropex')+taxPsf);
+  const resOpex=netAll*(v('f-ropex')+taxPsf);
   const resNOI=rentRoll*(1-v('f-rvac')/100)-resOpex;
   const resCapVal=resNOI/Math.max(.01,v('f-rcap')/100);
   // affordable units are never sold as condos: they are held as rentals and valued on their income
@@ -1452,6 +1557,7 @@ function fin(p,o={}){
     ['Demolition of existing building','5,534 sf × $'+v('f-demo'),5534*v('f-demo')],
     ['E-232 testing and remediation','allowance',v('f-edes')]
   ];
+  if(apxGross>1) items.push(['Floor area from the undrawn merge',`${fmt(apxGross)} gsf × $${v('f-hard')}`,apxGross*v('f-hard')]);
   /* ---- quantity take-off, measured off this scheme's own floor plates ---- */
   const GW=(p.geom&&p.geom.S1)||51, GS0=(p.geom&&p.geom.S0)||25.83;
   // linear feet of exterior wall per floor, split into street-facing and lot-line, read off the
@@ -1459,7 +1565,7 @@ function fin(p,o={}){
   const wallsOf=f=>{
     const a=f.occ; if(!a) return {st:0,lot:0};
     const on=(x,z)=>x>=0&&x<GW&&z>=0&&z<100&&a[z*GW+x];
-    const ease=p.s.merged&&f.elev+3>=30;                       // easement windows above 30 ft
+    const ease=p.s.ease&&f.elev+3>=30;                         // easement windows above 30 ft
     const isLot=(x,z)=>x<0||z>100||(x<GS0&&z<80&&!ease)||(x<GS0&&z>=80);
     let stl=0, lotl=0;
     for(let z=0;z<100;z++) for(let x=0;x<GW;x++){
@@ -1524,6 +1630,7 @@ function fin(p,o={}){
   hl('Fit-out','Loggias, terraces and roof deck',`${fmt(p.outdoor)} sf`,`$${v('f-outc')}/sf`,p.outdoor*v('f-outc'));
   hl('Site and general','Sidewalk, vault, utilities and site work',`${fmt(frontage)} lf frontage`,`$${fmt(v('h-site'))}/lf`,frontage*v('h-site'));
   hl('Site and general','E-232 testing and remediation','allowance','—',v('f-edes'));
+  if(apxGross>1) hl('Site and general','Floor area from the undrawn merge, at the blended rate',`${fmt(apxGross)} gsf`,`$${v('f-hard')}/gsf`,apxGross*v('f-hard'));
   const hTrade=HL.reduce((s,i)=>s+i.t,0);
   hl('Site and general','General conditions and GC fee',`${v('h-gc')}% of trade costs`,'—',hTrade*v('h-gc')/100);
   const subDetail=HL.reduce((s,i)=>s+i.t,0);
@@ -1562,7 +1669,8 @@ function fin(p,o={}){
   const softDetail=SL.reduce((s,i)=>s+i.t,0);
   const sDetail=$('f-smethod')&&$('f-smethod').value==='detail';
   const soft=sDetail?softDetail:hard*v('f-soft')/100;
-  const nb=p.s.tr*v('in-p1'), certs=p.s.cert*v('in-p2');
+  // each neighbour is its own deal: a lump sum or a rate per sf of rights, summed in defs()
+  const nb=p.s.nbCost!=null?p.s.nbCost:p.s.tr*v('in-p1'), certs=p.s.cert*v('in-p2');
   const costEx=hard+soft+land+nb+certs;
   const ltc=v('f-ltc')/100, k=v('f-rate')/100*(v('f-months')/12)*(v('f-util')/100)+v('f-fee')/100;
   const financing=ltc*k*costEx/(1-ltc*k), total=costEx+financing, loan=ltc*total, equity=total-loan;
@@ -1575,6 +1683,7 @@ function fin(p,o={}){
   const refiProceeds=refi?assetVal*refiLtv:0;
   return {rental,refi,refiLtv,refiProceeds,assetVal,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,
     qty,hardLines:HL,softLines:SL,hDetail,sDetail,subDetail,subBlend,softDetail,softPct:hard*v('f-soft')/100,gsfRate:hard/Math.max(1,p.gross),
+    apxZ,apxNet,apxGross,netAll,nbs:p.s.nbs||[],
     psfT,tierOf,tierSf,psfBlend,wSf,avg,bands:{lo:loN,mid:nF-loN-upN-phN,up:upN,ph:phN,floors:resN},privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
     margin:profit/total, roe:profit/equity, em, irr:em>0?Math.pow(em,12/Math.max(1,v('f-months')))-1:-1};
 }
@@ -1707,9 +1816,13 @@ function renderFinance(){
     const tag=aff?' · affordable':(!F.rental&&bandLabel[tr]?` · ${bandLabel[tr]}`:'');
     return `<tr><td class="num">${u.floor}</td><td>${u.label}${tag}</td><td class="num">${fmt(u.sf)}</td><td class="num">${val}</td><td class="num">$${fmt(psfU)}</td></tr>`;
   }).join('');
+  const apxRow=F.apxNet>1
+    ? `<tr><td class="num">—</td><td>${fmt(F.apxNet)} sf from ${(p.approx.from||[]).join(' + ')} · massing not drawn</td><td class="num">${fmt(F.apxNet)}</td><td class="num">${F.rental?money(F.apxNet*mrent/12):money(F.apxNet*F.psfT.mid)}</td><td class="num">$${fmt(F.rental?mrent:F.psfT.mid)}</td></tr>`
+    : '';
+  $('unit-body').innerHTML+=apxRow;
   $('unit-foot').innerHTML=F.rental
-    ? `<tr class="tot"><td colspan="2">${units.length} units · ${p.affUnits} affordable</td><td class="num">${fmt(p.net)}</td><td class="num">${money(F.rentRoll/12)}</td><td class="num">$${fmt(F.rentRoll/Math.max(1,p.net))}</td></tr>`
-    : `<tr class="tot"><td colspan="2">${units.length} units · avg ${short$(F.condoGross/Math.max(1,units.length))}/unit</td><td class="num">${fmt(p.net)}</td><td class="num">${money(F.condoGross)}</td><td class="num">$${fmt(F.psfBlend)}</td></tr>`;
+    ? `<tr class="tot"><td colspan="2">${units.length} units · ${p.affUnits} affordable</td><td class="num">${fmt(F.netAll)}</td><td class="num">${money(F.rentRoll/12)}</td><td class="num">$${fmt(F.rentRoll/Math.max(1,p.net))}</td></tr>`
+    : `<tr class="tot"><td colspan="2">${units.length} units${F.apxNet>1?' + undrawn area':''} · avg ${short$(F.condoGross/Math.max(1,units.length))}/unit</td><td class="num">${fmt(F.netAll)}</td><td class="num">${money(F.condoGross)}</td><td class="num">$${fmt(F.psfBlend)}</td></tr>`;
   $('resi-ledger-label').hidden=!F.rental; $('resi-ledger').hidden=!F.rental;
   if(F.rental){
     const rows=[['Market rent, '+fmt(F.mktSf)+' sf',money(F.mktSf*mrent)],
@@ -1740,7 +1853,7 @@ function renderFinance(){
     +row('Total hard costs',`${fmt(allG)} sf incl. cellar`,F.hard,'tot')
     +row('Soft costs',$('f-soft').value+'% of hard',F.soft)
     +row('Land basis, 725 Grand','placeholder',F.land)
-    +(p.s.tr?row('Air rights from 727 Grand',`${fmt(p.s.tr)} sf × $${$('in-p1').value}`,F.nb):'')
+    +(p.s.nbs||[]).map(n=>row(`Air rights from ${n.name}`,n.mode==='lump'?'lump sum':`${fmt(n.tr)} sf × $${n.price}`,n.cost)).join('')
     +(p.s.cert?row('IH certificates',`${fmt(p.s.cert)} sf × $${$('in-p2').value}`,F.certs):'')
     +row('Financing: interest reserve + fees',`${$('f-rate').value}% · ${$('f-months').value} mo`,F.financing)
     +row('Total project cost','',F.total,'tot');
@@ -1853,14 +1966,14 @@ function renderPlan(p){
   const X=x=>OX+x*S, Z=z=>OZ+z*S, W=OX+(S1+15)*S, H=OZ+106*S;
   $('plan-title').textContent=f.n==='C'?'Cellar':f.n===1?'Ground floor':f.top?`Floor ${f.n} · roof lounge`:`Floor ${f.n}`;
   $('plan-sub').textContent=`${f.cellar?'cellar':'+'+Math.round(f.elev)+"'"} · gross ${fmt(f.gross)} · counts ${f.cellar?0:fmt(f.counts)}${f.units?` · ${f.units} units`:''}${f.outdoor?` · outdoor ${fmt(f.outdoor)}`:''}`;
-  const ease=p.s.merged&&f.elev+3>=30&&!f.cellar;
+  const ease=p.s.ease&&f.elev+3>=30&&!f.cellar;
   let o=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Floor plan">`;
   o+=`<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" style="fill:var(--t-terr);fill-opacity:.35"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--t-terr)" stroke-width="2"/></pattern></defs>`;
   o+=`<rect x="0" y="0" width="${W}" height="${H}" style="fill:var(--paper)"/>`;
   o+=`<rect x="0" y="${Z(-12)}" width="${W}" height="${12*S-4}" style="fill:var(--street)"/><text x="${X(1)}" y="${Z(-4)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)">GRAND STREET · 80'</text>`;
   o+=`<rect x="${X(S1)+4}" y="${Z(-12)}" width="${W-X(S1)-4}" height="${H-Z(-12)}" style="fill:var(--street)"/><text x="${X(S1+8)}" y="${Z(92)}" font-size="11" style="fill:var(--ink);font-family:var(--mono)" transform="rotate(-90 ${X(S1+8)} ${Z(92)})">GRAHAM AVENUE · 80'</text>`;
   o+=`<rect x="${X(0)}" y="${Z(0)}" width="${S0*S}" height="${80*S}" style="fill:var(--m-exist);fill-opacity:.25;stroke:var(--ink-2)" stroke-dasharray="4 3"/>`;
-  o+=`<text x="${X(2)}" y="${Z(6)}" font-size="10" style="fill:var(--ink-2);font-family:var(--mono)">727 GRAND</text><text x="${X(2)}" y="${Z(9.5)}" font-size="9" style="fill:var(--ink-2);font-family:var(--mono)">${p.s.merged?(ease?'easement: windows OK':'easement starts 30\''):'separate lot'}</text>`;
+  o+=`<text x="${X(2)}" y="${Z(6)}" font-size="10" style="fill:var(--ink-2);font-family:var(--mono)">727 GRAND</text><text x="${X(2)}" y="${Z(9.5)}" font-size="9" style="fill:var(--ink-2);font-family:var(--mono)">${p.s.ease?(ease?'easement: windows OK':'easement starts 30\''):'separate lot'}</text>`;
   o+=`<path d="M${X(S0)} ${Z(0)} H${X(S1)} V${Z(100)} H${X(0)} V${Z(80)} H${X(S0)} Z" style="fill:none;stroke:var(--ink)" stroke-width="2"/>`;
   if(f.setback){
     o+=`<line x1="${X(S0)}" y1="${Z(10)}" x2="${X(S1)}" y2="${Z(10)}" style="stroke:var(--warn)" stroke-dasharray="5 4"/><line x1="${X(SB)}" y1="${Z(0)}" x2="${X(SB)}" y2="${Z(100)}" style="stroke:var(--warn)" stroke-dasharray="5 4"/>`;
@@ -2038,7 +2151,7 @@ function renderFacade(){
   const segs=[];
   floors.forEach((f,fi)=>{
     if(f.n===1) return;
-    const occ=f.occ, ease=p.s.merged&&f.elev+3>=30;
+    const occ=f.occ, ease=p.s.ease&&f.elev+3>=30;
     const lot=(x,z)=>x<0||z>100||(x<S0&&z<80&&!ease)||(x<S0&&z>=80);
     const on=(x,z)=>x>=0&&x<S1&&z>=0&&z<100&&occ[z*S1+x];
     const runs={};
@@ -2176,7 +2289,7 @@ function renderInterior(){
       const cx=(i+.5)*RES, cz=(j+.5)*RES; if(cx>r.x0&&cx<r.x1&&cz>r.z0&&cz<r.z1&&i>=0&&i<GW&&j>=0&&j<GH) grid[j*GW+i]=gi+1; }
   }));
   const at=(i,j)=>i<0||j<0||i>=GW||j>=GH?0:grid[j*GW+i];
-  const ease=p.s.merged&&f.elev+3>=30;
+  const ease=p.s.ease&&f.elev+3>=30;
   const lot=(x,z)=>x<0||z>100||(x<S0&&z<80&&!ease)||(x<S0&&z>=80);
   const isDoor=(vert,line,pos)=>D.some(([dx,dz])=>vert?(Math.abs(dx-line)<.3&&Math.abs(dz-pos)<1.5):(Math.abs(dz-line)<.3&&Math.abs(dx-pos)<1.5));
   const H=f.n===1?Math.min(14,f.h-1):9;
@@ -2372,12 +2485,12 @@ function cashflow(p,F,o={}){
       income+=sell*perUnit*(1-saleCost);
       unsold-=sell;
       if(unsold===0) income+=F.retNet;                             // retail condo sells at the end
-      need+=unsold*(p.net/p.units)*resOpexPsf/12;                  // carry on what is still unsold
+      need+=unsold*(F.netAll/p.units)*resOpexPsf/12;                // carry on what is still unsold
     }
     if(F.rental && m>done){
       const inLease=Math.min(1,(m-done)/lease);                     // rents ramp through lease-up
       income+=(F.rentRoll*esc*(1-vac)/12)*inLease + retailNOI*esc/12;
-      need+=p.net*resOpexPsf*esc/12;
+      need+=F.netAll*resOpexPsf*esc/12;
     }
 
     let net=income-need;
@@ -2406,12 +2519,12 @@ function cashflow(p,F,o={}){
       const pay=pmt(permRate/12,amortY*12,permBal);
       const interest=permBal*permRate/12;
       permBal=Math.max(0,permBal-(pay-interest));
-      const noiM=(F.rentRoll*esc*(1-vac)-p.net*resOpexPsf*esc)/12 + retailNOI*esc/12;
+      const noiM=(F.rentRoll*esc*(1-vac)-F.netAll*resOpexPsf*esc)/12 + retailNOI*esc/12;
       const cf=noiM-pay;
       eqFlow[m]+=cf; dist+=cf;
     }
     if(F.rental && m===N){                                          // exit: sell on next year's NOI
-      const noiFwd=(F.rentRoll*Math.pow(1+growth,holdY+1)*(1-vac)-p.net*resOpexPsf*Math.pow(1+growth,holdY+1))+retailNOI*Math.pow(1+growth,holdY+1);
+      const noiFwd=(F.rentRoll*Math.pow(1+growth,holdY+1)*(1-vac)-F.netAll*resOpexPsf*Math.pow(1+growth,holdY+1))+retailNOI*Math.pow(1+growth,holdY+1);
       const gross=noiFwd/exitCap, net=gross*(1-(+$('f-scret').value||0)/100)-permBal;
       eqFlow[m]+=net; dist+=net;
     }
@@ -2541,7 +2654,8 @@ function renderSummary(){
     const rows=[
       ['Average condo price to break even',`$${fmt(F.bePsf)}/sf`,`$${fmt(+$('f-res').value||0)}/sf average assumed, bands $${fmt(F.psfT.lo)}–$${fmt(F.psfT.ph)}`],
       ['Land basis for a 15% margin',mm(F.residual),`${mm(F.land)} assumed`],
-      ['Air rights from 727 Grand',`${fmt(D0.C.tr)} sf`,`$${$('in-p1').value}/sf assumed`],
+      ...(nbState().filter(n=>n.on).map(n=>[`Air rights from ${n.name}`,`${fmt(n.tr)} sf`,
+        `${n.mode==='lump'?money(n.price)+' lump sum':'$'+n.price+'/sf = '+money(n.cost)} · ${n.status}${n.drawn?'':' · massing not drawn'}`])),
       ['IH certificates for the merged bonus',`${fmt(D0.D.cert)} sf`,`$${$('in-p2').value}/sf assumed, market is finite and the option ends around 2034`],
       ['Hard cost',`$${$('f-hard').value}/gsf above grade`,'placeholder until a GC bid']
     ];
@@ -2620,6 +2734,10 @@ document.querySelectorAll('#gtabs button').forEach(b=>b.addEventListener('click'
 })();
 document.querySelectorAll('#mtabs button').forEach(b=>b.addEventListener('click',()=>{st.mini=b.dataset.s;renderMini();}));
 $('in-exist').addEventListener('change',()=>{st.exist=+$('in-exist').value;regen();renderMini();renderStudies(true);});
+document.querySelectorAll('#rights input[id^="nb-"], #rights select[id^="nb-"]').forEach(e=>{
+  const h=()=>{ regen(); renderMini(); renderStudies(true); };
+  e.addEventListener('input',h); e.addEventListener('change',h);
+});
 ['in-p1','in-p2'].forEach(id=>$(id).addEventListener('input',()=>{renderMini();renderFinance();}));
 document.querySelectorAll('#ftabs button').forEach(b=>b.addEventListener('click',()=>{st.scheme=b.dataset.s;renderStudies(false);}));
 /* Condo prices: the average is the master. Typing it lifts all four bands by the same proportion,
@@ -2678,7 +2796,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',reth
 new MutationObserver(rethemed).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 regen(); renderMini(); renderStudies(false);
 // read-only hook for the investor deck and projections pages (public/deck.html, public/projections.html) - keep when syncing from the artifact
-window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,get plans(){return plans;},loaded:false};
+window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,planFor,nbState,NEIGHBORS,get plans(){return plans;},loaded:false};
 
 /* ---------- saved values + scenarios (artifact db · Neon API · browser) ---------- */
 (function(){
