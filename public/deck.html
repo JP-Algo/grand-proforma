@@ -114,6 +114,13 @@ const DECK={
   sponsor:'MidUrban',       // shown on the cover and team slide
   base:'A', up:'D'           // base: 725 Grand alone, as of right (no certificates); upside: merged + certificates
 };
+// the upside ladder: each rung adds one more air-rights deal to the as-of-right base
+const LADDER_SPEC=[
+  {key:'base',label:'725 Grand alone',sub:'Base case, as of right',nb:[],cert:false},
+  {key:'727',label:'+ 727 Grand',sub:'Air rights from the east neighbor',nb:['727'],cert:false},
+  {key:'284',label:'+ 284 Graham',sub:'Air rights from the north neighbor',nb:['284'],cert:false},
+  {key:'both',label:'+ both neighbors',sub:'727 Grand and 284 Graham',nb:['727','284'],cert:false},
+  {key:'all',label:'+ IH certificates',sub:'Both neighbors, FAR 5.01 on the merged lot',nb:['727','284'],cert:true}];
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('en-US');
 const money=n=>(n<0?'−$':'$')+fmt(Math.abs(n));
@@ -312,6 +319,20 @@ function slides(){
       ${prices.map(pr=>{const b=scheme(B.k,{'f-res':pr}), d=scheme(D.k,{'f-res':pr}); return `<tr style="${pr===PRICE?'background:var(--accent-soft)':''}"><td class="n" style="text-align:left">$${fmt(pr)}</td><td class="n ${sg(b.F.margin)}">${pct(b.F.margin)}</td><td class="n">${b.V.em.toFixed(2)}×</td><td class="n ${sg(d.F.margin)}">${pct(d.F.margin)}</td><td class="n">${d.V.em.toFixed(2)}×</td></tr>`;}).join('')}
     </tbody></table><p class="note" style="margin-top:10px">LP returns after a ${pref}% preferred return and a ${100-promote}/${promote} split above it, over ${months} months. Full line-by-line detail: <b>grand-proforma.vercel.app/projections</b></p></div></div>`});
 
+  if(G.ladder&&G.ladder.length){
+    const nbBy=Object.fromEntries((G.nbs||[]).map(n=>[n.id,n]));
+    const stat={talking:'In talks',loi:'LOI',contract:'Under contract'};
+    const rungs=G.ladder.map(c=>{ const F=G.fin(c.plan,{}); return {...c,F,p:c.plan,units:G.unitsOf(c.plan).length}; });
+    const maxAbs=Math.max(.05,...rungs.map(r=>Math.abs(r.F.margin)));
+    const bar=m=>{ const w=Math.round(Math.abs(m)/maxAbs*90); return `<span style="display:inline-block;width:${w}px;height:10px;border-radius:2px;background:${m<0?'var(--neg)':'var(--pos)'};vertical-align:middle;margin-right:8px;opacity:.75"></span>${pct(m)}`; };
+    const deals=c=>c.nb.length?c.nb.map(id=>{ const n=nbBy[id]||{}; return `${n.short||id}: ${fmt(n.tr||0)} sf, ${n.mode==='lump'?mm(n.price||0)+' flat':'$'+fmt(n.price||0)+'/sf'} <span class="tag ${n.status==='contract'?'base':'up'}" style="font-size:9.5px;padding:2px 5px">${stat[n.status]||n.status||''}</span>`; }).join('<br>')+(c.cert?`<br>Certificates: ${fmt(c.p.s.cert)} sf`:''):'None';
+    const approx=rungs.filter(r=>r.p.approx&&r.p.approx.sf);
+    S.push({html:`<div class="kicker">Upside ladder</div><h2>Each air-rights deal is optional upside</h2>
+      <table style="font-size:13.5px"><thead><tr><th>Step</th><th>Rights bought</th><th class="n">Zoning floor area</th><th class="n">Condos</th><th class="n">Total cost</th><th class="n">Profit</th><th>Margin on cost</th></tr></thead><tbody>
+      ${rungs.map((r,i)=>`<tr style="${i===0?'background:var(--accent-soft)':''}"><td><b>${r.label}</b><br><span class="note">${r.sub}</span></td><td style="font-size:12.5px;line-height:1.5">${deals(r)}</td><td class="n">${fmt(r.p.s.cap)} sf${r.p.approx&&r.p.approx.sf?'*':''}</td><td class="n">${r.units}</td><td class="n">${mm2(r.F.total)}</td><td class="n ${sg(r.F.profit)}">${mm2(r.F.profit)}</td><td class="n" style="text-align:left">${bar(r.F.margin)}</td></tr>`).join('')}
+      </tbody></table>
+      <p class="note" style="margin-top:12px">At a $${fmt(PRICE)}/sf average condo price. Each deal is negotiated separately; the base case needs none of them.${approx.length?` *${approx.map(r=>`${r.label.replace('+ ','')}: ${fmt(r.p.approx.sf)} sf`).join('; ')} of floor area is priced at the drawn building's efficiency but not yet drawn in the massing.`:''} 284 Graham assumes its whole lot gets the same corner-lot treatment as 725 (full coverage, no rear yard), which is the sponsor's position; if land-use counsel finds the part beyond 100 ft from Grand Street is an interior lot, a 30 ft rear yard would reduce the top steps. The light-and-air easement applies only with 727 Grand.</p>`});
+  }
   S.push({html:`<div class="kicker">Path to the upside</div><h2>What turns the base case into the upside</h2>
     <div class="cols c2"><div class="panel base"><span class="tag base">Base case · ready to start</span><ul class="pts">
       <li>Everything is on 725 Grand's own lot, as of right at FAR 4.0. No neighbor agreement and no certificates needed.</li>
@@ -378,15 +399,23 @@ function bridge(){ // runs inside the engine frame
       const G=window.G725;
       if(G&&(G.loaded||(G.plans&&Date.now()-t0>8000))){
         try{
-          const sv=e.data.values;   // the saved scenario's inputs, applied the way the study applies a loaded scenario
+          // Start from the study's own defaults, never this viewer's saved working draft, so every viewer
+          // sees the same numbers; then lay the saved scenario's inputs over them.
+          const defs={}; document.querySelectorAll('.wrap input[id],.wrap select[id],.wrap textarea[id]').forEach(el=>{
+            if(el.type==='checkbox') defs[el.id]=el.defaultChecked;
+            else if(el.tagName==='SELECT'){ const o=[...el.options].find(x=>x.defaultSelected)||el.options[0]; if(o) defs[el.id]=o.value; }
+            else defs[el.id]=el.defaultValue; });
+          const sv={...defs,...(e.data.values||{})};
           if(sv){ if(typeof G.apply==='function') G.apply({values:sv,scheme:e.data.scheme}); else {
             document.querySelectorAll('.wrap input[id],.wrap select[id]').forEach(el=>{ if(!(el.id in sv)) return; const v=sv[el.id]; if(el.type==='checkbox') el.checked=!!v; else el.value=String(v); });
             const g=id=>document.getElementById(id);
             Object.assign(G.st,{exist:+g('in-exist').value,green:g('in-green').checked,strategy:g('in-strategy').value,circ:g('in-circ').value,cut:g('in-cut').checked,mode:g('in-mode').value,bonusSrc:g('in-bonus').value,tenure:g('in-tenure').value}); } }
           Object.assign(G.st,e.data.set||{}); G.regen();
           const vals={}; document.querySelectorAll('input[id],select[id],textarea[id]').forEach(el=>{ vals[el.id]={type:el.type,value:el.value,checked:el.checked}; });
+          const ladder=(e.data.ladder&&typeof G.planFor==='function')?e.data.ladder.map(c=>({...c,plan:JSON.parse(JSON.stringify(G.planFor({nb:c.nb,cert:c.cert})))})):null;
+          const nbs=typeof G.nbState==='function'?JSON.parse(JSON.stringify(G.nbState())):null;
           parent.postMessage({g725:'engine',fns:['fin','investorOf','developerOf','unitsOf'].map(n=>G[n].toString()),
-            plans:JSON.parse(JSON.stringify(G.plans)),st:JSON.parse(JSON.stringify(G.st)),vals},'*');
+            plans:JSON.parse(JSON.stringify(G.plans)),st:JSON.parse(JSON.stringify(G.st)),vals,ladder,nbs},'*');
         }catch(err){ parent.postMessage({g725:'error',msg:String(err&&err.message||err)},'*'); }
         return;
       }
@@ -403,7 +432,7 @@ function engineFrom(d){
   try{ const sc=document.createElement('script'); sc.textContent='window.__g725mk=function($,st){'+body+'};'; document.head.appendChild(sc); sc.remove(); mk=window.__g725mk; }catch(e){}
   if(!mk){ try{ mk=new Function('$','st',body); }catch(e){ throw new Error('this view blocks running the pro forma code'); } }
   const f=mk(el,d.st);
-  return {G:{st:d.st,plans:d.plans,regen(){},fin:f.fin,investorOf:f.investorOf,developerOf:f.developerOf,unitsOf:f.unitsOf},
+  return {G:{st:d.st,plans:d.plans,ladder:d.ladder,nbs:d.nbs,regen(){},fin:f.fin,investorOf:f.investorOf,developerOf:f.developerOf,unitsOf:f.unitsOf},
           W:{document:{getElementById:el}}};
 }
 async function engineHtml(){
@@ -440,7 +469,7 @@ const scnWhen=()=>SCN&&SCN.savedAt?new Date(SCN.savedAt).toLocaleString('en-US',
   SCN=await deckScenario();
   try{ const html=await engineHtml(); $('engine').srcdoc=html.replace(/<\/body>\s*<\/html>\s*$/i,'')+'<scr'+'ipt>('+bridge.toString()+')();</scr'+'ipt>'; }
   catch(e){ ENG.err=String(e&&e.message||e); }
-  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS,values:SCN&&SCN.values,scheme:SCN&&SCN.scheme},'*'); }catch(e){} },500);
+  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS,values:SCN&&SCN.values,scheme:SCN&&SCN.scheme,ladder:typeof LADDER_SPEC!=='undefined'?LADDER_SPEC:null},'*'); }catch(e){} },500);
 })();
 setTimeout(()=>{ if(ready) return; clearInterval(ask);
   $('loading').textContent=`Could not load the pro forma. Reload the page. (${ENG.mode}${ENG.err?': '+ENG.err:''})`; },30000);

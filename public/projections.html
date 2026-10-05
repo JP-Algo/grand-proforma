@@ -399,15 +399,23 @@ function bridge(){ // runs inside the engine frame
       const G=window.G725;
       if(G&&(G.loaded||(G.plans&&Date.now()-t0>8000))){
         try{
-          const sv=e.data.values;   // the saved scenario's inputs, applied the way the study applies a loaded scenario
+          // Start from the study's own defaults, never this viewer's saved working draft, so every viewer
+          // sees the same numbers; then lay the saved scenario's inputs over them.
+          const defs={}; document.querySelectorAll('.wrap input[id],.wrap select[id],.wrap textarea[id]').forEach(el=>{
+            if(el.type==='checkbox') defs[el.id]=el.defaultChecked;
+            else if(el.tagName==='SELECT'){ const o=[...el.options].find(x=>x.defaultSelected)||el.options[0]; if(o) defs[el.id]=o.value; }
+            else defs[el.id]=el.defaultValue; });
+          const sv={...defs,...(e.data.values||{})};
           if(sv){ if(typeof G.apply==='function') G.apply({values:sv,scheme:e.data.scheme}); else {
             document.querySelectorAll('.wrap input[id],.wrap select[id]').forEach(el=>{ if(!(el.id in sv)) return; const v=sv[el.id]; if(el.type==='checkbox') el.checked=!!v; else el.value=String(v); });
             const g=id=>document.getElementById(id);
             Object.assign(G.st,{exist:+g('in-exist').value,green:g('in-green').checked,strategy:g('in-strategy').value,circ:g('in-circ').value,cut:g('in-cut').checked,mode:g('in-mode').value,bonusSrc:g('in-bonus').value,tenure:g('in-tenure').value}); } }
           Object.assign(G.st,e.data.set||{}); G.regen();
           const vals={}; document.querySelectorAll('input[id],select[id],textarea[id]').forEach(el=>{ vals[el.id]={type:el.type,value:el.value,checked:el.checked}; });
+          const ladder=(e.data.ladder&&typeof G.planFor==='function')?e.data.ladder.map(c=>({...c,plan:JSON.parse(JSON.stringify(G.planFor({nb:c.nb,cert:c.cert})))})):null;
+          const nbs=typeof G.nbState==='function'?JSON.parse(JSON.stringify(G.nbState())):null;
           parent.postMessage({g725:'engine',fns:['fin','investorOf','developerOf','unitsOf'].map(n=>G[n].toString()),
-            plans:JSON.parse(JSON.stringify(G.plans)),st:JSON.parse(JSON.stringify(G.st)),vals},'*');
+            plans:JSON.parse(JSON.stringify(G.plans)),st:JSON.parse(JSON.stringify(G.st)),vals,ladder,nbs},'*');
         }catch(err){ parent.postMessage({g725:'error',msg:String(err&&err.message||err)},'*'); }
         return;
       }
@@ -424,7 +432,7 @@ function engineFrom(d){
   try{ const sc=document.createElement('script'); sc.textContent='window.__g725mk=function($,st){'+body+'};'; document.head.appendChild(sc); sc.remove(); mk=window.__g725mk; }catch(e){}
   if(!mk){ try{ mk=new Function('$','st',body); }catch(e){ throw new Error('this view blocks running the pro forma code'); } }
   const f=mk(el,d.st);
-  return {G:{st:d.st,plans:d.plans,regen(){},fin:f.fin,investorOf:f.investorOf,developerOf:f.developerOf,unitsOf:f.unitsOf},
+  return {G:{st:d.st,plans:d.plans,ladder:d.ladder,nbs:d.nbs,regen(){},fin:f.fin,investorOf:f.investorOf,developerOf:f.developerOf,unitsOf:f.unitsOf},
           W:{document:{getElementById:el}}};
 }
 async function engineHtml(){
@@ -461,7 +469,7 @@ const scnWhen=()=>SCN&&SCN.savedAt?new Date(SCN.savedAt).toLocaleString('en-US',
   SCN=await deckScenario();
   try{ const html=await engineHtml(); $('engine').srcdoc=html.replace(/<\/body>\s*<\/html>\s*$/i,'')+'<scr'+'ipt>('+bridge.toString()+')();</scr'+'ipt>'; }
   catch(e){ ENG.err=String(e&&e.message||e); }
-  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS,values:SCN&&SCN.values,scheme:SCN&&SCN.scheme},'*'); }catch(e){} },500);
+  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS,values:SCN&&SCN.values,scheme:SCN&&SCN.scheme,ladder:typeof LADDER_SPEC!=='undefined'?LADDER_SPEC:null},'*'); }catch(e){} },500);
 })();
 setTimeout(()=>{ if(ready) return; clearInterval(ask);
   $('status').textContent=`Could not load the pro forma. Reload the page. (${ENG.mode}${ENG.err?': '+ENG.err:''})`; },30000);
