@@ -108,12 +108,11 @@ svg text{font-family:var(--mono)}
 <iframe id="engine" title="Pro forma engine" aria-hidden="true" tabindex="-1"></iframe>
 <script>
 (function(){
-/* ---- deck settings: the proposal's own assumptions ---- */
+/* ---- deck settings ---- */
+// Every number comes from the study's "Deck" scenario (see the loader at the end); only the framing is set here.
 const DECK={
-  price:1600,              // condo $/sf used throughout the deck
   sponsor:'[Sponsor name]', // shown on the cover and team slide
-  base:'A', up:'D',          // base: 725 Grand alone, as of right (no certificates); upside: merged + certificates
-  costs:{'f-land':4500000,'f-hard':375,'f-soft':15,'f-scres':5} // the proposal's land and cost assumptions; override the main study's inputs
+  base:'A', up:'D'           // base: 725 Grand alone, as of right (no certificates); upside: merged + certificates
 };
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('en-US');
@@ -123,14 +122,14 @@ const mm2=n=>(n<0?'−$':'$')+(Math.abs(n)/1e6).toFixed(2)+'M';
 const pct=n=>(n<0?'−':'')+Math.abs(n*100).toFixed(1)+'%';
 const sg=n=>n<0?'neg':'pos';
 let G,W;
-const iv=id=>{ if(DECK.costs[id]!=null) return String(DECK.costs[id]); const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):'';};
+const iv=id=>{ const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):'';};
 
 function scheme(k,o={}){
-  const p=G.plans[k], opt={'f-res':DECK.price,...DECK.costs,...o}, F=G.fin(p,opt), V=G.investorOf(F,opt), Dv=G.developerOf(F,opt), units=G.unitsOf(p);
+  const p=G.plans[k], opt={...o}, F=G.fin(p,opt), V=G.investorOf(F,opt), Dv=G.developerOf(F,opt), units=G.unitsOf(p);
   const mix={}; units.forEach(u=>{mix[u.label]=(mix[u.label]||0)+1;});
   return {k,p,F,V,Dv,units,mix};
 }
-function solve(k,test){ let lo=500,hi=5000; for(let i=0;i<36;i++){const m=(lo+hi)/2; test(G.fin(G.plans[k],{...DECK.costs,'f-res':m}))?hi=m:lo=m;} return hi; }
+function solve(k,test){ let lo=500,hi=5000; for(let i=0;i<36;i++){const m=(lo+hi)/2; test(G.fin(G.plans[k],{'f-res':m}))?hi=m:lo=m;} return hi; }
 
 /* ---- drawings ---- */
 // Graham Avenue elevation: 100 ft of frontage, floors stepped back as the model sets them
@@ -190,7 +189,7 @@ function mixText(r){ return ['Studio','1BR','2BR','3BR'].filter(t=>r.mix[t]).map
 
 /* ---- slides ---- */
 function slides(){
-  const B=scheme(DECK.base), D=scheme(DECK.up), R=[B,D];
+  const B=scheme(DECK.base), D=scheme(DECK.up), R=[B,D], PRICE=+iv('f-res');
   const months=+iv('f-months'), pref=+iv('iv-pref'), promote=+iv('iv-promote'), ltc=+iv('f-ltc'), inv=+iv('iv-amt');
   const beB=solve(B.k,F=>F.profit>=0), beD=solve(D.k,F=>F.profit>=0);
   const S=[];
@@ -213,7 +212,7 @@ function slides(){
           <div class="stat"><span class="label">Building</span><span class="v">${D.p.N} stories</span></div>
           <div class="stat"><span class="label">Condos</span><span class="v">${D.units.length}</span></div>
           <div class="stat"><span class="label">Project cost</span><span class="v">${mm(D.F.total)}</span></div></div></div>
-        <p class="note">Figures at a $${fmt(DECK.price)}/sf average condo price, banded by floor, ${ltc}% loan-to-cost, ${months}-month project. See the returns and sensitivity slides.</p>
+        <p class="note">Raising ${mm(inv)} of investor equity. Figures at a $${fmt(PRICE)}/sf average condo price, banded by floor, ${ltc}% loan-to-cost, ${months}-month project. See the returns and sensitivity slides.</p>
       </div></div>`});
 
   S.push({html:`<div class="kicker">Why 725 Grand</div><h2>A corner site with room to grow</h2>
@@ -265,7 +264,7 @@ function slides(){
       <tr><td class="label">Preferred return</td><td>${pref}% per year, compounded</td></tr>
       <tr><td class="label">Profit split above the pref</td><td>${100-promote}% investors / ${promote}% sponsor</td></tr>
       <tr><td class="label">Sponsor capital</td><td>${iv('dv-land')?'Land contributed as equity + ':''}${mm(+iv('dv-cash'))} cash</td></tr>
-      <tr><td class="label">Example investment</td><td>${mm(inv)} LP commitment</td></tr>
+      <tr><td class="label">Equity raise</td><td>${mm(inv)} from investors (LP); the sponsor funds the rest</td></tr>
     </tbody></table>
     <div style="display:grid;gap:14px;align-content:start">
       ${R.map((r,i)=>`<div class="panel ${i?'up':'base'}"><span class="tag ${i?'up':'base'}">${i?'Upside':'Base case'} · Scheme ${r.k}</span><div class="stats">
@@ -287,15 +286,15 @@ function slides(){
     </tbody></table>
     <table><thead><tr><th>Sources</th><th class="n">Base · ${B.k}</th><th class="n">Upside · ${D.k}</th></tr></thead><tbody>
       ${su(`Construction loan (${ltc}% LTC)`,r=>mm2(r.F.loan))}
-      ${su('Sponsor equity',r=>mm2(r.Dv.devCap))}
-      ${su('Investor (LP) equity',r=>mm2(r.F.equity-r.Dv.devCap))}
+      ${su('Investor (LP) equity, this raise',r=>mm2(Math.min(inv,r.F.equity)))}
+      ${su('Sponsor equity: land + cash',r=>mm2(Math.max(0,r.F.equity-inv)))}
       ${su('Total sources',r=>mm2(r.F.total),'tot')}
       <tr><td colspan="3" class="note" style="border:0;padding-top:14px">Hard costs: $${iv('f-hard')}/gsf above grade, $${iv('f-cellar')}/sf cellar, $${fmt(+iv('f-story'))} per level for core, terraces, demolition and E-232 remediation, plus ${iv('f-green')}% green premium and ${iv('f-cont')}% contingency. Soft costs ${iv('f-soft')}% of hard, including the development fee.</td></tr>
     </tbody></table></div>`});
 
   const rr=(l,f,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="n">${f(B)}</td><td class="n">${f(D)}</td></tr>`;
-  const prices=[1500,1600,1700,1800,1900,2000];
-  S.push({html:`<div class="kicker">Returns</div><h2>Projected returns at a $${fmt(DECK.price)}/sf average price</h2>
+  const prices=[-200,-100,0,100,200,300].map(d=>PRICE+d);
+  S.push({html:`<div class="kicker">Returns</div><h2>Projected returns at a $${fmt(PRICE)}/sf average price</h2>
     <div class="cols c2"><table><thead><tr><th>Project</th><th class="n">Base · ${B.k}</th><th class="n">Upside · ${D.k}</th></tr></thead><tbody>
       ${rr('Net sales revenue',r=>mm2(r.F.revenue))}
       ${rr('Total project cost',r=>mm2(r.F.total))}
@@ -310,7 +309,7 @@ function slides(){
       ${rr('LP annualized (simplified)',r=>pct(r.V.irr))}
     </tbody></table>
     <div><h3 style="margin-bottom:10px">Sensitivity to condo price</h3><table><thead><tr><th>Average $/sf</th><th class="n">Base margin</th><th class="n">Base LP ×</th><th class="n">Upside margin</th><th class="n">Upside LP ×</th></tr></thead><tbody>
-      ${prices.map(pr=>{const b=scheme(B.k,{'f-res':pr}), d=scheme(D.k,{'f-res':pr}); return `<tr style="${pr===DECK.price?'background:var(--accent-soft)':''}"><td class="n" style="text-align:left">$${fmt(pr)}</td><td class="n ${sg(b.F.margin)}">${pct(b.F.margin)}</td><td class="n">${b.V.em.toFixed(2)}×</td><td class="n ${sg(d.F.margin)}">${pct(d.F.margin)}</td><td class="n">${d.V.em.toFixed(2)}×</td></tr>`;}).join('')}
+      ${prices.map(pr=>{const b=scheme(B.k,{'f-res':pr}), d=scheme(D.k,{'f-res':pr}); return `<tr style="${pr===PRICE?'background:var(--accent-soft)':''}"><td class="n" style="text-align:left">$${fmt(pr)}</td><td class="n ${sg(b.F.margin)}">${pct(b.F.margin)}</td><td class="n">${b.V.em.toFixed(2)}×</td><td class="n ${sg(d.F.margin)}">${pct(d.F.margin)}</td><td class="n">${d.V.em.toFixed(2)}×</td></tr>`;}).join('')}
     </tbody></table><p class="note" style="margin-top:10px">LP returns after a ${pref}% preferred return and a ${100-promote}/${promote} split above it, over ${months} months. Full line-by-line detail: <b>grand-proforma.vercel.app/projections</b></p></div></div>`});
 
   S.push({html:`<div class="kicker">Path to the upside</div><h2>What turns the base case into the upside</h2>
@@ -331,9 +330,9 @@ function slides(){
   S.push({html:`<div class="kicker">Important information</div><h2>Disclaimer</h2>
     <div style="display:grid;gap:12px;font-size:13.5px;line-height:1.55;color:var(--ink-2);max-width:95ch">
     <p>This presentation is for discussion purposes only and is not an offer to sell, or a solicitation of an offer to buy, any security. Any offering would be made only through definitive offering documents.</p>
-    <p>All figures are preliminary feasibility estimates based on assumptions that may prove incorrect, including sales prices, construction and soft costs (modeled here at $${DECK.costs['f-hard']}/gsf above grade and ${DECK.costs['f-soft']}% soft costs), financing terms, the availability and price of Inclusionary Housing certificates, and the outcome of any zoning lot merger with 727 Grand Street. Zoning conclusions are preliminary and subject to confirmation by land-use counsel and the Department of Buildings. Actual results may differ materially. Projected returns are not a guarantee of future performance.</p>
+    <p>All figures are preliminary feasibility estimates based on assumptions that may prove incorrect, including sales prices, construction and soft costs (modeled here at $${iv('f-hard')}/gsf above grade and ${iv('f-soft')}% soft costs), financing terms, the availability and price of Inclusionary Housing certificates, and the outcome of any zoning lot merger with 727 Grand Street. Zoning conclusions are preliminary and subject to confirmation by land-use counsel and the Department of Buildings. Actual results may differ materially. Projected returns are not a guarantee of future performance.</p>
     <p>Building drawings are schematic massing studies, not architectural designs.</p>
-    <p class="num" style="font-size:12px">Figures computed ${new Date().toLocaleDateString('en-US',{dateStyle:'medium'})} from the 725 Grand Street pro forma.</p></div>`});
+    <p class="num" style="font-size:12px">Figures computed ${new Date().toLocaleDateString('en-US',{dateStyle:'medium'})} from the 725 Grand Street pro forma, ${SCN?`"Deck" scenario saved ${scnWhen()}`:'study defaults (no "Deck" scenario found)'}.</p></div>`});
   return S;
 }
 
@@ -363,6 +362,11 @@ function bridge(){ // runs inside the engine frame
       const G=window.G725;
       if(G&&(G.loaded||(G.plans&&Date.now()-t0>8000))){
         try{
+          const sv=e.data.values;   // the saved scenario's inputs, applied the way the study applies a loaded scenario
+          if(sv){ if(typeof G.apply==='function') G.apply({values:sv,scheme:e.data.scheme}); else {
+            document.querySelectorAll('.wrap input[id],.wrap select[id]').forEach(el=>{ if(!(el.id in sv)) return; const v=sv[el.id]; if(el.type==='checkbox') el.checked=!!v; else el.value=String(v); });
+            const g=id=>document.getElementById(id);
+            Object.assign(G.st,{exist:+g('in-exist').value,green:g('in-green').checked,strategy:g('in-strategy').value,circ:g('in-circ').value,cut:g('in-cut').checked,mode:g('in-mode').value,bonusSrc:g('in-bonus').value,tenure:g('in-tenure').value}); } }
           Object.assign(G.st,e.data.set||{}); G.regen();
           const vals={}; document.querySelectorAll('input[id],select[id],textarea[id]').forEach(el=>{ vals[el.id]={type:el.type,value:el.value,checked:el.checked}; });
           parent.postMessage({g725:'engine',fns:['fin','investorOf','developerOf','unitsOf'].map(n=>G[n].toString()),
@@ -403,10 +407,24 @@ addEventListener('message',e=>{
   try{ const x=engineFrom(e.data); G=x.G; W=x.W; ready=true; clearInterval(ask); cur=Math.max(0,(parseInt(location.hash.slice(1))||1)-1); build(); $('loading').remove(); }
   catch(err){ ENG.err=String(err&&err.message||err); }
 });
+// Every input comes from the study's saved scenario named "Deck" (the newest one if there are several):
+// read live from the site's scenario list, or from the copy embedded when the page is built as a claude.ai artifact.
+let SCN=null;
+async function deckScenario(){
+  const emb=document.getElementById('deck-scenario');
+  if(emb){ try{ const d=JSON.parse(emb.textContent); if(d&&d.values) return {...d,source:'embedded'}; }catch(e){} }
+  try{ const r=await fetch('/api/scenarios',{cache:'no-store'}); if(r.ok&&(r.headers.get('content-type')||'').includes('json')){
+    const d=((await r.json()).scenarios||[]).filter(x=>String(x.name||'').trim().toLowerCase()==='deck'&&x.values)
+      .sort((a,b)=>String(b.savedAt).localeCompare(String(a.savedAt)))[0];
+    if(d) return {...d,source:'live'}; } }catch(e){}
+  return null;
+}
+const scnWhen=()=>SCN&&SCN.savedAt?new Date(SCN.savedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'}):'';
 (async()=>{
+  SCN=await deckScenario();
   try{ const html=await engineHtml(); $('engine').srcdoc=html.replace(/<\/body>\s*<\/html>\s*$/i,'')+'<scr'+'ipt>('+bridge.toString()+')();</scr'+'ipt>'; }
   catch(e){ ENG.err=String(e&&e.message||e); }
-  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS},'*'); }catch(e){} },500);
+  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS,values:SCN&&SCN.values,scheme:SCN&&SCN.scheme},'*'); }catch(e){} },500);
 })();
 setTimeout(()=>{ if(ready) return; clearInterval(ask);
   $('loading').textContent=`Could not load the pro forma. Reload the page. (${ENG.mode}${ENG.err?': '+ENG.err:''})`; },30000);

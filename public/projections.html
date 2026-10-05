@@ -133,7 +133,7 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
 <section aria-labelledby="h-lines">
   <span class="kicker">03 · Line by line</span>
   <h2 id="h-lines">Program, revenue, costs, capital and returns</h2>
-  <p class="status">Tap or hover <span class="ti" aria-hidden="true" style="cursor:default">i</span> next to any value to see how that figure is calculated. Sources: <span class="src src-prop">Proposal assumption</span> <span class="src src-ph">Study placeholder</span> <span class="src src-plan">From the plans</span> <span class="src src-calc">Calculated</span></p>
+  <p class="status">Tap or hover <span class="ti" aria-hidden="true" style="cursor:default">i</span> next to any value to see how that figure is calculated. Sources: <span class="src src-prop">Deck scenario</span> <span class="src src-ph">Study placeholder</span> <span class="src src-plan">From the plans</span> <span class="src src-calc">Calculated</span></p>
   <div class="scroll"><table id="lines"></table></div>
 </section>
 
@@ -178,9 +178,6 @@ const SCHEMES=[
   {k:'D',title:'Scheme D · upside',tag:'With 727 Grand',sub:'Zoning lot merger with 727 Grand + IH certificates on the merged lot.'}
 ];
 let G=null, W=null, saved={};
-const BASE_PRICE=1600; // the proposal's condo price assumption
-const BASE_COSTS={'f-land':4500000,'f-hard':375,'f-soft':15}; // the proposal's land and construction cost assumptions
-const FIXED={'f-scres':5}; // proposal assumptions with no control on this page: condo selling costs 5%
 let CUR={};
 
 function compute(o){
@@ -189,7 +186,7 @@ function compute(o){
     return {...s,p,F,V,units};
   });
 }
-function overrides(){ CUR={...FIXED,'f-res':+$('c-price').value||0,'f-land':+$('c-land').value||0,'f-hard':+$('c-hard').value||0,'f-soft':+$('c-soft').value||0}; return CUR; }
+function overrides(){ CUR={'f-res':+$('c-price').value||0,'f-land':+$('c-land').value||0,'f-hard':+$('c-hard').value||0,'f-soft':+$('c-soft').value||0}; return CUR; }
 function inVal(id){ if(CUR[id]!=null&&id!=='f-res'&&id!=='f-land') return String(CUR[id]); const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):''; }
 
 function render(){
@@ -238,7 +235,7 @@ function render(){
     const L={lo:'lower floors',mid:'middle floors',base:'middle floors',up:'upper floors',ph:'penthouse'};
     return ['lo','mid','base','up','ph'].filter(t=>F.tierSf[t]>0).map(t=>`${L[t]} ${fmt(F.tierSf[t])} sf × ${psf(F.psfT[t])}`).join(' + '); };
   const itemNote=(name,it,r)=>{ const calc=`${it[1]} = ${M(it[2])}.`;
-    return /Above-grade/.test(name)?['prop',`${calc} The rate is the proposal's hard cost set at the top of this page.`]
+    return /Above-grade/.test(name)?['prop',`${calc} The rate comes from the Deck scenario (adjustable at the top of this page).`]
       :/Cellar/.test(name)?['ph',`${calc} The rate is a main-study placeholder, not a bid.`]
       :/penthouse/.test(name)?['ph',`${calc} A fixed rooftop mechanical penthouse priced at the above-grade rate.`]
       :/Loggias/.test(name)?['ph',`${calc} Decking, railings and drainage. Study placeholder rate.`]
@@ -271,7 +268,7 @@ function render(){
     ${both('Hard-cost contingency',r=>M(r.F.cont),'',null,r=>['ph',`${inVal('f-cont')}% × (${M(r.F.sub)} + ${M(r.F.green)}) = ${M(r.F.cont)}. Study placeholder.`])}
     ${both('Total hard costs',r=>M(r.F.hard),'tot',null,r=>['calc',`${M(r.F.sub)} cost lines + ${M(r.F.green)} green + ${M(r.F.cont)} contingency = ${M(r.F.hard)}, or ${psf(r.F.hard/r.p.gross)} per gsf above grade.`])}
     <tr class="grp"><td colspan="3">Other costs</td></tr>
-    ${both('Soft costs',r=>M(r.F.soft),'',null,r=>['prop',`${inVal('f-soft')}% × ${M(r.F.hard)} hard = ${M(r.F.soft)}: design, legal, insurance, permits, development fee, marketing. The rate is the proposal's, set at the top of this page.`])}
+    ${both('Soft costs',r=>M(r.F.soft),'',null,r=>['prop',`${inVal('f-soft')}% × ${M(r.F.hard)} hard = ${M(r.F.soft)}: design, legal, insurance, permits, development fee, marketing. The rate comes from the Deck scenario (adjustable at the top of this page).`])}
     ${both('Land, 725 Grand',r=>M(r.F.land),'',null,r=>['prop',`The land basis set at the top of this page: ${M(r.F.land)}.`])}
     ${both('Air rights from 727 Grand',r=>M(r.F.nb),'',null,r=>r.p.s.tr?['ph',`${fmt(r.p.s.tr)} sf × $${inVal('in-p1')} = ${M(r.F.nb)}. Transfer = 2,067 sf × 4.0 less 727 Grand's existing building (about 4,133 sf, field measurement). Price is a study placeholder.`]:['calc',`None. Scheme ${r.k} builds on 725 Grand alone.`])}
     ${both('IH certificates',r=>M(r.F.certs),'',null,r=>r.p.s.cert?['ph',`${fmt(r.p.s.cert)} sf of bonus × $${inVal('in-p2')} = ${M(r.F.certs)}, to reach FAR 5.01. Price is a study placeholder; supply is limited.`]:['calc',`None. Scheme ${r.k} stays at FAR 4.0, as of right.`])}
@@ -320,7 +317,7 @@ function render(){
   $('ass').innerHTML=`<thead><tr><th>Input</th><th>Source</th><th class="num">Value</th></tr></thead><tbody>${A.map(a=>`<tr><td>${a[0]}${a[2]?`<span class="sub">${a[2]}</span>`:''}</td><td>${srcTag(a[3]||'ph')}</td><td class="num">${a[1]}</td></tr>`).join('')}</tbody>`;
 }
 
-const SRC={prop:['src-prop','Proposal assumption'],ph:['src-ph','Study placeholder'],plan:['src-plan','From the plans'],calc:['src-calc','Calculated']};
+const SRC={prop:['src-prop','Deck scenario'],ph:['src-ph','Study placeholder'],plan:['src-plan','From the plans'],calc:['src-calc','Calculated']};
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function srcTag(k){ const [c,l]=SRC[k]||SRC.calc; return `<span class="src ${c}">${l}</span>`; }
 function tipBtn([k,text]){ return `<button type="button" class="ti" aria-label="How this figure is derived" data-src="${k}" data-tip="${esc(text)}">i</button>`; }
@@ -360,9 +357,10 @@ function drawBars(per){
 }
 
 function start(){
-  saved={'f-res':BASE_PRICE,'f-land':+inVal('f-land'),...BASE_COSTS};
+  saved={'f-res':+W.document.getElementById('f-res').value,'f-land':+W.document.getElementById('f-land').value,'f-hard':+W.document.getElementById('f-hard').value,'f-soft':+W.document.getElementById('f-soft').value};
   setControls();
-  $('status').textContent=`Proposal assumptions: ${psf(BASE_PRICE)}/sf average condo price (lower floors below it, upper floors and penthouse above), ${mm(BASE_COSTS['f-land'])} land, $${BASE_COSTS['f-hard']}/gsf hard, ${BASE_COSTS['f-soft']}% soft. Every other input comes from the pro forma.`;
+  $('status').textContent=SCN?`Values from the study's "Deck" scenario, saved ${scnWhen()}: ${psf(saved['f-res'])}/sf average condo price, ${mm(saved['f-land'])} land, $${saved['f-hard']}/gsf hard, ${saved['f-soft']}% soft. Changes here are not saved; update the Deck scenario in the study to change them.`
+    :'No "Deck" scenario found, so these are the study defaults. Save a scenario named Deck in the study.';
   $('asof').textContent='Computed '+new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
   render();
 }
@@ -383,6 +381,11 @@ function bridge(){ // runs inside the engine frame
       const G=window.G725;
       if(G&&(G.loaded||(G.plans&&Date.now()-t0>8000))){
         try{
+          const sv=e.data.values;   // the saved scenario's inputs, applied the way the study applies a loaded scenario
+          if(sv){ if(typeof G.apply==='function') G.apply({values:sv,scheme:e.data.scheme}); else {
+            document.querySelectorAll('.wrap input[id],.wrap select[id]').forEach(el=>{ if(!(el.id in sv)) return; const v=sv[el.id]; if(el.type==='checkbox') el.checked=!!v; else el.value=String(v); });
+            const g=id=>document.getElementById(id);
+            Object.assign(G.st,{exist:+g('in-exist').value,green:g('in-green').checked,strategy:g('in-strategy').value,circ:g('in-circ').value,cut:g('in-cut').checked,mode:g('in-mode').value,bonusSrc:g('in-bonus').value,tenure:g('in-tenure').value}); } }
           Object.assign(G.st,e.data.set||{}); G.regen();
           const vals={}; document.querySelectorAll('input[id],select[id],textarea[id]').forEach(el=>{ vals[el.id]={type:el.type,value:el.value,checked:el.checked}; });
           parent.postMessage({g725:'engine',fns:['fin','investorOf','developerOf','unitsOf'].map(n=>G[n].toString()),
@@ -423,10 +426,24 @@ addEventListener('message',e=>{
   try{ const x=engineFrom(e.data); G=x.G; W=x.W; ready=true; clearInterval(ask); start(); }
   catch(err){ ENG.err=String(err&&err.message||err); }
 });
+// Every input comes from the study's saved scenario named "Deck" (the newest one if there are several):
+// read live from the site's scenario list, or from the copy embedded when the page is built as a claude.ai artifact.
+let SCN=null;
+async function deckScenario(){
+  const emb=document.getElementById('deck-scenario');
+  if(emb){ try{ const d=JSON.parse(emb.textContent); if(d&&d.values) return {...d,source:'embedded'}; }catch(e){} }
+  try{ const r=await fetch('/api/scenarios',{cache:'no-store'}); if(r.ok&&(r.headers.get('content-type')||'').includes('json')){
+    const d=((await r.json()).scenarios||[]).filter(x=>String(x.name||'').trim().toLowerCase()==='deck'&&x.values)
+      .sort((a,b)=>String(b.savedAt).localeCompare(String(a.savedAt)))[0];
+    if(d) return {...d,source:'live'}; } }catch(e){}
+  return null;
+}
+const scnWhen=()=>SCN&&SCN.savedAt?new Date(SCN.savedAt).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'}):'';
 (async()=>{
+  SCN=await deckScenario();
   try{ const html=await engineHtml(); $('engine').srcdoc=html.replace(/<\/body>\s*<\/html>\s*$/i,'')+'<scr'+'ipt>('+bridge.toString()+')();</scr'+'ipt>'; }
   catch(e){ ENG.err=String(e&&e.message||e); }
-  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS},'*'); }catch(e){} },500);
+  ask=setInterval(()=>{ try{ $('engine').contentWindow.postMessage({g725:'get',set:SETTINGS,values:SCN&&SCN.values,scheme:SCN&&SCN.scheme},'*'); }catch(e){} },500);
 })();
 setTimeout(()=>{ if(ready) return; clearInterval(ask);
   $('status').textContent=`Could not load the pro forma. Reload the page. (${ENG.mode}${ENG.err?': '+ENG.err:''})`; },30000);
