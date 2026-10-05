@@ -683,8 +683,12 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
   <div class="sheet-tag"><span class="no">F-200</span><span class="label">Costs</span></div>
   <div class="sheet-body">
     <h2>Estimated construction and project costs</h2>
-    <p>Hard costs use the gross areas from each scheme's plans. The defaults are planning-level placeholders for a non-union Brooklyn mid-rise condo, not bids. Swap in a GC's budget, your land basis and your acquisition prices when you have them.</p>
+    <p id="costs-intro"></p>
     <div class="fgrid">
+      <label class="field"><span class="label">Hard cost method</span>
+        <select id="f-hmethod"><option value="detail" selected>Detailed build-up (F-210)</option><option value="blend">One blended $/gsf</option></select></label>
+      <label class="field"><span class="label">Soft cost method</span>
+        <select id="f-smethod"><option value="detail" selected>Detailed build-up (F-220)</option><option value="pct">Flat % of hard</option></select></label>
       <label class="field"><span class="label">Hard $/gsf above grade</span><input id="f-hard" type="number" step="25" value="450"></label>
       <label class="field"><span class="label">Cellar $/sf</span><input id="f-cellar" type="number" step="25" value="325"></label>
       <label class="field"><span class="label">Terraces $/sf</span><input id="f-outc" type="number" step="5" value="75"></label>
@@ -715,6 +719,83 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
         <p class="note">Neighbor rights and certificate prices come from the placeholder inputs in Z-002. The land basis is a placeholder too; replace it with your actual cost.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="sheet" id="hardcost">
+  <div class="sheet-tag"><span class="no">F-210</span><span class="label">Hard build-up</span></div>
+  <div class="sheet-body">
+    <h2>Hard costs, line by line off the model</h2>
+    <p id="hard-intro"></p>
+    <div class="tiles" id="hard-tiles"></div>
+    <div class="fgrid">
+      <label class="field"><span class="label">Excavation + foundations $/cellar sf</span><input id="h-exc" type="number" step="5" value="95"></label>
+      <label class="field"><span class="label">Underpinning $/lf of lot line</span><input id="h-under" type="number" step="50" value="1200"></label>
+      <label class="field"><span class="label">Superstructure $/gsf</span><input id="h-super" type="number" step="5" value="125"></label>
+      <label class="field"><span class="label">Street window wall $/sf of wall</span><input id="h-env" type="number" step="5" value="105"></label>
+      <label class="field"><span class="label">Lot-line / party wall $/sf</span><input id="h-party" type="number" step="2" value="42"></label>
+      <label class="field"><span class="label">Façade fin $ each</span><input id="h-fin" type="number" step="10" value="320"></label>
+      <label class="field"><span class="label">Roofing + waterproofing $/sf</span><input id="h-roof" type="number" step="2" value="38"></label>
+      <label class="field"><span class="label">Elevator $/stop</span><input id="h-elev" type="number" step="5000" value="55000"></label>
+      <label class="field"><span class="label">Stair + risers $/level</span><input id="h-stair" type="number" step="1000" value="22000"></label>
+      <label class="field"><span class="label">MEP residential $/gsf</span><input id="h-mepres" type="number" step="2" value="62"></label>
+      <label class="field"><span class="label">MEP retail core + shell $/sf</span><input id="h-mepret" type="number" step="2" value="28"></label>
+      <label class="field"><span class="label">Unit interiors $/net sf</span><input id="h-fitout" type="number" step="5" value="115"></label>
+      <label class="field"><span class="label">Kitchen $ each</span><input id="h-kit" type="number" step="1000" value="22000"></label>
+      <label class="field"><span class="label">Bathroom $ each</span><input id="h-bath" type="number" step="1000" value="14000"></label>
+      <label class="field"><span class="label">Common area finishes $/sf</span><input id="h-common" type="number" step="5" value="85"></label>
+      <label class="field"><span class="label">Sprinkler + alarm $/gsf</span><input id="h-fire" type="number" step="1" value="14"></label>
+      <label class="field"><span class="label">Sidewalk + site $/lf frontage</span><input id="h-site" type="number" step="50" value="850"></label>
+      <label class="field"><span class="label">General conditions + GC fee %</span><input id="h-gc" type="number" step="0.5" value="14"></label>
+    </div>
+    <div class="below">
+      <div class="tbl" style="max-height:620px;overflow:auto"><table>
+        <thead><tr><th>Line</th><th>Quantity off the model</th><th>Rate</th><th>Total</th><th>$/gsf</th></tr></thead>
+        <tbody id="hard-body"></tbody>
+      </table></div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <span class="label">Quantities this scheme generates</span>
+        <div class="ledger" id="hard-qty"></div>
+        <p class="note">Wall areas are measured off each floor's occupancy grid, so the corner geometry is priced as it is drawn: the long Grand Street and Graham Avenue elevations get window wall, the walls against 727 Grand and the rear lot line get party-wall construction, and above the 30 ft easement line in schemes C and D that east wall switches to glazing. Fin count follows the spacing set in A-200.</p>
+      </div>
+    </div>
+    <p class="note">Every rate here is a planning-level placeholder for a non-union Brooklyn mid-rise, not a bid. The point of the build-up is that the $/gsf is now an <b>output</b>: change a rate, or the massing, and watch which lines move. Switch <b>Hard cost method</b> in F-200 to compare it against a single blended rate.</p>
+  </div>
+</section>
+
+<section class="sheet" id="softcost">
+  <div class="sheet-tag"><span class="no">F-220</span><span class="label">Soft build-up</span></div>
+  <div class="sheet-body">
+    <h2>Soft costs, line by line</h2>
+    <p id="soft-intro"></p>
+    <div class="tiles" id="soft-tiles"></div>
+    <div class="fgrid">
+      <label class="field"><span class="label">Architecture + engineering $/gsf</span><input id="s-ae" type="number" step="0.5" value="14"></label>
+      <label class="field"><span class="label">Expediting + filing fees $</span><input id="s-exp" type="number" step="10000" value="140000"></label>
+      <label class="field"><span class="label">Surveys + inspections $/gsf</span><input id="s-insp" type="number" step="0.5" value="3.5"></label>
+      <label class="field"><span class="label">Phase I/II + E-232 oversight $</span><input id="s-env" type="number" step="10000" value="60000"></label>
+      <label class="field"><span class="label">Builder's risk + GL % of hard</span><input id="s-ins" type="number" step="0.1" value="2.2"></label>
+      <label class="field"><span class="label">Construction-period taxes %/yr of land</span><input id="s-tax" type="number" step="0.1" value="1.4"></label>
+      <label class="field"><span class="label">Legal: acquisition, loan, ZLDA $</span><input id="s-legal" type="number" step="10000" value="220000"></label>
+      <label class="field"><span class="label">Offering plan + sponsor legal $</span><input id="s-offer" type="number" step="10000" value="180000"></label>
+      <label class="field"><span class="label">Offering plan $ per unit</span><input id="s-offeru" type="number" step="500" value="2500"></label>
+      <label class="field"><span class="label">Title + recording % of land</span><input id="s-title" type="number" step="0.1" value="0.9"></label>
+      <label class="field"><span class="label">Marketing + sales center $/unit</span><input id="s-mkt" type="number" step="500" value="6500"></label>
+      <label class="field"><span class="label">Appraisal + loan closing $</span><input id="s-lender" type="number" step="5000" value="95000"></label>
+      <label class="field"><span class="label">Soft contingency %</span><input id="s-cont" type="number" step="0.5" value="7.5"></label>
+    </div>
+    <div class="below">
+      <div class="tbl"><table>
+        <thead><tr><th>Line</th><th>Basis</th><th>Total</th><th>% of hard</th></tr></thead>
+        <tbody id="soft-body"></tbody>
+      </table></div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <span class="label">How this compares</span>
+        <div class="ledger" id="soft-cmp"></div>
+        <p class="note">The development fee is the same input as F-500, so it is counted once, here inside softs. Construction-period taxes run on the land basis for the project length set in F-300, which is why a longer schedule shows up as a soft cost and not only as interest. The offering plan line applies to a condo sale; held as a rental it drops to lease-up and rent-registration legal.</p>
+      </div>
+    </div>
+    <p class="note">Switch <b>Soft cost method</b> in F-200 to flip back to a flat percentage of hard costs and sanity-check the build-up against it.</p>
   </div>
 </section>
 
@@ -1169,7 +1250,8 @@ function tally(P,gf){
   const pre=cnt-refuse, zfa=pre/gf, greenEx=pre-zfa;
   const height=P.mode==='enl'?P.exTop+(P.N-1-P.exN)*P.typ:P.g+(P.N-1)*P.typ;
   return {...P,gross,cellar,cnt,corrEx,amenEx,mechEx,refuse,greenEx,zfa,units:units.size,net,outdoor,retail,height,
-    exGross,newGross:gross-exGross,newAbove4,affNet,affUnits:affUnits.size,marketNet:net-affNet};
+    exGross,newGross:gross-exGross,newAbove4,affNet,affUnits:affUnits.size,marketNet:net-affNet,
+    geom:{S0,S1,SB}};   // fin() reads the occupancy grids, so it needs the stride and the lot lines
 }
 
 /* Vertical enlargement: keep the existing ground + upper floors, build new floors above.
@@ -1351,7 +1433,7 @@ function fin(p,o={}){
   const rent=p.retail*v('f-rent'), noi=rent*(1-v('f-vac')/100-v('f-opex')/100), retVal=noi/(v('f-cap')/100), retNet=retVal*(1-v('f-scret')/100);
   const revenue=resNet+retNet;
   const enl=p.mode==='enl';
-  const items=enl?[
+  let items=enl?[
     ['New construction above the existing',`${fmt(p.newGross)} gsf × $${v('f-hard')}`,p.newGross*v('f-hard')],
     ['Renovate retained floors',`${fmt(p.exGross)} sf × $${v('f-reno')}`,p.exGross*v('f-reno')],
     ['Steel columns + foundations above floor 4',`${fmt(p.newAbove4)} gsf × $${v('f-steel')}`,p.newAbove4*v('f-steel')],
@@ -1369,9 +1451,116 @@ function fin(p,o={}){
     ['Demolition of existing building','5,534 sf × $'+v('f-demo'),5534*v('f-demo')],
     ['E-232 testing and remediation','allowance',v('f-edes')]
   ];
-  const sub=items.reduce((s,i)=>s+i[2],0);
+  /* ---- quantity take-off, measured off this scheme's own floor plates ---- */
+  const GW=(p.geom&&p.geom.S1)||51, GS0=(p.geom&&p.geom.S0)||25.83;
+  // linear feet of exterior wall per floor, split into street-facing and lot-line, read off the
+  // same occupancy grid the 3D model and the facade study use
+  const wallsOf=f=>{
+    const a=f.occ; if(!a) return {st:0,lot:0};
+    const on=(x,z)=>x>=0&&x<GW&&z>=0&&z<100&&a[z*GW+x];
+    const ease=p.s.merged&&f.elev+3>=30;                       // easement windows above 30 ft
+    const isLot=(x,z)=>x<0||z>100||(x<GS0&&z<80&&!ease)||(x<GS0&&z>=80);
+    let stl=0, lotl=0;
+    for(let z=0;z<100;z++) for(let x=0;x<GW;x++){
+      if(!on(x,z)) continue;
+      const eg=[[x,z-1,x+.5,z-.5],[x,z+1,x+.5,z+1.5],[x-1,z,x-.5,z+.5],[x+1,z,x+1.5,z+.5]];
+      for(let i=0;i<eg.length;i++){ const e=eg[i];
+        if(on(e[0],e[1])) continue;
+        if(isLot(e[2],e[3])) lotl++; else stl++; }
+    }
+    return {st:stl,lot:lotl};
+  };
+  let faceSt=0, facePty=0, faceLf=0, terrSf=0, cellarLot=0;
+  p.floors.forEach(f=>{
+    const w=wallsOf(f);
+    if(f.cellar){ cellarLot=w.lot; return; }
+    if(!f.existing){ faceSt+=w.st*f.h; facePty+=w.lot*f.h; if(f.n!==1) faceLf+=w.st; }   // fins skip the storefront
+    terrSf+=Math.max(0,(f.outdoor||0)-(f.logg||0));
+  });
+  const roofSf=(p.floors[p.floors.length-1].gross||0)+terrSf;
+  const resGsf=Math.max(0,p.gross-p.retail), commonSf=Math.max(0,p.gross-p.net-p.retail);
+  const frontage=(GW-GS0)+100;                                  // Grand Street + Graham Avenue
+  const finSp=Math.max(1,+(($('fc-spacing')||{}).value)||2.5), finCount=Math.round(faceLf/finSp);
+  let kitchens=0, baths=0;
+  p.floors.forEach(f=>{ if(typeof f.n!=='number'||f.n<2) return;
+    const by={}; f.rects.forEach(r=>{ if((r.t==='res'||r.t==='aff')&&r.u) by[r.u]=(by[r.u]||0)+r.area; });
+    Object.keys(by).forEach(u=>{ kitchens++; baths+=unitName(by[u])==='3BR'?2:1; });
+  });
+  const stops=p.N+1, allG=p.gross+p.cellar;
+  const qty={gross:p.gross,cellar:p.cellar,net:p.net,retail:p.retail,outdoor:p.outdoor,resGsf,commonSf,
+    faceSt,facePty,faceLf,finCount,roofSf,terrSf,frontage,kitchens,baths,stops,
+    exGross:p.exGross,newGross:p.newGross,newAbove4:p.newAbove4,units:p.units};
+
+  /* ---- detailed hard cost build-up ---- */
+  const HL=[];
+  const hl=(g,l,q,rate,total)=>HL.push({g,l,q,r:rate,t:total});
+  if(enl){
+    hl('Substructure and shell','Renovate retained floors',`${fmt(p.exGross)} sf retained`,`$${v('f-reno')}/sf`,p.exGross*v('f-reno'));
+    hl('Substructure and shell','Building-wide code upgrade (sprinklers, egress, alarm)',`${fmt(p.exGross+p.cellar)} sf existing`,`$${v('f-upgrade')}/sf`,(p.exGross+p.cellar)*v('f-upgrade'));
+    hl('Substructure and shell','Cellar fit-out',`${fmt(p.cellar)} sf`,`$${v('f-reno')}/sf`,p.cellar*v('f-reno'));
+    hl('Substructure and shell','New superstructure above the existing',`${fmt(p.newGross)} gsf new`,`$${v('h-super')}/gsf`,p.newGross*v('h-super'));
+    hl('Substructure and shell','New steel columns + foundations above floor 4',`${fmt(p.newAbove4)} gsf`,`$${v('f-steel')}/gsf`,p.newAbove4*v('f-steel'));
+  } else {
+    hl('Substructure and shell','Excavation, foundations and cellar slab',`${fmt(p.cellar)} sf footprint`,`$${v('h-exc')}/sf`,p.cellar*v('h-exc'));
+    hl('Substructure and shell','Underpinning and shoring at the shared lot lines',`${fmt(cellarLot)} lf`,`$${fmt(v('h-under'))}/lf`,cellarLot*v('h-under'));
+    hl('Substructure and shell','Demolition of the existing building','5,534 sf',`$${v('f-demo')}/sf`,5534*v('f-demo'));
+    hl('Substructure and shell','Superstructure, ground to roof',`${fmt(p.gross)} gsf`,`$${v('h-super')}/gsf`,p.gross*v('h-super'));
+    hl('Substructure and shell','Rooftop MEP penthouse','625 gsf',`$${v('h-super')}/gsf`,625*v('h-super'));
+  }
+  hl('Envelope','Street-facing window wall and spandrel',`${fmt(faceSt)} sf of wall`,`$${v('h-env')}/sf`,faceSt*v('h-env'));
+  hl('Envelope','Lot-line and party walls',`${fmt(facePty)} sf of wall`,`$${v('h-party')}/sf`,facePty*v('h-party'));
+  hl('Envelope','Parametric façade fins (A-200)',`${fmt(finCount)} fins at ${finSp} ft`,`$${fmt(v('h-fin'))} each`,finCount*v('h-fin'));
+  hl('Envelope','Roofing, waterproofing and flashing',`${fmt(roofSf)} sf`,`$${v('h-roof')}/sf`,roofSf*v('h-roof'));
+  hl('Core and systems','Elevator, one car',`${stops} stops`,`$${fmt(v('h-elev'))}/stop`,stops*v('h-elev'));
+  hl('Core and systems','Scissor stair, flights, railings and risers',`${stops} levels`,`$${fmt(v('h-stair'))}/level`,stops*v('h-stair'));
+  hl('Core and systems','MEP, residential',`${fmt(resGsf)} gsf`,`$${v('h-mepres')}/gsf`,resGsf*v('h-mepres'));
+  hl('Core and systems','MEP, retail core and shell',`${fmt(p.retail)} sf`,`$${v('h-mepret')}/sf`,p.retail*v('h-mepret'));
+  hl('Core and systems','Sprinkler, standpipe and fire alarm',`${fmt(allG)} gsf incl. cellar`,`$${v('h-fire')}/gsf`,allG*v('h-fire'));
+  hl('Fit-out','Unit interiors: partitions, floors, doors, paint',`${fmt(p.net)} net sf`,`$${v('h-fitout')}/sf`,p.net*v('h-fitout'));
+  hl('Fit-out','Kitchens',`${kitchens} units`,`$${fmt(v('h-kit'))} each`,kitchens*v('h-kit'));
+  hl('Fit-out','Bathrooms',`${baths} baths`,`$${fmt(v('h-bath'))} each`,baths*v('h-bath'));
+  hl('Fit-out','Corridors, lobby, amenity and core finishes',`${fmt(commonSf)} sf`,`$${v('h-common')}/sf`,commonSf*v('h-common'));
+  hl('Fit-out','Loggias, terraces and roof deck',`${fmt(p.outdoor)} sf`,`$${v('f-outc')}/sf`,p.outdoor*v('f-outc'));
+  hl('Site and general','Sidewalk, vault, utilities and site work',`${fmt(frontage)} lf frontage`,`$${fmt(v('h-site'))}/lf`,frontage*v('h-site'));
+  hl('Site and general','E-232 testing and remediation','allowance','—',v('f-edes'));
+  const hTrade=HL.reduce((s,i)=>s+i.t,0);
+  hl('Site and general','General conditions and GC fee',`${v('h-gc')}% of trade costs`,'—',hTrade*v('h-gc')/100);
+  const subDetail=HL.reduce((s,i)=>s+i.t,0);
+
+  const hDetail=$('f-hmethod')&&$('f-hmethod').value==='detail';
+  const subBlend=items.reduce((s,i)=>s+i[2],0);
+  // in detailed mode F-200 shows the build-up rolled up by group; F-210 carries the lines
+  const groups=[];
+  HL.forEach(i=>{ const g=groups.find(x=>x[0]===i.g); if(g) g[2]+=i.t; else groups.push([i.g,'',i.t]); });
+  groups.forEach(g=>{ g[1]=`${fmt(100*g[2]/Math.max(1,subDetail))}% of hard trade + fee`; });
+  if(hDetail) items=groups;
+  const sub=hDetail?subDetail:subBlend;
   const green=st.green?sub*v('f-green')/100:0; const cont=(sub+green)*v('f-cont')/100; const hard=sub+green+cont;
-  const soft=hard*v('f-soft')/100, land=v('f-land');
+
+  /* ---- detailed soft cost build-up (needs hard, so it comes after) ---- */
+  const land=v('f-land'), months=Math.max(1,v('f-months'));
+  const SL=[];
+  const sl=(l,b,total)=>SL.push({l,b,t:total});
+  sl('Architecture, structural and MEP engineering',`${fmt(allG)} gsf × $${v('s-ae')}`,allG*v('s-ae'));
+  sl('Expediting, DOB and utility filing fees','allowance',v('s-exp'));
+  sl('Surveys, controlled and special inspections',`${fmt(allG)} gsf × $${v('s-insp')}`,allG*v('s-insp'));
+  sl('Phase I/II and E-232 oversight','allowance',v('s-env'));
+  sl("Builder's risk and general liability",`${v('s-ins')}% of hard ${fmt(hard)}`,hard*v('s-ins')/100);
+  sl('Construction-period real estate taxes',`${v('s-tax')}%/yr of land × ${months} mo`,land*v('s-tax')/100*months/12);
+  sl('Legal: acquisition, loan, ZLDA and easement','allowance',v('s-legal'));
+  sl(rental?'Lease-up, rent registration and sponsor legal':'Condo offering plan (AG filing) and sponsor legal',
+     rental?'allowance at 25% of the condo figure':`allowance + ${p.units} units × $${fmt(v('s-offeru'))}`,
+     rental?v('s-offer')*.25:v('s-offer')+p.units*v('s-offeru'));
+  sl('Title insurance and recording',`${v('s-title')}% of land ${fmt(land)}`,land*v('s-title')/100);
+  sl('Development fee',`${v('dv-fee')}% of hard (the F-500 input)`,hard*v('dv-fee')/100);
+  sl(rental?'Lease-up marketing':'Marketing, branding and sales center',
+     `${p.units} units × $${fmt(v('s-mkt')*(rental?.3:1))}`,p.units*v('s-mkt')*(rental?.3:1));
+  sl('Appraisal, lender inspections and loan closing','allowance',v('s-lender'));
+  const sTrade=SL.reduce((s,i)=>s+i.t,0);
+  sl('Soft contingency',`${v('s-cont')}% of the above`,sTrade*v('s-cont')/100);
+  const softDetail=SL.reduce((s,i)=>s+i.t,0);
+  const sDetail=$('f-smethod')&&$('f-smethod').value==='detail';
+  const soft=sDetail?softDetail:hard*v('f-soft')/100;
   const nb=p.s.tr*v('in-p1'), certs=p.s.cert*v('in-p2');
   const costEx=hard+soft+land+nb+certs;
   const ltc=v('f-ltc')/100, k=v('f-rate')/100*(v('f-months')/12)*(v('f-util')/100)+v('f-fee')/100;
@@ -1384,6 +1573,7 @@ function fin(p,o={}){
   const assetVal=(rental?resCapVal:condoGross+affVal)+retVal;   // the retail condo is part of the project's value
   const refiProceeds=refi?assetVal*refiLtv:0;
   return {rental,refi,refiLtv,refiProceeds,assetVal,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,
+    qty,hardLines:HL,softLines:SL,hDetail,sDetail,subDetail,subBlend,softDetail,softPct:hard*v('f-soft')/100,gsfRate:hard/Math.max(1,p.gross),
     psfT,tierOf,tierSf,psfBlend,wSf,avg,bands:{lo:loN,mid:nF-loN-upN-phN,up:upN,ph:phN,floors:resN},privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
     margin:profit/total, roe:profit/equity, em, irr:em>0?Math.pow(em,12/Math.max(1,v('f-months')))-1:-1};
 }
@@ -1585,10 +1775,76 @@ function renderFinance(){
   $('sens-body').innerHTML=prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${hards.map(h=>{const m=fin(p,{'f-res':pr,'f-hard':h}).margin;return `<td class="num ${m<0?'cellbad':m>=.15?'cellgood':''}"${pr===psf&&h===hb?' style="font-weight:700;outline:1.5px solid var(--ink);outline-offset:-2px"':''}>${pct(m)}</td>`;}).join('')}</tr>`).join('');
   $('fin-cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; const G=fin(q); const c=G.profit<0?'neg':'';
     return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${mm(G.revenue)}</td><td class="num">${mm(G.total)}</td><td class="num">${mm(G.loan)}</td><td class="num">${mm(G.equity)}</td><td class="num ${c}">${mm(G.profit)}</td><td class="num ${c}">${pct(G.margin)}</td><td class="num ${c}">${G.em.toFixed(2)}×</td><td class="num ${c}">${pct(G.irr)}</td></tr>`;}).join('');
+  $('costs-intro').textContent=`Hard costs are ${F.hDetail?`built up line by line in F-210 off this scheme's own floor plates, landing at $${fmt(F.gsfRate)}/gsf`:`a single blended $${$('f-hard').value}/gsf above grade, plus the cellar, core and outdoor lines`}. Soft costs are ${F.sDetail?'built up line by line in F-220':`a flat ${$('f-soft').value}% of hard`}. Every rate is a planning-level placeholder for a non-union Brooklyn mid-rise, not a bid — swap in a GC's budget, your land basis and your acquisition prices when you have them.`;
+  renderHard(p);
+  renderSoft(p);
   renderInvestor(p);
   renderCashflow(p);
   renderSummary();
   normalizeBands();   // show each band at the price actually used, so the average above holds
+}
+
+/* ---------- F-210 hard cost build-up ---------- */
+function renderHard(p){
+  if(!$('hard-body')) return;
+  const F=fin(p), g=p.gross;
+  const psf=x=>'$'+fmt(x/Math.max(1,g));
+  $('hard-intro').textContent=`Scheme ${p.s.k}${p.mode==='enl'?', keep + add,':','} priced off its own floor plates rather than one blended rate: ${fmt(F.qty.gross)} gsf above grade${p.mode==='enl'?` of which ${fmt(F.qty.exGross)} retained and ${fmt(F.qty.newGross)} new`:''}, ${fmt(F.qty.faceSt)} sf of street-facing wall, ${fmt(F.qty.facePty)} sf of party wall, ${F.qty.units} units with ${F.qty.kitchens} kitchens and ${F.qty.baths} baths, and ${F.qty.stops} core levels. Hard cost lands at ${mm(F.hard)}, which is ${psf(F.hard)}/gsf — an output of the lines below, not an assumption.`;
+  const neg=F.gsfRate>500?' neg':'';
+  $('hard-tiles').innerHTML=[
+    ['Hard cost, all in',mm(F.hard),'',`Trade costs ${mm(F.subDetail)} (including general conditions and the GC fee) + green premium ${mm(F.green)} + ${$('f-cont').value}% contingency ${mm(F.cont)} = <b>${mm(F.hard)}</b>.`],
+    ['Implied $/gsf',psf(F.hard)+'/gsf',neg,`Hard cost ${mm(F.hard)} ÷ ${fmt(g)} gsf above grade = <b>${psf(F.hard)}/gsf</b>. This is what a single blended rate would have to be to produce the same number — compare it with the $${$('f-hard').value} placeholder in F-200.`],
+    ['Trade costs before fee',mm(F.subDetail-F.hardLines[F.hardLines.length-1].t),'',`Everything except general conditions and the GC fee, which run at ${$('h-gc').value}% on top: <b>${mm(F.hardLines[F.hardLines.length-1].t)}</b>.`],
+    ['vs. one blended rate',mm(F.subBlend*(1+(st.green?+$('f-green').value/100:0))*(1+(+$('f-cont').value||0)/100)),'',`The old method — $${$('f-hard').value}/gsf above grade plus the cellar, core and outdoor lines — gives <b>${mm(F.subBlend*(1+(st.green?+$('f-green').value/100:0))*(1+(+$('f-cont').value||0)/100))}</b> all in. The build-up is ${F.subDetail>F.subBlend?'higher':'lower'} by ${mm(Math.abs(F.subDetail-F.subBlend)*(1+(+$('f-cont').value||0)/100))}.`],
+    ['Cost per unit',mm(F.hard/Math.max(1,p.units)),'',`Hard cost ${mm(F.hard)} ÷ ${p.units} units = <b>${mm(F.hard/Math.max(1,p.units))}</b> per unit, before land, softs and financing.`]
+  ].map(tileHTML).join('');
+  let rows='', lastG=null, gSum=0;
+  const flush=()=>{ if(lastG!==null) rows+=`<tr class="tot"><td>${lastG} subtotal</td><td></td><td></td><td class="num">${money(gSum)}</td><td class="num">${psf(gSum)}</td></tr>`; };
+  F.hardLines.forEach(i=>{
+    if(i.g!==lastG){ flush(); lastG=i.g; gSum=0; }
+    gSum+=i.t;
+    rows+=`<tr><td>${i.l}</td><td class="num">${i.q}</td><td class="num">${i.r}</td><td class="num">${money(i.t)}</td><td class="num">${psf(i.t)}</td></tr>`;
+  });
+  flush();
+  rows+=`<tr class="tot"><td>Trade costs, general conditions and fee</td><td></td><td></td><td class="num">${money(F.subDetail)}</td><td class="num">${psf(F.subDetail)}</td></tr>`;
+  if(st.green) rows+=`<tr><td>Green / ultra-low-energy premium</td><td></td><td class="num">${$('f-green').value}%</td><td class="num">${money(F.green)}</td><td class="num">${psf(F.green)}</td></tr>`;
+  rows+=`<tr><td>Hard contingency</td><td></td><td class="num">${$('f-cont').value}%</td><td class="num">${money(F.cont)}</td><td class="num">${psf(F.cont)}</td></tr>`
+    +`<tr class="tot"><td>Hard cost</td><td></td><td></td><td class="num">${money(F.hard)}</td><td class="num">${psf(F.hard)}</td></tr>`;
+  $('hard-body').innerHTML=rows;
+  const q=F.qty;
+  $('hard-qty').innerHTML=[
+    ['Gross above grade',fmt(q.gross)+' gsf'],['Cellar',fmt(q.cellar)+' sf'],
+    ...(p.mode==='enl'?[['Retained',fmt(q.exGross)+' sf'],['New above',fmt(q.newGross)+' gsf']]:[]),
+    ['Needs new steel (above fl. 4)',fmt(q.newAbove4)+' gsf'],
+    ['Street-facing wall',fmt(q.faceSt)+' sf'],['Party / lot-line wall',fmt(q.facePty)+' sf'],
+    ['Façade fins',fmt(q.finCount)],['Roof + terrace waterproofing',fmt(q.roofSf)+' sf'],
+    ['Loggias and terraces',fmt(q.outdoor)+' sf'],['Net sellable',fmt(q.net)+' sf'],
+    ['Common areas and core',fmt(q.commonSf)+' sf'],['Retail',fmt(q.retail)+' sf'],
+    ['Units · kitchens · baths',`${q.units} · ${q.kitchens} · ${q.baths}`],
+    ['Core levels / elevator stops',q.stops],['Street frontage',fmt(q.frontage)+' lf']
+  ].map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('');
+}
+
+/* ---------- F-220 soft cost build-up ---------- */
+function renderSoft(p){
+  if(!$('soft-body')) return;
+  const F=fin(p);
+  const pc=x=>fmt(100*x/Math.max(1,F.hard))+'%';
+  $('soft-intro').textContent=`Softs built up line by line instead of a flat percentage: ${mm(F.softDetail)} against hard costs of ${mm(F.hard)}, which is ${pc(F.softDetail)} of hard — compare the ${$('f-soft').value}% placeholder in F-200. Fees scale on ${fmt(F.qty.gross+F.qty.cellar)} gsf including the cellar, insurance and the development fee on hard cost, carrying taxes on the ${mm(F.land)} land basis over ${$('f-months').value} months, and the ${p.units===1?'single unit':p.units+' units'} drive the offering plan and marketing lines.`;
+  $('soft-tiles').innerHTML=[
+    ['Soft cost, all in',mm(F.softDetail),'',`The thirteen lines below, including a ${$('s-cont').value}% soft contingency.`],
+    ['% of hard cost',pc(F.softDetail),'',`Soft ${mm(F.softDetail)} ÷ hard ${mm(F.hard)} = <b>${pc(F.softDetail)}</b>. The flat-percentage method in F-200 assumes ${$('f-soft').value}%, which would be ${mm(F.softPct)}.`],
+    ['Per unit',mm(F.softDetail/Math.max(1,p.units)),'',`${mm(F.softDetail)} ÷ ${p.units} units.`],
+    ['Which method is live',F.sDetail?'Build-up':'Flat %','',F.sDetail?`F-200 is set to the detailed build-up, so <b>${mm(F.softDetail)}</b> is what flows into the returns.`:`F-200 is set to a flat ${$('f-soft').value}% of hard, so <b>${mm(F.softPct)}</b> is what flows into the returns and this section is a comparison only.`]
+  ].map(tileHTML).join('');
+  $('soft-body').innerHTML=F.softLines.map(i=>`<tr><td>${i.l}</td><td class="num">${i.b}</td><td class="num">${money(i.t)}</td><td class="num">${pc(i.t)}</td></tr>`).join('')
+    +`<tr class="tot"><td>Soft costs</td><td></td><td class="num">${money(F.softDetail)}</td><td class="num">${pc(F.softDetail)}</td></tr>`;
+  $('soft-cmp').innerHTML=[
+    ['Detailed build-up',money(F.softDetail)],
+    [`Flat ${$('f-soft').value}% of hard`,money(F.softPct)],
+    ['Difference',money(F.softDetail-F.softPct)]
+  ].map(([l,x])=>`<div><span>${l}</span><span class="num">${x}</span></div>`).join('')
+    +`<div class="sum"><span>Used in the returns</span><span class="num">${money(F.soft)}</span></div>`;
 }
 
 function renderPlan(p){
