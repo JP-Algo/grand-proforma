@@ -96,7 +96,12 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
 .src-plan{background:var(--pos-soft);color:var(--pos)}
 .src-calc{background:var(--ground);color:var(--ink-2);border:1px solid var(--rule)}
 #tip{position:fixed;z-index:20;max-width:min(380px,calc(100vw - 32px));background:var(--paper);color:var(--ink);border:1px solid var(--rule);
-  border-radius:8px;padding:10px 12px;font-size:.86rem;line-height:1.45;box-shadow:0 8px 28px rgba(0,0,0,.18);pointer-events:none}
+  border-radius:8px;padding:10px 12px;font-size:.86rem;line-height:1.45;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+#tip a{display:inline-block;margin-top:6px;font-weight:600}
+.exp{all:unset;cursor:pointer;font-weight:500}
+.exp::before{content:'▸';display:inline-block;width:14px;color:var(--accent);transition:transform .15s}
+.exp[aria-expanded="true"]::before{transform:rotate(90deg)}
+.exp:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #tip .src{margin-bottom:6px}
 #engine{position:absolute;left:-10000px;top:0;width:1200px;height:900px;border:0;visibility:hidden}
 @media (max-width:560px){ .kpis{grid-template-columns:repeat(2,1fr)} .big{font-size:1.9rem} }
@@ -135,7 +140,7 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
 <section aria-labelledby="h-lines">
   <span class="kicker">03 · Line by line</span>
   <h2 id="h-lines">Program, revenue, costs, capital and returns</h2>
-  <p class="status">Tap or hover <span class="ti" aria-hidden="true" style="cursor:default">i</span> next to any value to see how that figure is calculated. Sources: <span class="src src-prop">Deck scenario</span> <span class="src src-ph">Study placeholder</span> <span class="src src-plan">From the plans</span> <span class="src src-calc">Calculated</span></p>
+  <p class="status">Tap or hover <span class="ti" aria-hidden="true" style="cursor:default">i</span> next to any value to see how that figure is calculated and jump to it in the master study. Click a cost group to expand its lines. Sources: <span class="src src-prop">Deck scenario</span> <span class="src src-ph">Study placeholder</span> <span class="src src-plan">From the plans</span> <span class="src src-calc">Calculated</span></p>
   <div class="scroll"><table id="lines"></table></div>
 </section>
 
@@ -227,7 +232,8 @@ function render(){
   const cell=(v,note)=>`${v}${note?tipBtn(note):''}`;
   const row=(l,sub,a,bv,cls='')=>`<tr class="${cls}"><td>${l}${sub?`<span class="sub">${sub}</span>`:''}</td><td class="num">${a}</td><td class="num">${bv}</td></tr>`;
   // both(label, value(r), cls, sub(r), note(r) -> [source, text])
-  const both=(l,f,cls,subf,note)=>row(l,subf?subf(R[0]):'',cell(f(R[0]),note&&note(R[0])),cell(f(R[1]),note&&note(R[1])),cls);
+  const withSec=(n,l)=>n?[n[0],n[1],SEC_OF(l)]:n;
+  const both=(l,f,cls,subf,note)=>row(l,subf?subf(R[0]):'',cell(f(R[0]),note&&withSec(note(R[0]),l)),cell(f(R[1]),note&&withSec(note(R[1]),l)),cls);
   const floorsText=pl=>{ const fl=pl.floors.filter(f=>typeof f.n==='number'); const out=[]; let k=0;
     while(k<fl.length){ let m=k; while(m+1<fl.length&&Math.round(fl[m+1].gross)===Math.round(fl[k].gross)) m++;
       const name=fl[k].n===1?'ground':(m>k?`floors ${fl[k].n}–${fl[m].n}`:`floor ${fl[k].n}`);
@@ -245,7 +251,31 @@ function render(){
       :/Demolition/.test(name)?['ph',`${calc} The existing building at 725 Grand. Study placeholder until it is inspected.`]
       :/E-232/.test(name)?['ph',`${calc} Allowance for the E-232 environmental designation: testing, noise attenuation, alternate ventilation. Study placeholder.`]
       :['ph',`${calc} Main study cost line.`]; };
-  const itemRows=R[0].F.items.map((it,i)=>row(it[0],'',cell(M(it[2]),itemNote(it[0],it,R[0])),cell(M(R[1].F.items[i][2]),itemNote(it[0],R[1].F.items[i],R[1])))).join('');
+  const linesOf=(F,g)=>(F.hardLines||[]).filter(x=>x.g===g);
+  const grpNote=(name,r)=>{ const L=linesOf(r.F,name); return ['ph',`${name}, ${M(L.reduce((a,x)=>a+x.t,0))}: `+L.map(x=>`${x.l.toLowerCase()} (${M(x.t)})`).join('; ')+'. Unit rates are the study\'s placeholders, not bids. Click the row to see each line.','hardcost']; };
+  const isDetail=!!(R[0].F.hardLines&&R[0].F.hardLines.length&&inVal('f-hmethod')==='detail');
+  const itemRows=R[0].F.items.map((it,i)=>{
+    if(!isDetail) return row(it[0],'',cell(M(it[2]),itemNote(it[0],it,R[0])),cell(M(R[1].F.items[i][2]),itemNote(it[0],R[1].F.items[i],R[1])));
+    const g=it[0], gid='g'+i, LA=linesOf(R[0].F,g), LD=linesOf(R[1].F,g), labels=[...new Set(LA.concat(LD).map(x=>x.l))];
+    const sub=labels.map(l=>{ const a=LA.find(x=>x.l===l), d=LD.find(x=>x.l===l);
+      const c=(x,r)=>x?cell(M(x.t),['ph',`${x.q} × ${x.r} = ${M(x.t)}. ${x.l}.`,'hardcost']):'—';
+      return `<tr class="part" data-grp="${gid}" hidden><td>${l}</td><td class="num">${c(a,R[0])}</td><td class="num">${c(d,R[1])}</td></tr>`; }).join('');
+    return `<tr class="grp-row" data-toggle="${gid}"><td><button type="button" class="exp" aria-expanded="false" aria-controls="${gid}">${g}</button></td><td class="num">${cell(M(it[2]),grpNote(g,R[0]))}</td><td class="num">${cell(M(R[1].F.items[i][2]),grpNote(g,R[1]))}</td></tr>`+sub;
+  }).join('');
+  const softRows=(R[0].F.softLines&&R[0].F.softLines.length&&inVal('f-smethod')==='detail')?(()=>{
+    const LA=R[0].F.softLines, LD=R[1].F.softLines||[];
+    return LA.map(x=>{ const d=LD.find(y=>y.l===x.l); return `<tr class="part" data-grp="soft" hidden><td>${x.l}</td><td class="num">${cell(M(x.t),['ph',`${x.b} = ${M(x.t)}.`,'softcost'])}</td><td class="num">${d?cell(M(d.t),['ph',`${d.b} = ${M(d.t)}.`,'softcost']):'—'}</td></tr>`; }).join(''); })():'';
+  // typical NYC seller costs on a commercial condo sale; whatever the input's total exceeds them by is "other"
+  const retailCostText=r=>{ const tot=iv('f-scret'), v=r.F.retVal;
+    const P=[['Brokerage commission',6,'4–6% is usual for an investment sale of this size'],
+             ['NYC Real Property Transfer Tax',v>500000?2.625:1.425,'commercial rate'],
+             ['NYS transfer tax',v>=2e6?0.65:0.4,'NYC commercial rate; no mansion tax on commercial'],
+             ['Seller legal fees',0.5,'about $15–25K for a commercial condo unit']];
+    const other=tot-P.reduce((a,x)=>a+x[1],0);
+    const lines=P.map(([l,pc,why])=>`${l}, ${pc}%: ${M(v*pc/100)} (${why}).`).join(' ');
+    return `${M(v)} × ${tot}% = ${M(v-r.F.retNet)}. Typical NYC seller costs: ${lines} `
+      +(other>=0?`Title, recording, condo fees and other: ${other.toFixed(3)}%, ${M(v*other/100)}.`
+                :`Those come to ${(tot-other).toFixed(3)}%, so the ${tot}% input is ${M(-v*other/100)} short; set "Retail sale costs %" to about 10 in the Deck scenario.`); };
   const kOf=()=>iv('f-rate')/100*(iv('f-months')/12)*(iv('f-util')/100)+iv('f-fee')/100;
   $('lines').innerHTML=`<thead><tr><th>Line</th><th class="num">Scheme ${kA}</th><th class="num">Scheme ${kD}</th></tr></thead><tbody>
     <tr class="grp"><td colspan="3">Program</td></tr>
@@ -262,17 +292,7 @@ function render(){
     ${both('Condo sales, gross',r=>M(r.F.condoGross),'',null,r=>['prop',`${bandText(r.F)} = ${M(r.F.condoGross)}, an average of ${psf(r.F.condoGross/Math.max(1,r.F.mktSf))}/sf. The band prices are spread around the ${psf(price)}/sf average set at the top of this page, priced by floor.`])}
     ${both('Less condo selling costs',r=>M(-(r.F.condoGross-(r.F.revenue-r.F.retNet))),'',null,r=>['ph',`${M(r.F.condoGross)} × ${inVal('f-scres')}% = ${M(r.F.condoGross-(r.F.revenue-r.F.retNet))} for brokerage, marketing, closing and transfer taxes.`])}
     ${both('Retail condo value, at cap rate',r=>M(r.F.retVal),'',null,r=>['calc',`${fmt(r.p.retail)} sf × $${inVal('f-rent')} = ${M(r.F.rent)} rent; less ${inVal('f-vac')}% vacancy and ${inVal('f-opex')}% expenses = ${M(r.F.noi)} NOI; ÷ ${inVal('f-cap')}% cap = ${M(r.F.retVal)}. The ground-floor retail is sold as a commercial condo; rent and cap rate are study placeholders.`])}
-    ${both('Less retail sale costs',r=>M(-(r.F.retVal-r.F.retNet)),'',null,r=>['ph',`${M(r.F.retVal)} × ${inVal('f-scret')}% = ${M(r.F.retVal-r.F.retNet)} for brokerage, closing and transfer taxes on the retail condo sale. The ${inVal('f-scret')}% is the main study's placeholder.`])}
-    ${(()=>{ // typical NYC seller costs on a commercial condo sale; whatever the scenario's total rate exceeds them by shows as "other"
-      const tot=iv('f-scret'), nys=r=>r.F.retVal>=2e6?0.65:0.4;
-      const P=[['Brokerage commission',r=>6,'Commercial investment sales of this size usually pay 4–6%; 6% is conservative.'],
-               ['NYC Real Property Transfer Tax',r=>r.F.retVal>500000?2.625:1.425,'NYC commercial rate: 2.625% above $500K, 1.425% at or below.'],
-               ['NYS transfer tax',nys,'In NYC, 0.65% on commercial sales of $2M or more, 0.4% below. The mansion tax applies only to residential sales.'],
-               ['Seller legal fees',r=>0.5,'About 0.5%; a commercial condo unit sale typically runs $15–25K in seller legal fees.']];
-      const other=r=>tot-P.reduce((a,[,f])=>a+f(r),0);
-      const rows=P.map(([l,f,why])=>row(l,'',cell(M(-R[0].F.retVal*f(R[0])/100),['calc',`${M(R[0].F.retVal)} × ${f(R[0])}% = ${M(R[0].F.retVal*f(R[0])/100)}. ${why}`]),cell(M(-R[1].F.retVal*f(R[1])/100),['calc',`${M(R[1].F.retVal)} × ${f(R[1])}% = ${M(R[1].F.retVal*f(R[1])/100)}. ${why}`]),'part'));
-      rows.push(row(other(R[0])>=0?'Title, recording, condo fees, other':'Shortfall vs. the components above','',cell(M(-R[0].F.retVal*other(R[0])/100),['calc',`${M(R[0].F.retVal)} × ${other(R[0]).toFixed(3)}% = ${M(R[0].F.retVal*other(R[0])/100)}: the scenario's ${tot}% total less the four lines above. Covers title clearance, recording, condo board and managing agent fees.`]),cell(M(-R[1].F.retVal*other(R[1])/100),['calc',`${M(R[1].F.retVal)} × ${other(R[1]).toFixed(3)}% = ${M(R[1].F.retVal*other(R[1])/100)}: the scenario's ${tot}% total less the four lines above.`]),'part'));
-      return rows.join(''); })()}
+    ${both('Less retail sale costs',r=>M(-(r.F.retVal-r.F.retNet)),'',null,r=>['ph',retailCostText(r)])}
     ${both('Net revenue',r=>M(r.F.revenue),'tot',null,r=>['calc',`${M(r.F.revenue-r.F.retNet)} condos after selling costs + ${M(r.F.retNet)} retail = ${M(r.F.revenue)}.`])}
     <tr class="grp"><td colspan="3">Hard costs</td></tr>
     ${itemRows}
@@ -280,7 +300,7 @@ function render(){
     ${both('Hard-cost contingency',r=>M(r.F.cont),'',null,r=>['ph',`${inVal('f-cont')}% × (${M(r.F.sub)} + ${M(r.F.green)}) = ${M(r.F.cont)}. Study placeholder.`])}
     ${both('Total hard costs',r=>M(r.F.hard),'tot',null,r=>['calc',`${M(r.F.sub)} cost lines + ${M(r.F.green)} green + ${M(r.F.cont)} contingency = ${M(r.F.hard)}, or ${psf(r.F.hard/r.p.gross)} per gsf above grade.`])}
     <tr class="grp"><td colspan="3">Other costs</td></tr>
-    ${both('Soft costs',r=>M(r.F.soft),'',null,r=>['prop',`${inVal('f-soft')}% × ${M(r.F.hard)} hard = ${M(r.F.soft)}: design, legal, insurance, permits, development fee, marketing. The rate comes from the Deck scenario (adjustable at the top of this page).`])}
+    ${softRows?`<tr class="grp-row" data-toggle="soft"><td><button type="button" class="exp" aria-expanded="false">Soft costs</button></td><td class="num">${cell(M(R[0].F.soft),['ph',`Line-by-line estimate: ${(R[0].F.softLines||[]).map(x=>x.l.toLowerCase()+' ('+M(x.t)+')').join('; ')}. Click the row to see each line.`])}</td><td class="num">${cell(M(R[1].F.soft),['ph',`Line-by-line estimate: ${(R[1].F.softLines||[]).map(x=>x.l.toLowerCase()+' ('+M(x.t)+')').join('; ')}.`])}</td></tr>${softRows}`:both('Soft costs',r=>M(r.F.soft),'',null,r=>['prop',`${inVal('f-soft')}% × ${M(r.F.hard)} hard = ${M(r.F.soft)}: design, legal, insurance, permits, development fee, marketing. The rate comes from the Deck scenario (adjustable at the top of this page).`])}
     ${both('Land, 725 Grand',r=>M(r.F.land),'',null,r=>['prop',`The land basis set at the top of this page: ${M(r.F.land)}.`])}
     ${both('Air rights from 727 Grand',r=>M(r.F.nb),'',null,r=>r.p.s.tr?['ph',`${fmt(r.p.s.tr)} sf × $${inVal('in-p1')} = ${M(r.F.nb)}. Transfer = 2,067 sf × 4.0 less 727 Grand's existing building (about 4,133 sf, field measurement). Price is a study placeholder.`]:['calc',`None. Scheme ${r.k} builds on 725 Grand alone.`])}
     ${both('IH certificates',r=>M(r.F.certs),'',null,r=>r.p.s.cert?['ph',`${fmt(r.p.s.cert)} sf of bonus × $${inVal('in-p2')} = ${M(r.F.certs)}, to reach FAR 5.01. Price is a study placeholder; supply is limited.`]:['calc',`None. Scheme ${r.k} stays at FAR 4.0, as of right.`])}
@@ -329,23 +349,42 @@ function render(){
   $('ass').innerHTML=`<thead><tr><th>Input</th><th>Source</th><th class="num">Value</th></tr></thead><tbody>${A.map(a=>`<tr><td>${a[0]}${a[2]?`<span class="sub">${a[2]}</span>`:''}</td><td>${srcTag(a[3]||'ph')}</td><td class="num">${a[1]}</td></tr>`).join('')}</tbody>`;
 }
 
+const STUDY='https://claude.ai/artifact/XEjoY4B3jVJkknZkYKCph7';
+const SECTIONS={studies:'Massing studies',far:'Floor area and schemes',compare:'Schemes side by side',sellout:'Projected sell-out',
+  costs:'Construction and project costs',hardcost:'Hard costs, line by line',softcost:'Soft costs, line by line',rights:'Air rights and certificates',returns:'Return on investment'};
+const SEC_OF=label=>/^Stories/.test(label)?'studies':/^Zoning floor/.test(label)?'far':/^(Gross above|Cellar$|Loggias)/.test(label)?'compare'
+  :/^(Sellable|Condo units|Retail$|Condo sales|Less condo|Retail condo|Less retail|Net revenue)/.test(label)?'sellout'
+  :/^(Air rights|IH cert)/.test(label)?'rights':/^Soft/.test(label)?(inVal('f-smethod')==='detail'?'softcost':'costs')
+  :/^(Land|Green|Hard-cost cont|Total hard)/.test(label)?'costs'
+  :/^(Financing|Total project|Construction loan|Equity|Profit|Margin|Return on|Annualized|Break-even|Average price)/.test(label)?'returns'
+  :(inVal('f-hmethod')==='detail'?'hardcost':'costs');
 const SRC={prop:['src-prop','Deck scenario'],ph:['src-ph','Study placeholder'],plan:['src-plan','From the plans'],calc:['src-calc','Calculated']};
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function srcTag(k){ const [c,l]=SRC[k]||SRC.calc; return `<span class="src ${c}">${l}</span>`; }
-function tipBtn([k,text]){ return `<button type="button" class="ti" aria-label="How this figure is derived" data-src="${k}" data-tip="${esc(text)}">i</button>`; }
+function tipBtn([k,text,sec]){ return `<button type="button" class="ti" aria-label="How this figure is derived" data-src="${k}" data-tip="${esc(text)}"${sec?` data-sec="${sec}"`:''}>i</button>`; }
 (function(){
-  const tip=document.getElementById('tip'); let pinned=null;
-  function show(b){ tip.innerHTML=srcTag(b.dataset.src)+'<div>'+esc(b.dataset.tip)+'</div>'; tip.hidden=false;
+  const tip=document.getElementById('tip'); let pinned=null, hideT=null;
+  function show(b){ clearTimeout(hideT);
+    tip.innerHTML=srcTag(b.dataset.src)+'<div>'+esc(b.dataset.tip)+'</div>'
+      +(b.dataset.sec?`<a href="${STUDY}#${b.dataset.sec}" target="_blank" rel="noopener">See it in the master study: ${esc(SECTIONS[b.dataset.sec]||b.dataset.sec)} ↗</a>`:'');
+    tip.hidden=false;
     const r=b.getBoundingClientRect(), w=tip.offsetWidth, h=tip.offsetHeight;
-    let x=Math.min(Math.max(16,r.left-8), innerWidth-w-16), y=r.bottom+8; if(y+h>innerHeight-8) y=Math.max(8,r.top-h-8);
+    let x=Math.min(Math.max(16,r.left-8), innerWidth-w-16), y=r.bottom+6; if(y+h>innerHeight-8) y=Math.max(8,r.top-h-6);
     tip.style.left=x+'px'; tip.style.top=y+'px'; }
   function hide(){ tip.hidden=true; pinned=null; }
-  document.addEventListener('mouseover',e=>{ const b=e.target.closest&&e.target.closest('.ti'); if(b) show(b); else if(!pinned) tip.hidden=true; });
+  const later=()=>{ clearTimeout(hideT); if(!pinned) hideT=setTimeout(()=>{ if(!pinned) tip.hidden=true; },300); };
+  document.addEventListener('mouseover',e=>{ const b=e.target.closest&&e.target.closest('.ti'); if(b){ if(!pinned) show(b); } else if(e.target.closest&&e.target.closest('#tip')) clearTimeout(hideT); else later(); });
   document.addEventListener('focusin',e=>{ const b=e.target.closest&&e.target.closest('.ti'); if(b) show(b); });
-  document.addEventListener('focusout',e=>{ if(e.target.closest&&e.target.closest('.ti')) hide(); });
-  document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.ti'); if(b){ if(pinned===b){ hide(); } else { pinned=b; show(b); } } else hide(); });
+  document.addEventListener('click',e=>{
+    if(e.target.closest&&e.target.closest('#tip')) return;
+    const b=e.target.closest&&e.target.closest('.ti');
+    if(b){ if(pinned===b) hide(); else { pinned=b; show(b); } return; }
+    const t=e.target.closest&&e.target.closest('tr[data-toggle]');
+    if(t){ const id=t.dataset.toggle, btn=t.querySelector('.exp'), open=btn.getAttribute('aria-expanded')!=='true';
+      btn.setAttribute('aria-expanded',String(open)); document.querySelectorAll(`tr[data-grp="${id}"]`).forEach(r=>r.hidden=!open); return; }
+    hide(); });
   addEventListener('keydown',e=>{ if(e.key==='Escape') hide(); });
-  addEventListener('scroll',()=>{ if(!tip.hidden) hide(); },{passive:true});
+  addEventListener('scroll',()=>{ if(!tip.hidden&&!pinned) tip.hidden=true; },{passive:true});
 })();
 function solve(k,test,o){ let lo=500,hi=5000; for(let i=0;i<36;i++){const m=(lo+hi)/2; test(G.fin(G.plans[k],{...o,'f-res':m}))?hi=m:lo=m;} return hi; }
 
