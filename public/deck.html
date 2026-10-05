@@ -401,7 +401,7 @@ function bridge(){ // runs inside the engine frame
         try{
           // Start from the study's own defaults, never this viewer's saved working draft, so every viewer
           // sees the same numbers; then lay the saved scenario's inputs over them.
-          const defs={}; document.querySelectorAll('.wrap input[id],.wrap select[id],.wrap textarea[id]').forEach(el=>{
+          const defs={}; document.querySelectorAll('.wrap input[id],.wrap select[id],.wrap textarea[id]').forEach(el=>{ if(el.closest('#scenarios')) return;
             if(el.type==='checkbox') defs[el.id]=el.defaultChecked;
             else if(el.tagName==='SELECT'){ const o=[...el.options].find(x=>x.defaultSelected)||el.options[0]; if(o) defs[el.id]=o.value; }
             else defs[el.id]=el.defaultValue; });
