@@ -2807,6 +2807,7 @@ window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,get plans(){return
     let resumed=false;
     try{ const w=await store.getWorking(); if(w&&w.values){ apply(w); current=w.scenarioId||''; edited=!!w.edited; resumed=true; } }
     catch(e){ status('Could not load your last session'); }
+    window.G725.apply=apply;   // deck + projections load a saved scenario through this
     window.G725.loaded=true; window.dispatchEvent(new Event('g725-ready'));
     ready=true; $('sc-menu').disabled=false;
     await refresh();
