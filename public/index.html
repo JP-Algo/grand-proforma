@@ -78,6 +78,22 @@ b{font-weight:600}
 .sheet-tag{display:grid;align-content:start;gap:6px;position:sticky;top:calc(var(--topbar-h,58px) + 14px);height:max-content}
 .sheet-tag .no{font-family:var(--mono);font-size:1.05rem;font-weight:500;color:var(--accent);border:1.5px solid var(--accent);padding:2px 8px;width:max-content;border-radius:2px}
 .sheet-body{display:grid;gap:22px;min-width:0}
+.jumpable{cursor:pointer}
+.sheet-tag.jumpable:hover .no,.sheet-tag.jumpable:focus-visible .no{background:var(--accent);color:var(--paper)}
+.sheet-tag.jumpable:focus-visible{outline:none}
+.where.jumpable{text-decoration:underline dotted;text-underline-offset:3px}
+.where.jumpable:hover{color:var(--accent)}
+#jump{position:fixed;z-index:60;width:min(330px,calc(100vw - 24px));max-height:min(70vh,560px);overflow:auto;
+  background:var(--paper);border:1px solid var(--rule);border-radius:8px;box-shadow:0 16px 44px rgba(0,0,0,.22);padding:8px}
+.jump-hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);padding:6px 8px 9px}
+#jump .jump-list{display:grid}
+#jump button{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:center;text-align:left;background:none;
+  border:0;padding:7px 8px;border-radius:5px;cursor:pointer;color:var(--ink);font-family:var(--body);font-size:.86rem}
+#jump button:hover{background:var(--accent-soft)}
+#jump button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+#jump button[aria-current="true"]{background:var(--accent-soft);font-weight:600}
+#jump .jno{font-family:var(--mono);font-size:.74rem;color:var(--accent)}
 @media (max-width:760px){.sheet{grid-template-columns:1fr;gap:14px}.sheet-tag{position:static;grid-auto-flow:column;justify-content:start;align-items:center;gap:12px}}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
 @media (max-width:860px){.two{grid-template-columns:1fr}}
@@ -617,9 +633,15 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
     </div>
     <p id="sellout-intro"></p>
     <div class="fgrid">
-      <label class="field"><span class="label">Condo $/sf</span><input id="f-res" type="number" step="25" value="1500"></label>
+      <label class="field"><span class="label">Base condo $/sf</span><input id="f-res" type="number" step="25" value="1400"></label>
+      <label class="field"><span class="label">Lower floors $/sf</span><input id="f-res-lo" type="number" step="25" value="1300"></label>
+      <label class="field"><span class="label">Upper floors $/sf</span><input id="f-res-up" type="number" step="25" value="1450"></label>
+      <label class="field"><span class="label">Penthouse $/sf</span><input id="f-res-ph" type="number" step="25" value="1500"></label>
+      <label class="field"><span class="label">Lower band, no. of floors</span><input id="f-band-lo" type="number" step="1" min="0" value="2"></label>
+      <label class="field"><span class="label">Upper band, no. of floors</span><input id="f-band-up" type="number" step="1" min="0" value="2"></label>
+      <label class="field"><span class="label">Penthouse floors</span><input id="f-band-ph" type="number" step="1" min="0" value="1"></label>
       <label class="field"><span class="label">Private outdoor $/sf</span><input id="f-out" type="number" step="25" value="0"></label>
-      <label class="field"><span class="label">Condo sales costs %</span><input id="f-scres" type="number" step="0.5" value="6"></label>
+      <label class="field"><span class="label">Condo sales costs %</span><input id="f-scres" type="number" step="0.5" value="5"></label>
       <label class="field"><span class="label">Market rent $/sf/yr</span><input id="f-mrent" type="number" step="1" value="78"></label>
       <label class="field"><span class="label">Affordable rent $/sf/yr</span><input id="f-arent" type="number" step="1" value="30"></label>
       <label class="field"><span class="label">Resi opex $/sf/yr</span><input id="f-ropex" type="number" step="1" value="14"></label>
@@ -652,7 +674,7 @@ footer{padding-top:28px;font-size:.8rem;color:var(--ink-2);display:grid;gap:8px}
         <p class="note">Commercial condos sell to investors on in-place income, so a signed lease before sale supports the 5% cap rate. ICAP (Industrial & Commercial Abatement Program) phases in the tax increase from new construction; apply before permits are pulled <span class="verify">verify eligibility</span>.</p>
       </div>
     </div>
-    <p class="note">Condo sales costs cover brokerage, marketing, closing costs and the sponsor-paid NYC/NYS transfer taxes. Loggias and terraces are priced at $0 by default, so $1,500/sf applies to interior area only. Enter an outdoor premium to value them.</p>
+    <p class="note">Pricing is banded by height: the lower floors sell below the base, the upper floors above it, and the top floor or floors as penthouses. The three bands are pegged to the base, so moving <b>Base condo $/sf</b> moves all of them by the same proportion; type over any band to re-peg it at a new relationship, and it holds from then on. Band prices are saved with the scenario. Condo sales costs cover brokerage, marketing, closing costs and the sponsor-paid NYC/NYS transfer taxes. Loggias and terraces are priced at $0 by default, so the band prices apply to interior area only. Enter an outdoor premium to value them.</p>
   </div>
 </section>
 
@@ -1293,7 +1315,28 @@ function fin(p,o={}){
   // affordable units are never sold as condos: they are held as rentals and valued on their income
   const affRoll=affSf*v('f-arent'), affNOI=affRoll*(1-v('f-rvac')/100)-affSf*(v('f-ropex')+taxPsf);
   const affVal=affSf?affNOI/Math.max(.01,v('f-rcap')/100):0;
-  const condoGross=mktSf*v('f-res')+privOut*v('f-out');
+  // banded condo pricing. The bands are pegged to the base by ratio, so overriding f-res alone
+  // (the sensitivity tables do) moves all four prices together instead of only the middle one.
+  const base=v('f-res'), b0=+$('f-res').value||0, kB=b0>0?base/b0:1;
+  const band=id=>(o[id]!=null?o[id]:(+$(id).value||0)*kB);
+  const psfT={lo:band('f-res-lo'),base,up:band('f-res-up'),ph:band('f-res-ph')};
+  const resN=p.floors.filter(f=>typeof f.n==='number'&&f.n>1&&f.rects.some(r=>r.t==='res'||r.t==='aff'))
+                     .map(f=>f.n).sort((a,b)=>a-b);
+  const nF=resN.length;
+  const phN=Math.min(nF,Math.max(0,Math.round(v('f-band-ph'))));
+  const upN=Math.min(nF-phN,Math.max(0,Math.round(v('f-band-up'))));
+  const loN=Math.min(nF-phN-upN,Math.max(0,Math.round(v('f-band-lo'))));
+  const tierOf=n=>{ const i=resN.indexOf(n); if(i<0) return 'base';
+    if(i>=nF-phN) return 'ph'; if(i>=nF-phN-upN) return 'up'; if(i<loN) return 'lo'; return 'base'; };
+  const tierSf={lo:0,base:0,up:0,ph:0};
+  let condoRes=0, wSf=0;                       // wSf: sellable sf weighted by each band's ratio to the base
+  p.floors.forEach(f=>{ if(typeof f.n!=='number'||f.n<2) return;
+    const tr=tierOf(f.n), sf=f.rects.reduce((s,r)=>s+(r.t==='res'?r.area:0),0);
+    tierSf[tr]+=sf; condoRes+=sf*psfT[tr]; wSf+=sf*(base>0?psfT[tr]/base:1); });
+  const spare=Math.max(0,mktSf-(tierSf.lo+tierSf.base+tierSf.up+tierSf.ph));
+  tierSf.base+=spare; condoRes+=spare*base; wSf+=spare;
+  const psfBlend=mktSf>0?condoRes/mktSf:base;
+  const condoGross=condoRes+privOut*v('f-out');
   const refi=rental&&$('f-exit')&&$('f-exit').value==='refi';
   const refiLtv=v('f-refiltv')/100;
   const resGross=rental?resCapVal:condoGross+affVal;
@@ -1330,11 +1373,13 @@ function fin(p,o={}){
   const financing=ltc*k*costEx/(1-ltc*k), total=costEx+financing, loan=ltc*total, equity=total-loan;
   const profit=revenue-total, em=(equity+profit)/equity;
   const sc=1-v('f-scres')/100, c=1/(1-ltc*k);
-  const bePsf=rental?NaN:(total-retNet-affVal*(1-v('f-scret')/100)-privOut*v('f-out')*sc)/(Math.max(1,mktSf)*sc);
+  // break-even is solved for the BASE price: the bands move with it, so wSf is the right denominator
+  const bePsf=rental?NaN:(total-retNet-affVal*(1-v('f-scret')/100)-privOut*v('f-out')*sc)/(Math.max(1,wSf)*sc);
   const target=.15, residual=revenue/((1+target)*c)-(costEx-land);
   const assetVal=(rental?resCapVal:condoGross+affVal)+retVal;   // the retail condo is part of the project's value
   const refiProceeds=refi?assetVal*refiLtv:0;
-  return {rental,refi,refiLtv,refiProceeds,assetVal,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
+  return {rental,refi,refiLtv,refiProceeds,assetVal,use485,taxPsf,affSf,mktSf,rentRoll,resNOI,resCapVal,affNOI,affVal,condoGross,privOut,bePsf,residual,
+    psfT,tierOf,tierSf,psfBlend,wSf,bands:{lo:loN,up:upN,ph:phN,floors:resN},privOut,resGross,resNet,rent,noi,retVal,retNet,revenue,items,sub,green,cont,hard,soft,land,nb,certs,financing,total,loan,equity,profit,
     margin:profit/total, roe:profit/equity, em, irr:em>0?Math.pow(em,12/Math.max(1,v('f-months')))-1:-1};
 }
 function investorOf(F,o={}){
@@ -1440,11 +1485,13 @@ function renderFinance(){
   const p=plans[st.scheme]; if(!p||!$('f-res')) return;
   document.querySelectorAll('#ftabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.scheme));
   const F=fin(p), units=unitsOf(p), psf=+$('f-res').value||0;
+  const bandLabel={lo:'lower',base:'',up:'upper',ph:'penthouse'};
+  const bandList=`lower $${fmt(F.psfT.lo)}, base $${fmt(F.psfT.base)}, upper $${fmt(F.psfT.up)}, PH $${fmt(F.psfT.ph)}`;
   $('rev-tiles').innerHTML=[
     [F.rental?'Rentable sf':'Sellable sf',fmt(p.net),'',`Every unit's area in scheme ${p.s.k}'s plans (${p.units} units)${p.affUnits?`, of which ${fmt(F.affSf)} sf in ${p.affUnits} income-restricted units`:''}. Excludes loggias, terraces, corridors, core, lobby, amenity and retail.`],
     [F.rental?'Residential value at cap':'Gross residential value',mm(F.resGross),'',F.rental
       ? `Rent roll ${money(F.rentRoll)}/yr (market ${fmt(F.mktSf)} sf × $${$('f-mrent').value}, affordable ${fmt(F.affSf)} sf × $${$('f-arent').value}) less ${$('f-rvac').value}% vacancy, opex $${$('f-ropex').value}/sf and taxes $${F.taxPsf}/sf ${F.use485?'(485-x)':'(no 485-x)'} = NOI <b>${money(F.resNOI)}</b>, ÷ ${$('f-rcap').value}% cap = <b>${mm(F.resCapVal)}</b>.`
-      : `Market condos ${fmt(F.mktSf)} sf × $${fmt(+$('f-res').value||0)}/sf${(+$('f-out').value||0)?` + outdoor ${fmt(F.privOut)} sf × $${$('f-out').value}/sf`:''} = ${mm(F.condoGross)}${F.affSf?`, plus ${p.affUnits} affordable rentals held and valued on income at <b>${mm(F.affVal)}</b>`:''}.`],
+      : `Market condos ${fmt(F.mktSf)} sf priced by band (${bandList}) — ${fmt(F.tierSf.lo)} sf lower, ${fmt(F.tierSf.base)} sf base, ${fmt(F.tierSf.up)} sf upper, ${fmt(F.tierSf.ph)} sf penthouse — a blended <b>$${fmt(F.psfBlend)}/sf</b>${(+$('f-out').value||0)?` + outdoor ${fmt(F.privOut)} sf × $${$('f-out').value}/sf`:''} = ${mm(F.condoGross)}${F.affSf?`, plus ${p.affUnits} affordable rentals held and valued on income at <b>${mm(F.affVal)}</b>`:''}.`],
     ['Retail condo value',mm(F.retVal),'',`Rent ${fmt(p.retail)} sf × $${$('f-rent').value} = ${mm(F.rent)}. Less ${$('f-vac').value}% vacancy and ${$('f-opex').value}% non-reimbursed opex = NOI ${money(F.noi)}. ÷ ${$('f-cap').value}% cap rate = <b>${mm(F.retVal)}</b>.`],
     ['Net revenue after sales costs',mm(F.revenue),'',`Condo sales ${mm(F.resGross)} × (1 − ${$('f-scres').value}%) = ${mm(F.resNet)}, plus retail ${mm(F.retVal)} × (1 − ${$('f-scret').value}%) = ${mm(F.retNet)}. Total <b>${mm(F.revenue)}</b>.`]
   ].map(tileHTML).join('');
@@ -1456,15 +1503,17 @@ function renderFinance(){
   $('uh-psf').textContent=F.rental?'$/sf/yr':'$/sf';
   $('sellout-intro').textContent=F.rental
     ? `Every unit is rented, not sold. Market units are underwritten at $${fmt(mrent)}/sf/yr and income-restricted units at $${fmt(arent)}/sf/yr${F.use485?', with 485-x holding taxes down':''}. Rent less vacancy, operating costs and taxes gives the NOI; the cap rate turns that into value, which you either sell or refinance against. The ground-floor retail is valued separately as a commercial condo on a triple-net lease, with ICAP keeping its taxes low.`
-    : 'Residential condos are priced per sellable sf, taken as unit area from the plans (core, corridors, lobby and amenities excluded). The ground-floor retail is valued as a commercial condo: rent, less vacancy and landlord costs, divided by the cap rate. The lease is assumed triple-net, and ICAP is assumed to keep real estate taxes low, which supports the rent. Changing the scheme here also changes the studies above.';
+    : `Condos are priced per sellable sf, taken as unit area from the plans (core, corridors, lobby and amenities excluded), and banded by height: ${F.bands.lo?`floors ${F.bands.floors.slice(0,F.bands.lo).join(', ')} at $${fmt(F.psfT.lo)}`:'no lower band'}, the middle floors at the $${fmt(F.psfT.base)} base, ${F.bands.up?`the ${F.bands.up} floor${F.bands.up>1?'s':''} below the top at $${fmt(F.psfT.up)}`:'no upper band'}, and ${F.bands.ph?`floor${F.bands.ph>1?'s':''} ${F.bands.floors.slice(-F.bands.ph).join(', ')} as penthouse at $${fmt(F.psfT.ph)}`:'no penthouse band'} — a blended $${fmt(F.psfBlend)}/sf. The ground-floor retail is valued as a commercial condo: rent, less vacancy and landlord costs, divided by the cap rate. The lease is assumed triple-net, and ICAP is assumed to keep real estate taxes low, which supports the rent. Changing the scheme here also changes the studies above.`;
   $('unit-body').innerHTML=units.slice().reverse().map(u=>{
-    const aff=u.aff||affIds.has(u.u), psfU=F.rental?(aff?arent:mrent):psf;
-    const val=F.rental?money(u.sf*psfU/12):money(u.sf*psf);
-    return `<tr><td class="num">${u.floor}</td><td>${u.label}${aff?' · affordable':''}</td><td class="num">${fmt(u.sf)}</td><td class="num">${val}</td><td class="num">$${fmt(psfU)}</td></tr>`;
+    const aff=u.aff||affIds.has(u.u), tr=F.tierOf(u.floor);
+    const psfU=F.rental?(aff?arent:mrent):F.psfT[tr];
+    const val=F.rental?money(u.sf*psfU/12):money(u.sf*psfU);
+    const tag=aff?' · affordable':(!F.rental&&bandLabel[tr]?` · ${bandLabel[tr]}`:'');
+    return `<tr><td class="num">${u.floor}</td><td>${u.label}${tag}</td><td class="num">${fmt(u.sf)}</td><td class="num">${val}</td><td class="num">$${fmt(psfU)}</td></tr>`;
   }).join('');
   $('unit-foot').innerHTML=F.rental
     ? `<tr class="tot"><td colspan="2">${units.length} units · ${p.affUnits} affordable</td><td class="num">${fmt(p.net)}</td><td class="num">${money(F.rentRoll/12)}</td><td class="num">$${fmt(F.rentRoll/Math.max(1,p.net))}</td></tr>`
-    : `<tr class="tot"><td colspan="2">${units.length} units · avg ${short$(p.net*psf/Math.max(1,units.length))}/unit</td><td class="num">${fmt(p.net)}</td><td class="num">${money(p.net*psf)}</td><td class="num">$${fmt(p.net>0?p.net*psf/p.net:0)}</td></tr>`;
+    : `<tr class="tot"><td colspan="2">${units.length} units · avg ${short$(F.condoGross/Math.max(1,units.length))}/unit</td><td class="num">${fmt(p.net)}</td><td class="num">${money(F.condoGross)}</td><td class="num">$${fmt(F.psfBlend)}</td></tr>`;
   $('resi-ledger-label').hidden=!F.rental; $('resi-ledger').hidden=!F.rental;
   if(F.rental){
     const rows=[['Market rent, '+fmt(F.mktSf)+' sf',money(F.mktSf*mrent)],
@@ -1506,7 +1555,7 @@ function renderFinance(){
       F.rental?(F.refi
         ? `The whole building — residential ${mm(F.resCapVal)} plus the retail condo ${mm(F.retVal)} = ${mm(F.assetVal)} — is refinanced at ${$('f-refiltv').value}%: ${money(F.refiProceeds)} of proceeds repay the construction loan of ${mm(F.loan)} first. You keep the asset and ${money(F.assetVal-F.refiProceeds)} of equity in it, plus the rent.`
         : `Residential: stabilized NOI ${money(F.resNOI)} ÷ ${$('f-rcap').value}% cap = ${mm(F.resCapVal)}. Retail condo at a ${$('f-cap').value}% cap = ${mm(F.retVal)}. Together <b>${mm(F.assetVal)}</b> before ${$('f-scret').value}% sale costs.`)
-      :`Condos ${fmt(F.mktSf)} sf at $${fmt(+$('f-res').value||0)}/sf = ${mm(F.condoGross)}${F.affSf?`, affordable rentals held ${mm(F.affVal)}`:''}, plus the retail condo ${mm(F.retVal)}. Together <b>${mm(F.assetVal)}</b> before sales costs.`],
+      :`Condos ${fmt(F.mktSf)} sf at a blended $${fmt(F.psfBlend)}/sf = ${mm(F.condoGross)}${F.affSf?`, affordable rentals held ${mm(F.affVal)}`:''}, plus the retail condo ${mm(F.retVal)}. Together <b>${mm(F.assetVal)}</b> before sales costs.`],
     ['Total project cost',mm(F.total),'',`Hard costs <b>${mm(F.hard)}</b> + soft costs <b>${mm(F.soft)}</b> + land <b>${mm(F.land)}</b> + air rights &amp; certificates <b>${mm(F.nb+F.certs)}</b> + financing (interest reserve + fees) <b>${mm(F.financing)}</b> = <b>${mm(F.total)}</b>.`],
     ['Bank loan ('+$('f-ltc').value+'% LTC)',mm(F.loan),'',`Loan-to-cost ${$('f-ltc').value}% × total project cost ${mm(F.total)} = <b>${mm(F.loan)}</b>. The interest reserve is inside the cost, so the loan also funds its own interest.`],
     ['Equity required',mm(F.equity),'',`Total project cost ${mm(F.total)} − bank loan ${mm(F.loan)} = <b>${mm(F.equity)}</b>, the ${100-(+$('f-ltc').value||0)}% of cost the bank won't fund. It goes in first (land, predevelopment, early construction) before the loan starts drawing. F-500 shows who funds it.`],
@@ -1515,7 +1564,7 @@ function renderFinance(){
     ['Return on equity',pct(F.roe),neg,`Profit ${mm(F.profit)} ÷ equity ${mm(F.equity)} = <b>${pct(F.roe)}</b> over the whole ${$('f-months').value}-month project, not per year.`],
     ['Equity multiple',F.em.toFixed(2)+'×',neg,`(Equity ${mm(F.equity)} + profit ${mm(F.profit)}) ÷ equity ${mm(F.equity)} = <b>${F.em.toFixed(2)}×</b>. Every $1 of equity comes back as $${F.em.toFixed(2)}.`],
     ['Annualized (simplified)',pct(F.irr),neg,`Multiple ${F.em.toFixed(2)}× spread over ${$('f-months').value} months: ${F.em.toFixed(2)}^(12/${$('f-months').value}) − 1 = <b>${pct(F.irr)}</b>/yr. Assumes all equity goes in on day one and comes out at the end, so a real IRR will be higher.`],
-    [F.rental?'Break-even rent $/sf/yr':'Break-even condo $/sf',F.rental?'n/a for rentals':'$'+fmt(F.bePsf),'',`The condo price at which profit = $0: (total cost ${mm(F.total)} − net retail ${mm(F.retNet)}) ÷ (sellable ${fmt(p.net)} sf × (1 − ${$('f-scres').value}% sales costs)) = <b>$${fmt(F.bePsf)}/sf</b>.`],
+    [F.rental?'Break-even rent $/sf/yr':'Break-even base condo $/sf',F.rental?'n/a for rentals':'$'+fmt(F.bePsf),'',`The <b>base</b> price at which profit = $0, with the lower, upper and penthouse bands moving with it: (total cost ${mm(F.total)} − net retail ${mm(F.retNet)}) ÷ (${fmt(F.wSf)} sf of sellable area weighted by each band's ratio to the base × (1 − ${$('f-scres').value}% sales costs)) = <b>$${fmt(F.bePsf)}/sf</b> base, a blended $${fmt(F.bePsf*(F.psfBlend/Math.max(1,F.psfT.base)))}/sf.`],
     ['Land value for 15% margin',mm(F.residual),F.residual<0?' neg':'',`The most you could pay for the land and still earn a 15% margin on cost: net revenue ${mm(F.revenue)} ÷ 1.15, less all non-land costs and the financing they carry = <b>${mm(F.residual)}</b>. Compare it with your land basis of ${mm(F.land)}.`],
     ['Building efficiency',Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)+'%','',`(Condo sellable ${fmt(p.net)} sf + retail ${fmt(p.retail)} sf + occupiable outdoor ${fmt(p.outdoor)} sf) ÷ (gross above-grade ${fmt(p.gross)} sf + occupiable outdoor ${fmt(p.outdoor)} sf) = <b>${Math.round((p.net+p.retail+p.outdoor)/(p.gross+p.outdoor)*100)}%</b>. Outdoor means loggias, setback terraces and roof decks; adding it to both sides keeps the ratio under 100%. Enclosed only: ${Math.round((p.net+p.retail)/p.gross*100)}%. Condo only: ${Math.round(p.net/p.gross*100)}%.`]
   ].map(tileHTML).join('');
@@ -1527,7 +1576,7 @@ function renderFinance(){
   const uses=[['Land',F.land],['Air rights + certificates',F.nb+F.certs],['Hard costs',F.hard],['Soft costs',F.soft],['Financing',F.financing]];
   $('use-body').innerHTML=uses.map(([l,x])=>`<tr><td>${l}</td><td class="num">${money(x)}</td><td class="num">${pct(x/T)}</td></tr>`).join('')+`<tr class="tot"><td>Total</td><td class="num">${money(T)}</td><td class="num">100%</td></tr>`;
   const hb=+$('f-hard').value||0, prices=[-200,-100,0,100,200].map(d=>psf+d), hards=[-50,0,50,100].map(d=>hb+d);
-  $('sens-head').innerHTML=`<tr><th>Condo $/sf ↓ · hard $/gsf →</th>${hards.map(h=>`<th>$${fmt(h)}</th>`).join('')}</tr>`;
+  $('sens-head').innerHTML=`<tr><th>Base condo $/sf ↓ · hard $/gsf →</th>${hards.map(h=>`<th>$${fmt(h)}</th>`).join('')}</tr>`;
   $('sens-body').innerHTML=prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${hards.map(h=>{const m=fin(p,{'f-res':pr,'f-hard':h}).margin;return `<td class="num ${m<0?'cellbad':m>=.15?'cellgood':''}"${pr===psf&&h===hb?' style="font-weight:700;outline:1.5px solid var(--ink);outline-offset:-2px"':''}>${pct(m)}</td>`;}).join('')}</tr>`).join('');
   $('fin-cmp').innerHTML=['A','B','C','D'].map(k=>{const q=plans[k]; if(!q) return ''; const G=fin(q); const c=G.profit<0?'neg':'';
     return `<tr class="${k===st.scheme?'hi':''}"><td><b>${k}</b> · ${q.s.name}</td><td class="num">${mm(G.revenue)}</td><td class="num">${mm(G.total)}</td><td class="num">${mm(G.loan)}</td><td class="num">${mm(G.equity)}</td><td class="num ${c}">${mm(G.profit)}</td><td class="num ${c}">${pct(G.margin)}</td><td class="num ${c}">${G.em.toFixed(2)}×</td><td class="num ${c}">${pct(G.irr)}</td></tr>`;}).join('');
@@ -1967,15 +2016,16 @@ function renderInterior(){
   const units={};
   G.filter(g=>g.unit).forEach(g=>{(units[g.unit]=units[g.unit]||[]).push(g);});
   let rows='', ui=0;
+  const FI=fin(plans[st.scheme]), psfF=FI.psfT[FI.tierOf(f.n)];   // this floor's band price
   for(const u in units){ ui++; const tot=units[u].reduce((s,g)=>s+g.rects.reduce((a,q)=>a+q.area,0),0);
     const nm=unitName(f.rects.filter(r=>r.u===u).reduce((s,r)=>s+r.area,0));
     const open=st.openUnits.has(u), rid='ur-'+u;
-    rows+=`<tr class="tot"><td><button type="button" class="unit-toggle" data-u="${u}" aria-expanded="${open}" aria-controls="${rid}-0"><span class="caret" aria-hidden="true">${open?'▾':'▸'}</span>Unit ${f.n}-${String.fromCharCode(64+ui)} · ${nm}</button></td><td class="num">${fmt(tot)}</td><td class="num">${short$(tot*(+$('f-res').value||0))}</td></tr>`;
+    rows+=`<tr class="tot"><td><button type="button" class="unit-toggle" data-u="${u}" aria-expanded="${open}" aria-controls="${rid}-0"><span class="caret" aria-hidden="true">${open?'▾':'▸'}</span>Unit ${f.n}-${String.fromCharCode(64+ui)} · ${nm}</button></td><td class="num">${fmt(tot)}</td><td class="num">${short$(tot*psfF)}</td></tr>`;
     rows+=units[u].map((g,gi)=>`<tr id="${rid}-${gi}"${open?'':' hidden'}><td style="padding-left:30px">${g.name}</td><td class="num">${fmt(g.rects.reduce((a,q)=>a+q.area,0))}</td><td></td></tr>`).join('');
   }
   G.filter(g=>!g.unit&&['hall','lounge','retail'].includes(g.kind)).forEach(g=>{rows+=`<tr><td>${g.name}</td><td class="num">${fmt(g.rects.reduce((a,q)=>a+q.area,0))}</td><td></td></tr>`;});
   { const unitSf=f.rects.filter(r=>(r.t==='res'||r.t==='aff')).reduce((s,r)=>s+r.area,0);
-    rows+=`<tr class="tot"><td>Floor ${f.n===1?'1 (ground)':f.n} total · gross</td><td class="num">${fmt(f.gross)}</td><td class="num">${unitSf?short$(unitSf*(+$('f-res').value||0)):''}</td></tr>`; }
+    rows+=`<tr class="tot"><td>Floor ${f.n===1?'1 (ground)':f.n} total · gross</td><td class="num">${fmt(f.gross)}</td><td class="num">${unitSf?short$(unitSf*psfF):''}</td></tr>`; }
   $('int-body').innerHTML=rows;
   $('int-body').querySelectorAll('.unit-toggle').forEach(b=>b.addEventListener('click',()=>{
     const u=b.dataset.u, open=!st.openUnits.has(u); open?st.openUnits.add(u):st.openUnits.delete(u);
@@ -2048,7 +2098,7 @@ function cashflow(p,F,o={}){
   const eqFlow=new Array(N+1).fill(0);
   const resOpexPsf=(+$('f-ropex').value||0)+F.taxPsf, vac=(+$('f-rvac').value||0)/100;
   const retailNOI=F.noi;                                           // the ground-floor lease, already net
-  const condoPrice=(+$('f-res').value||0), saleCost=(+$('f-scres').value||0)/100;
+  const perUnit=F.condoGross/Math.max(1,p.units), saleCost=(+$('f-scres').value||0)/100;
 
   for(let m=0;m<=N;m++){
     const yr=Math.floor(Math.max(0,m-done)/12), esc=Math.pow(1+growth,yr);
@@ -2056,7 +2106,7 @@ function cashflow(p,F,o={}){
 
     if(!F.rental && m>done+1 && unsold>0){                         // condo closings
       const sell=Math.min(unsold,pace);
-      income+=sell*(p.net/p.units)*condoPrice*(1-saleCost);
+      income+=sell*perUnit*(1-saleCost);
       unsold-=sell;
       if(unsold===0) income+=F.retNet;                             // retail condo sells at the end
       need+=unsold*(p.net/p.units)*resOpexPsf/12;                  // carry on what is still unsold
@@ -2226,7 +2276,7 @@ function renderSummary(){
     // what has to be true, measured against what is loaded
     const F=fin(plans[st.scheme]);
     const rows=[
-      ['Condo price to break even',`$${fmt(F.bePsf)}/sf`,`$${fmt(+$('f-res').value||0)}/sf assumed`],
+      ['Base condo price to break even',`$${fmt(F.bePsf)}/sf`,`$${fmt(+$('f-res').value||0)}/sf base assumed, blended $${fmt(F.psfBlend)}/sf`],
       ['Land basis for a 15% margin',mm(F.residual),`${mm(F.land)} assumed`],
       ['Air rights from 727 Grand',`${fmt(D0.C.tr)} sf`,`$${$('in-p1').value}/sf assumed`],
       ['IH certificates for the merged bonus',`${fmt(D0.D.cert)} sf`,`$${$('in-p2').value}/sf assumed, market is finite and the option ends around 2034`],
@@ -2262,10 +2312,63 @@ document.querySelectorAll('#gtabs button').forEach(b=>b.addEventListener('click'
   addEventListener('scroll',()=>{ if(tick) return; tick=true; requestAnimationFrame(()=>{ update(); tick=false; }); },{passive:true});
   update();
 })();
+/* ---------- jump box: click any sheet tag, or the section name in the bar, to hop ---------- */
+(function(){
+  const sheets=[...document.querySelectorAll('.sheet')].map(s=>({el:s,
+    no:((s.querySelector('.sheet-tag .no')||{}).textContent||'').trim(),
+    name:((s.querySelector('h2')||{}).textContent||(s.querySelector('.sheet-tag .label')||{}).textContent||'').trim()}));
+  if(!sheets.length) return;
+  const box=document.createElement('div');
+  box.id='jump'; box.hidden=true; box.setAttribute('role','dialog'); box.setAttribute('aria-label','Jump to a section');
+  box.innerHTML='<div class="jump-hd"><span>Jump to a section</span><span>esc to close</span></div><div class="jump-list">'+
+    sheets.map((m,i)=>`<button type="button" data-i="${i}"><span class="jno">${m.no}</span><span>${m.name}</span></button>`).join('')+
+    '</div>';
+  document.body.appendChild(box);
+  const barH=()=>parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--topbar-h'))||58;
+  let shown=false, anchor=null;
+  function place(){ if(!anchor) return;
+    const r=anchor.getBoundingClientRect(), w=box.offsetWidth, h=box.offsetHeight;
+    let x=Math.min(r.left,innerWidth-w-12), y=r.bottom+8;
+    if(y+h>innerHeight-12) y=Math.max(12,innerHeight-h-12);
+    box.style.left=Math.max(12,x)+'px'; box.style.top=y+'px'; }
+  function mark(){ const y=scrollY+barH()+40; let cur=-1;
+    sheets.forEach((m,i)=>{ if(m.el.offsetTop<=y) cur=i; });
+    box.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===cur?'true':'false'));
+    return cur; }
+  function show(el){ anchor=el; box.hidden=false; shown=true; place();
+    const cur=mark(), bs=box.querySelectorAll('button');
+    (bs[cur>=0?cur:0]||bs[0]).focus(); }
+  function hide(){ if(!shown) return; box.hidden=true; shown=false;
+    if(anchor&&anchor.focus) anchor.focus(); anchor=null; }
+  box.addEventListener('click',e=>{ const b=e.target.closest('button[data-i]'); if(!b) return;
+    const m=sheets[+b.dataset.i]; hide();
+    scrollTo({top:Math.max(0,m.el.offsetTop-barH()-12),behavior:'smooth'}); });
+  const arm=el=>{ el.classList.add('jumpable'); el.tabIndex=0;
+    el.setAttribute('role','button'); el.setAttribute('aria-haspopup','dialog');
+    el.title='Jump to another section';
+    el.addEventListener('click',()=>{ (shown&&anchor===el)?hide():show(el); });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); show(el); } }); };
+  document.querySelectorAll('.sheet-tag').forEach(arm);
+  if($('topbar-where')) arm($('topbar-where'));
+  addEventListener('keydown',e=>{ if(e.key==='Escape') hide(); });
+  addEventListener('click',e=>{ if(shown&&!box.contains(e.target)&&!e.target.closest('.jumpable')) hide(); });
+  addEventListener('scroll',()=>{ if(shown){ place(); mark(); } },{passive:true});
+  addEventListener('resize',()=>{ if(shown) place(); });
+})();
 document.querySelectorAll('#mtabs button').forEach(b=>b.addEventListener('click',()=>{st.mini=b.dataset.s;renderMini();}));
 $('in-exist').addEventListener('change',()=>{st.exist=+$('in-exist').value;regen();renderMini();renderStudies(true);});
 ['in-p1','in-p2'].forEach(id=>$(id).addEventListener('input',()=>{renderMini();renderFinance();}));
 document.querySelectorAll('#ftabs button').forEach(b=>b.addEventListener('click',()=>{st.scheme=b.dataset.s;renderStudies(false);}));
+/* banded condo prices: each band remembers its ratio to the base, so moving the base moves
+   them all; typing over a band re-pegs it there. Registered before the .fgrid listener below so
+   renderFinance sees the new band values, not the old ones. */
+const PSF_BANDS=['f-res-lo','f-res-up','f-res-ph'];
+function pegTiers(){ const b=+$('f-res').value||0; if(b<=0) return;
+  PSF_BANDS.forEach(id=>{ const e=$(id); if(e) e.dataset.r=((+e.value||0)/b).toFixed(6); }); }
+$('f-res').addEventListener('input',()=>{ const b=+$('f-res').value||0; if(b<=0) return;
+  PSF_BANDS.forEach(id=>{ const e=$(id), r=+e.dataset.r; if(r>0) e.value=Math.round(b*r/5)*5; }); });
+PSF_BANDS.forEach(id=>$(id).addEventListener('input',pegTiers));
+pegTiers();
 document.querySelectorAll('.fgrid input, .fgrid select').forEach(i=>{ i.addEventListener('input',renderFinance); i.addEventListener('change',renderFinance); });
 $('f-res').addEventListener('input',renderInterior);
 $('in-green').addEventListener('change',()=>{st.green=$('in-green').checked;regen();renderStudies(true);});
@@ -2308,6 +2411,7 @@ window.G725={st,defs,regen,fin,investorOf,developerOf,unitsOf,get plans(){return
   function apply(state){
     if(!state||!state.values) return;
     fields().forEach(el=>{ if(!(el.id in state.values)) return; const v=state.values[el.id]; if(el.type==='checkbox') el.checked=!!v; else el.value=String(v); });
+    pegTiers();   // a loaded scenario's band/base relationship becomes the new peg
     st.exist=+$('in-exist').value; st.green=$('in-green').checked; st.strategy=$('in-strategy').value; st.circ=$('in-circ').value; st.cut=$('in-cut').checked;
     st.mode=$('in-mode').value; st.bonusSrc=$('in-bonus').value; st.tenure=$('in-tenure').value;
     if(['A','B','C','D'].includes(state.scheme)) st.scheme=state.scheme;
