@@ -6,9 +6,12 @@
  * hidden frame with srcdoc, which works inside the artifact sandbox; study.html is also
  * written for publishing alongside. On Vercel the pages fall back to the site's main page.
  */
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
-const study = readFileSync(new URL('../public/index.html', import.meta.url));
+// Bundle the last COMMITTED study, not the working copy: other sessions edit src/page.html and
+// public/index.html in this same folder, and half-finished edits must not ship in an artifact.
+const study = execFileSync('git', ['show', 'HEAD:public/index.html'], { cwd: new URL('..', import.meta.url), maxBuffer: 64 << 20 });
 if (!study.includes('window.G725')) throw new Error('public/index.html has no G725 hook; run npm run build');
 const embedded = `<script type="application/octet-stream" id="study-src">${study.toString('base64')}</script>
 `;
@@ -31,5 +34,5 @@ function toArtifact(name) {
 
 toArtifact('deck.html');
 toArtifact('projections.html');
-copyFileSync(new URL('../public/index.html', import.meta.url), new URL('study.html', out));
+writeFileSync(new URL('study.html', out), study);
 console.log('built artifacts/deck.html, artifacts/projections.html, artifacts/study.html');

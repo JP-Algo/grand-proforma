@@ -180,6 +180,7 @@ const SCHEMES=[
 let G=null, W=null, saved={};
 const BASE_PRICE=1600; // the proposal's condo price assumption
 const BASE_COSTS={'f-land':4500000,'f-hard':375,'f-soft':15}; // the proposal's land and construction cost assumptions
+const FIXED={'f-scres':5}; // proposal assumptions with no control on this page: condo selling costs 5%
 let CUR={};
 
 function compute(o){
@@ -188,7 +189,7 @@ function compute(o){
     return {...s,p,F,V,units};
   });
 }
-function overrides(){ CUR={'f-res':+$('c-price').value||0,'f-land':+$('c-land').value||0,'f-hard':+$('c-hard').value||0,'f-soft':+$('c-soft').value||0}; return CUR; }
+function overrides(){ CUR={...FIXED,'f-res':+$('c-price').value||0,'f-land':+$('c-land').value||0,'f-hard':+$('c-hard').value||0,'f-soft':+$('c-soft').value||0}; return CUR; }
 function inVal(id){ if(CUR[id]!=null&&id!=='f-res'&&id!=='f-land') return String(CUR[id]); const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):''; }
 
 function render(){
@@ -247,7 +248,7 @@ function render(){
     ${both('Loggias, terraces, roof deck',r=>fmt(r.p.outdoor)+' sf','',null,['plan',`Outdoor area from the plans. Excluded from zoning floor area. Costed in hard costs; private outdoor space adds $${inVal('f-out')}/sf to condo revenue.`])}
     <tr class="grp"><td colspan="3">Revenue</td></tr>
     ${both('Condo sales, gross',r=>money(r.F.condoGross),'',()=>`sellable sf × ${psf(price)}`,['prop',`Sellable condo area × ${psf(price)}/sf, the proposal's price set at the top of this page. It is an assumption, not a comp-based appraisal.`])}
-    ${both('Less condo selling costs',r=>money(-(r.F.condoGross-(r.F.revenue-r.F.retNet))),'',()=>`${inVal('f-scres')}% brokerage + transfer tax`,['ph',`${inVal('f-scres')}% of gross condo sales for brokerage and seller transfer taxes. Main study placeholder.`])}
+    ${both('Less condo selling costs',r=>money(-(r.F.condoGross-(r.F.revenue-r.F.retNet))),'',()=>`${inVal('f-scres')}% brokerage + transfer tax`,['prop',`${inVal('f-scres')}% of gross condo sales for brokerage and seller transfer taxes, the proposal's rate (the main study used 6%).`])}
     ${both('Retail, sold at cap rate',r=>money(r.F.retNet),'',()=>`${fmt(R[0].p.retail)} sf × $${inVal('f-rent')} rent, ${inVal('f-cap')}% cap, less ${inVal('f-scret')}% costs`,['calc',`The retail is sold as a commercial condo: ${fmt(P.retail)} sf × $${inVal('f-rent')}/sf/yr rent, less ${inVal('f-vac')}% vacancy and credit and ${inVal('f-opex')}% unreimbursed expenses, divided by a ${inVal('f-cap')}% cap rate, less ${inVal('f-scret')}% sale costs. Rent and cap rate are study placeholders.`])}
     ${both('Net revenue',r=>money(r.F.revenue),'tot',null,['calc','Condo sales after selling costs, plus the retail sale.'])}
     <tr class="grp"><td colspan="3">Hard costs</td></tr>
@@ -296,7 +297,7 @@ function render(){
   }</tbody></table></div></div>`).join('');
 
   // assumptions
-  const A=[['Condo price',psf(price)+'/sf','set above','prop'],['Land basis, 725 Grand',money(o['f-land']),'set above','prop'],['Condo selling costs',inVal('f-scres')+'%'],['Retail rent',`$${inVal('f-rent')}/sf/yr, ${inVal('f-vac')}% vacancy, ${inVal('f-cap')}% cap`],
+  const A=[['Condo price',psf(price)+'/sf','set above','prop'],['Land basis, 725 Grand',money(o['f-land']),'set above','prop'],['Condo selling costs',inVal('f-scres')+'%','','prop'],['Retail rent',`$${inVal('f-rent')}/sf/yr, ${inVal('f-vac')}% vacancy, ${inVal('f-cap')}% cap`],
     ['Hard cost above grade',`$${inVal('f-hard')}/gsf`,'set above','prop'],['Cellar',`$${inVal('f-cellar')}/sf`],['Terraces',`$${inVal('f-outc')}/sf`],['Core per level',money(+inVal('f-story'))],['Demolition',`$${inVal('f-demo')}/sf`],['E-232 remediation',money(+inVal('f-edes'))],
     ['Green premium',inVal('f-green')+'% of hard'],['Contingency',inVal('f-cont')+'% of hard'],['Soft costs',inVal('f-soft')+'% of hard','set above','prop'],['IH certificates',`$${inVal('in-p2')}/sf`],['727 Grand air rights',`$${inVal('in-p1')}/sf`],
     ['Loan-to-cost',inVal('f-ltc')+'%'],['Interest rate',inVal('f-rate')+'%'],['Avg loan drawn',inVal('f-util')+'%'],['Origination fee',inVal('f-fee')+'%'],['Project length',inVal('f-months')+' months'],
