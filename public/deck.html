@@ -112,7 +112,8 @@ svg text{font-family:var(--mono)}
 const DECK={
   price:1600,              // condo $/sf used throughout the deck
   sponsor:'[Sponsor name]', // shown on the cover and team slide
-  base:'B', up:'D'
+  base:'A', up:'D',          // base: 725 Grand alone, as of right (no certificates); upside: merged + certificates
+  costs:{'f-hard':375,'f-soft':15} // the proposal's cost assumptions; override the main study's inputs
 };
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('en-US');
@@ -122,14 +123,14 @@ const mm2=n=>(n<0?'−$':'$')+(Math.abs(n)/1e6).toFixed(2)+'M';
 const pct=n=>(n<0?'−':'')+Math.abs(n*100).toFixed(1)+'%';
 const sg=n=>n<0?'neg':'pos';
 let G,W;
-const iv=id=>{const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):'';};
+const iv=id=>{ if(DECK.costs[id]!=null) return String(DECK.costs[id]); const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):'';};
 
 function scheme(k,o={}){
-  const p=G.plans[k], opt={'f-res':DECK.price,...o}, F=G.fin(p,opt), V=G.investorOf(F,opt), Dv=G.developerOf(F,opt), units=G.unitsOf(p);
+  const p=G.plans[k], opt={'f-res':DECK.price,...DECK.costs,...o}, F=G.fin(p,opt), V=G.investorOf(F,opt), Dv=G.developerOf(F,opt), units=G.unitsOf(p);
   const mix={}; units.forEach(u=>{mix[u.label]=(mix[u.label]||0)+1;});
   return {k,p,F,V,Dv,units,mix};
 }
-function solve(k,test){ let lo=500,hi=5000; for(let i=0;i<36;i++){const m=(lo+hi)/2; test(G.fin(G.plans[k],{'f-res':m}))?hi=m:lo=m;} return hi; }
+function solve(k,test){ let lo=500,hi=5000; for(let i=0;i<36;i++){const m=(lo+hi)/2; test(G.fin(G.plans[k],{...DECK.costs,'f-res':m}))?hi=m:lo=m;} return hi; }
 
 /* ---- drawings ---- */
 // Graham Avenue elevation: 100 ft of frontage, floors stepped back as the model sets them
@@ -188,7 +189,7 @@ function mixText(r){ return ['Studio','1BR','2BR','3BR'].filter(t=>r.mix[t]).map
 function slides(){
   const B=scheme(DECK.base), D=scheme(DECK.up), R=[B,D];
   const months=+iv('f-months'), pref=+iv('iv-pref'), promote=+iv('iv-promote'), ltc=+iv('f-ltc'), inv=+iv('iv-amt');
-  const beB=solve('B',F=>F.profit>=0), beD=solve('D',F=>F.profit>=0);
+  const beB=solve(B.k,F=>F.profit>=0), beD=solve(D.k,F=>F.profit>=0);
   const S=[];
   S.push({cls:'cover',html:`<div class="l"><div><div class="kicker">Investment opportunity</div><h1>725 Grand Street</h1><p class="sub">A ground-up condominium with ground-floor retail at the corner of Grand Street and Graham Avenue, Williamsburg, Brooklyn.</p></div>
     <div class="facts"><span>Block 2783 · Lot 43 · C4-4A</span><span>${B.units.length}–${D.units.length} condominiums · ${fmt(B.p.retail)} sf retail</span><span>Presented by ${DECK.sponsor}</span></div></div>
@@ -197,8 +198,8 @@ function slides(){
   S.push({html:`<div class="kicker">Executive summary</div><h2>A building we can start now, with a larger one within reach</h2>
     <div class="cols c2">
       <div style="display:grid;gap:18px;align-content:start">
-        <p class="lead" style="font-size:18.5px">725 Grand Street is a 3,034 sf corner lot on two 80-foot-wide streets, zoned C4-4A in the former Greenpoint/Williamsburg Inclusionary Housing area. That lets the site buy Inclusionary Housing certificates and build to FAR 5.01 with no affordable units on site.</p>
-        <p class="lead" style="font-size:18.5px"><b>The base case</b> builds on 725 Grand alone. It needs no agreement with any neighbor, so design and filing can begin immediately. <b>The upside</b> adds the development rights of 727 Grand Street next door through a zoning lot merger, for a ${D.p.N}-story building with ${D.units.length} condos.</p>
+        <p class="lead" style="font-size:18.5px">725 Grand Street is a 3,034 sf corner lot on two 80-foot-wide streets, zoned C4-4A in the former Greenpoint/Williamsburg Inclusionary Housing area. At FAR 4.0 it can be built as of right on its own lot, with no purchased floor area; the site's E-232 environmental designation still needs city sign-off.</p>
+        <p class="lead" style="font-size:18.5px"><b>The base case</b> builds on 725 Grand alone, as of right. It needs no agreement with any neighbor and no purchased floor area, so design and filing can begin immediately. <b>The upside</b> adds the development rights of 727 Grand Street next door through a zoning lot merger, plus Inclusionary Housing certificates to reach FAR 5.01, for a ${D.p.N}-story building with ${D.units.length} condos.</p>
       </div>
       <div style="display:grid;gap:14px;align-content:start">
         <div class="panel base"><span class="tag base">Base case · start now</span><div class="stats">
@@ -215,7 +216,8 @@ function slides(){
   S.push({html:`<div class="kicker">Why 725 Grand</div><h2>A corner site with room to grow</h2>
     <div class="cols c-64"><ul class="pts">
       <li><b>Corner lot on two wide streets.</b> Grand Street and Graham Avenue are both 80 ft wide, so setbacks above the base are only 10 ft, and the whole lot is within 100 ft of the corner: 100% coverage, no rear yard.</li>
-      <li><b>Certificates instead of on-site affordable units.</b> In the former Greenpoint/Williamsburg IH area, buying certificates from vested generating sites raises the site from FAR 4.0 to 5.01.</li>
+      <li><b>As of right today.</b> FAR 4.0 on the lot's own 3,034 sf: ${fmt(B.p.s.base)} sf of zoning floor area, with no purchased rights.</li>
+      <li><b>Certificates for more height later.</b> In the former Greenpoint/Williamsburg IH area, buying certificates from vested generating sites raises FAR from 4.0 to 5.01 with no affordable units on site.</li>
       <li><b>A neighbor that completes the block corner.</b> 727 Grand fills the notch of the L-shaped lot. Merging the two makes a 51 × 100 ft rectangle and adds about ${fmt(D.p.s.tr)} sf of unused development rights.</li>
       <li><b>Ground-floor retail on the corner.</b> ${fmt(B.p.retail)} sf of retail, valued in the model at ${mm(B.F.retNet)} after sale costs.</li>
       <li><b>Loggias on every residential floor.</b> Private outdoor space for most units, excluded from zoning floor area.</li>
@@ -224,7 +226,7 @@ function slides(){
   const need=(t)=>`<span class="note" style="font-size:14px">${t}</span>`;
   S.push({html:`<div class="kicker">Two paths</div><h2>Base case and upside, side by side</h2>
     <table><thead><tr><th></th><th class="n">Base case · Scheme ${B.k}</th><th class="n">Upside · Scheme ${D.k}</th></tr></thead><tbody>
-    <tr><td>What it needs</td><td class="n">${need('725 Grand + IH certificates')}</td><td class="n">${need('+ zoning lot merger and easement with 727 Grand')}</td></tr>
+    <tr><td>What it needs</td><td class="n">${need('725 Grand alone, as of right')}</td><td class="n">${need('+ merger with 727 Grand + IH certificates')}</td></tr>
     <tr><td>Stories / height</td><td class="n">${B.p.N} / ${fmt(B.p.height)} ft</td><td class="n">${D.p.N} / ${fmt(D.p.height)} ft</td></tr>
     <tr><td>Zoning floor area</td><td class="n">${fmt(B.p.s.cap)} sf</td><td class="n">${fmt(D.p.s.cap)} sf</td></tr>
     <tr><td>Gross above grade</td><td class="n">${fmt(B.p.gross)} sf</td><td class="n">${fmt(D.p.gross)} sf</td></tr>
@@ -239,7 +241,7 @@ function slides(){
   S.push({html:`<div class="kicker">Zoning</div><h2>Where the floor area comes from</h2>
     <div class="cols c-46"><ul class="pts">
       <li><b>Own lot:</b> 3,034 sf × FAR 4.0 = ${fmt(B.p.s.base)} sf, as of right.</li>
-      <li><b>IH certificates:</b> bonus to FAR 5.01. On 725 Grand alone that's ${fmt(B.p.s.cert)} sf; on the merged lot, ${fmt(D.p.s.cert)} sf. Priced at $${iv('in-p2')}/sf of bonus.</li>
+      <li><b>IH certificates (upside only):</b> bonus to FAR 5.01 on the merged lot, ${fmt(D.p.s.cert)} sf, priced at $${iv('in-p2')}/sf of bonus. The base case buys none.</li>
       <li><b>727 Grand transfer:</b> 2,067 sf × 4.0 less its existing building leaves ${fmt(D.p.s.tr)} sf. Recorded as a zoning lot merger with a light and air easement; priced at $${iv('in-p1')}/sf.</li>
       <li class="note" style="padding-left:0;font-size:13px">The 727 Grand transfer depends on its existing floor area: about 4,133 sf by field measurement, or 6,042 sf per PLUTO. A CO or survey will settle it.</li>
     </ul><div style="display:grid;align-content:center">${farBars(R)}</div></div>`});
@@ -285,7 +287,7 @@ function slides(){
       ${su('Sponsor equity',r=>mm2(r.Dv.devCap))}
       ${su('Investor (LP) equity',r=>mm2(r.F.equity-r.Dv.devCap))}
       ${su('Total sources',r=>mm2(r.F.total),'tot')}
-      <tr><td colspan="3" class="note" style="border:0;padding-top:14px">Hard costs: $${iv('f-hard')}/gsf above grade, $${iv('f-cellar')}/sf cellar, core, terraces, demolition and E-232 remediation, plus ${iv('f-green')}% green premium and ${iv('f-cont')}% contingency. Soft costs ${iv('f-soft')}% of hard, including the development fee.</td></tr>
+      <tr><td colspan="3" class="note" style="border:0;padding-top:14px">Hard costs: $${iv('f-hard')}/gsf above grade, $${iv('f-cellar')}/sf cellar, $${fmt(+iv('f-story'))} per level for core, terraces, demolition and E-232 remediation, plus ${iv('f-green')}% green premium and ${iv('f-cont')}% contingency. Soft costs ${iv('f-soft')}% of hard, including the development fee.</td></tr>
     </tbody></table></div>`});
 
   const rr=(l,f,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="n">${f(B)}</td><td class="n">${f(D)}</td></tr>`;
@@ -305,19 +307,18 @@ function slides(){
       ${rr('LP annualized (simplified)',r=>pct(r.V.irr))}
     </tbody></table>
     <div><h3 style="margin-bottom:10px">Sensitivity to condo price</h3><table><thead><tr><th>Condo $/sf</th><th class="n">Base margin</th><th class="n">Base LP ×</th><th class="n">Upside margin</th><th class="n">Upside LP ×</th></tr></thead><tbody>
-      ${prices.map(pr=>{const b=scheme('B',{'f-res':pr}), d=scheme('D',{'f-res':pr}); return `<tr style="${pr===DECK.price?'background:var(--accent-soft)':''}"><td class="n" style="text-align:left">$${fmt(pr)}</td><td class="n ${sg(b.F.margin)}">${pct(b.F.margin)}</td><td class="n">${b.V.em.toFixed(2)}×</td><td class="n ${sg(d.F.margin)}">${pct(d.F.margin)}</td><td class="n">${d.V.em.toFixed(2)}×</td></tr>`;}).join('')}
+      ${prices.map(pr=>{const b=scheme(B.k,{'f-res':pr}), d=scheme(D.k,{'f-res':pr}); return `<tr style="${pr===DECK.price?'background:var(--accent-soft)':''}"><td class="n" style="text-align:left">$${fmt(pr)}</td><td class="n ${sg(b.F.margin)}">${pct(b.F.margin)}</td><td class="n">${b.V.em.toFixed(2)}×</td><td class="n ${sg(d.F.margin)}">${pct(d.F.margin)}</td><td class="n">${d.V.em.toFixed(2)}×</td></tr>`;}).join('')}
     </tbody></table><p class="note" style="margin-top:10px">LP returns after a ${pref}% preferred return and a ${100-promote}/${promote} split above it, over ${months} months. Full line-by-line detail: <b>grand-proforma.vercel.app/projections</b></p></div></div>`});
 
   S.push({html:`<div class="kicker">Path to the upside</div><h2>What turns the base case into the upside</h2>
     <div class="cols c2"><div class="panel base"><span class="tag base">Base case · ready to start</span><ul class="pts">
-      <li>Everything is on 725 Grand's own lot. No neighbor agreement needed.</li>
-      <li>Land-use counsel confirms the certificate path to FAR 5.01 and 115 ft, and identifies vested generating sites.</li>
+      <li>Everything is on 725 Grand's own lot, as of right at FAR 4.0. No neighbor agreement and no certificates needed.</li>
       <li>Inspect the existing building and basement to firm up demolition cost.</li>
       <li>Expediter review of the loggia exemption and E-232 requirements.</li></ul></div>
     <div class="panel up"><span class="tag up">Upside · adds</span><ul class="pts">
       <li>Zoning lot merger with 727 Grand plus a light and air easement starting at 30 ft, with waivers from the neighbor's lender.</li>
       <li>727 Grand CO or survey to settle its existing floor area, which moves the transfer by about 1,900 sf.</li>
-      <li>Certificates on the merged lot: ${fmt(D.p.s.cert)} sf instead of ${fmt(B.p.s.cert)} sf.</li>
+      <li>${fmt(D.p.s.cert)} sf of IH certificates on the merged lot. Land-use counsel confirms the path to FAR 5.01 and 115 ft and identifies vested generating sites.</li>
       <li>Result: +${D.p.N-B.p.N} stories, +${D.units.length-B.units.length} condos, and ${mm2(D.F.profit-B.F.profit)} more projected profit.</li></ul></div></div>`});
 
   S.push({html:`<div class="kicker">Team</div><h2>${DECK.sponsor}</h2>
@@ -327,7 +328,7 @@ function slides(){
   S.push({html:`<div class="kicker">Important information</div><h2>Disclaimer</h2>
     <div style="display:grid;gap:12px;font-size:13.5px;line-height:1.55;color:var(--ink-2);max-width:95ch">
     <p>This presentation is for discussion purposes only and is not an offer to sell, or a solicitation of an offer to buy, any security. Any offering would be made only through definitive offering documents.</p>
-    <p>All figures are preliminary feasibility estimates based on assumptions that may prove incorrect, including sales prices, construction and soft costs, financing terms, the availability and price of Inclusionary Housing certificates, and the outcome of any zoning lot merger with 727 Grand Street. Zoning conclusions are preliminary and subject to confirmation by land-use counsel and the Department of Buildings. Actual results may differ materially. Projected returns are not a guarantee of future performance.</p>
+    <p>All figures are preliminary feasibility estimates based on assumptions that may prove incorrect, including sales prices, construction and soft costs (modeled here at $${DECK.costs['f-hard']}/gsf above grade and ${DECK.costs['f-soft']}% soft costs), financing terms, the availability and price of Inclusionary Housing certificates, and the outcome of any zoning lot merger with 727 Grand Street. Zoning conclusions are preliminary and subject to confirmation by land-use counsel and the Department of Buildings. Actual results may differ materially. Projected returns are not a guarantee of future performance.</p>
     <p>Building drawings are schematic massing studies, not architectural designs.</p>
     <p class="num" style="font-size:12px">Figures computed ${new Date().toLocaleDateString('en-US',{dateStyle:'medium'})} from the 725 Grand Street pro forma.</p></div>`});
   return S;

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>725 Grand Projections</title>
-<meta name="description" content="Line-by-line projections for 725 Grand Street: Scheme B (own lot + IH certificates) and Scheme D (merged with 727 Grand + certificates).">
+<meta name="description" content="Line-by-line projections for 725 Grand Street: Scheme A (own lot, as of right) and Scheme D (merged with 727 Grand + IH certificates).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -93,11 +93,13 @@ footer{padding-top:24px;color:var(--ink-2);font-size:.85rem;display:grid;gap:6px
 <div class="wrap">
 <header>
   <span class="kicker">725 Grand Street · Brooklyn · pro forma detail</span>
-  <h1>Projections: Scheme B base case vs Scheme D upside</h1>
-  <p class="lede">Every number here comes from the same pro forma as the <a href="/">main study</a>, with both schemes built ground-up and sold as condos. Change the condo price or land basis below to see how the result moves. Changes on this page are not saved.</p>
+  <h1>Projections: Scheme A base case vs Scheme D upside</h1>
+  <p class="lede">Every number here comes from the same pro forma as the <a href="/">main study</a>, with both schemes built ground-up and sold as condos. Change the condo price, land basis or construction costs below to see how the result moves. Changes on this page are not saved.</p>
   <div class="controls">
     <label><span class="label">Condo $/sf</span><input id="c-price" type="number" step="25" min="0"></label>
     <label><span class="label">Land basis, 725 Grand $</span><input id="c-land" type="number" step="100000" min="0"></label>
+    <label><span class="label">Hard $/gsf above grade</span><input id="c-hard" type="number" step="5" min="0"></label>
+    <label><span class="label">Soft costs % of hard</span><input id="c-soft" type="number" step="0.5" min="0"></label>
     <button id="c-reset" type="button">Reset</button>
     <span class="hint" id="status">Loading the pro forma…</span>
   </div>
@@ -159,11 +161,13 @@ const pct=n=>(n<0?'−':'')+Math.abs(n*100).toFixed(1)+'%';
 const psf=n=>(n<0?'−$':'$')+fmt(Math.abs(n));
 const sign=n=>n<0?'neg':'pos';
 const SCHEMES=[
-  {k:'B',title:'Scheme B · base case',tag:'Start now',sub:'725 Grand alone + IH certificates. No deal with 727 Grand needed.'},
+  {k:'A',title:'Scheme A · base case',tag:'Start now',sub:'725 Grand alone, as of right at FAR 4.0. No certificates, no deal with 727 Grand.'},
   {k:'D',title:'Scheme D · upside',tag:'With 727 Grand',sub:'Zoning lot merger with 727 Grand + IH certificates on the merged lot.'}
 ];
 let G=null, W=null, saved={};
 const BASE_PRICE=1600; // the proposal's condo price assumption
+const BASE_COSTS={'f-hard':375,'f-soft':15}; // the proposal's construction cost assumptions
+let CUR={};
 
 function compute(o){
   return SCHEMES.map(s=>{
@@ -171,8 +175,8 @@ function compute(o){
     return {...s,p,F,V,units};
   });
 }
-function overrides(){ return {'f-res':+$('c-price').value||0,'f-land':+$('c-land').value||0}; }
-function inVal(id){ const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):''; }
+function overrides(){ CUR={'f-res':+$('c-price').value||0,'f-land':+$('c-land').value||0,'f-hard':+$('c-hard').value||0,'f-soft':+$('c-soft').value||0}; return CUR; }
+function inVal(id){ if(CUR[id]!=null&&id!=='f-res'&&id!=='f-land') return String(CUR[id]); const e=W.document.getElementById(id); return e?(e.type==='checkbox'?e.checked:e.value):''; }
 
 function render(){
   const o=overrides(), R=compute(o), price=o['f-res'], sc=+inVal('f-scres')/100;
@@ -198,9 +202,9 @@ function render(){
       rev:[['Condo sales, net of '+Math.round(sc*100)+'% selling costs',(F.revenue-F.retNet)/n,'--c-condo'],['Retail (sold at cap rate)',F.retNet/n,'--c-retail']],
       costT:F.total/n, revT:F.revenue/n, gross:r.p.gross, eff:F.mktSf/r.p.gross}; });
   const b=per[0], d=per[1], B=R[0].F;
-  $('why').innerHTML=`<p><b>The short version:</b> the condo price is per <i>sellable</i> square foot, but costs are paid on every square foot built. Scheme B builds ${fmt(b.gross)} sf above grade, plus a ${fmt(R[0].p.cellar)} sf cellar, to get <b>${fmt(b.n)} sf of sellable condos</b> (${pct(b.eff)} of above-grade area). The rest is retail, lobby, stairs, elevator, corridors, walls and mechanical space.</p>
-  <p>Spread over those ${fmt(b.n)} sellable sf, Scheme B costs <b>${psf(b.costT)}/sf</b> all-in: hard ${psf(b.cost[0][1])}, soft ${psf(b.cost[1][1])}, land ${psf(b.cost[2][1])}, certificates ${psf(b.cost[3][1])}, financing ${psf(b.cost[4][1])}. At ${psf(price)}/sf, each sellable sf brings in <b>${psf(b.revT)}</b>: ${psf(b.rev[0][1])} from the condo after selling costs, plus ${psf(b.rev[1][1])} of retail value. The gap of ${psf(b.revT-b.costT)} per sf × ${fmt(b.n)} sf is the ${mm(B.profit)} result.</p>
-  <p>Scheme D spreads the same ${money(o['f-land'])} land basis over ${fmt(d.n)} sellable sf instead of ${fmt(b.n)}, so land drops from ${psf(b.cost[2][1])} to ${psf(d.cost[2][1])} per sf. That's most of the difference between the two schemes.</p>`;
+  $('why').innerHTML=`<p><b>The short version:</b> the condo price is per <i>sellable</i> square foot, but costs are paid on every square foot built. Scheme ${R[0].k} builds ${fmt(b.gross)} sf above grade, plus a ${fmt(R[0].p.cellar)} sf cellar, to get <b>${fmt(b.n)} sf of sellable condos</b> (${pct(b.eff)} of above-grade area). The rest is retail, lobby, stairs, elevator, corridors, walls and mechanical space.</p>
+  <p>Spread over those ${fmt(b.n)} sellable sf, Scheme ${R[0].k} costs <b>${psf(b.costT)}/sf</b> all-in: hard ${psf(b.cost[0][1])}, soft ${psf(b.cost[1][1])}, land ${psf(b.cost[2][1])}, air rights and certificates ${psf(b.cost[3][1])}, financing ${psf(b.cost[4][1])}. At ${psf(price)}/sf, each sellable sf brings in <b>${psf(b.revT)}</b>: ${psf(b.rev[0][1])} from the condo after selling costs, plus ${psf(b.rev[1][1])} of retail value. The gap of ${psf(b.revT-b.costT)} per sf × ${fmt(b.n)} sf is the ${mm(B.profit)} result.</p>
+  <p>Scheme D spreads the same ${money(o['f-land'])} land basis over ${fmt(d.n)} sellable sf instead of ${fmt(b.n)}, so land drops from ${psf(b.cost[2][1])} to ${psf(d.cost[2][1])} per sf. Fixed costs like the cellar, demolition and the ground floor are spread over more sellable area too, which is why the larger building earns a much higher margin.</p>`;
   const cols=[...new Set(per[0].cost.concat(per[0].rev).map(x=>x[0]+'|'+x[2]))];
   $('legend').innerHTML=cols.map(c=>{const [l,v]=c.split('|'); return `<span><i style="background:var(${v})"></i>${l.replace(/, net of.*/,'')}</span>`;}).join('');
   drawBars(per);
@@ -209,7 +213,7 @@ function render(){
   const row=(l,sub,a,bv,cls='')=>`<tr class="${cls}"><td>${l}${sub?`<span class="sub">${sub}</span>`:''}</td><td class="num">${a}</td><td class="num">${bv}</td></tr>`;
   const both=(l,f,cls,subf)=>row(l,subf?subf(R[0]):'',f(R[0]),f(R[1]),cls);
   const itemRows=R[0].F.items.map((it,i)=>row(it[0],`B: ${it[1]} · D: ${R[1].F.items[i][1]}`,money(it[2]),money(R[1].F.items[i][2]))).join('');
-  $('lines').innerHTML=`<thead><tr><th>Line</th><th class="num">Scheme B</th><th class="num">Scheme D</th></tr></thead><tbody>
+  $('lines').innerHTML=`<thead><tr><th>Line</th><th class="num">Scheme ${R[0].k}</th><th class="num">Scheme ${R[1].k}</th></tr></thead><tbody>
     <tr class="grp"><td colspan="3">Program</td></tr>
     ${both('Stories / height',r=>`${r.p.N} / ${fmt(r.p.height)} ft`)}
     ${both('Zoning floor area',r=>fmt(r.p.zfa||0)+' sf')}
@@ -252,7 +256,7 @@ function render(){
   // investor
   $('inv-p').textContent=`${inVal('iv-pref')}% preferred return, then ${100-(+inVal('iv-promote'))}/${inVal('iv-promote')} split of profit above the pref (LP/sponsor), over ${inVal('f-months')} months.`;
   const ir=(l,f,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="num">${f(R[0])}</td><td class="num">${f(R[1])}</td></tr>`;
-  $('inv').innerHTML=`<thead><tr><th>$2M LP investment</th><th class="num">Scheme B</th><th class="num">Scheme D</th></tr></thead><tbody>
+  $('inv').innerHTML=`<thead><tr><th>$2M LP investment</th><th class="num">Scheme ${R[0].k}</th><th class="num">Scheme ${R[1].k}</th></tr></thead><tbody>
     ${ir('Share of project equity',r=>pct(r.V.s))}
     ${ir('1 · Capital back',r=>money(r.V.invCap))}
     ${ir('2 · Preferred return',r=>money(r.V.invPref))}
@@ -266,7 +270,7 @@ function render(){
   // sensitivity
   const prices=[1500,1600,1700,1800,1900,2000,2100], lands=[3500000,3000000,2500000,2000000,1500000];
   $('sens').innerHTML=SCHEMES.map(s=>`<div><h3>Scheme ${s.k}</h3><div class="scroll"><table class="grid-sens" style="min-width:420px"><thead><tr><th>$/sf ↓ · land →</th>${lands.map(l=>`<th class="num">${mm(l).replace('.00M','M').replace(/0M$/,'M')}</th>`).join('')}</tr></thead><tbody>${
-    prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${lands.map(l=>{const F=G.fin(G.plans[s.k],{'f-res':pr,'f-land':l}); const hi=pr===price&&l===o['f-land']; return `<td class="num ${F.margin<0?'cell-neg':'cell-pos'}${hi?' cell-hi':''}">${pct(F.margin)}</td>`;}).join('')}</tr>`).join('')
+    prices.map(pr=>`<tr><td class="num">$${fmt(pr)}</td>${lands.map(l=>{const F=G.fin(G.plans[s.k],{...o,'f-res':pr,'f-land':l}); const hi=pr===price&&l===o['f-land']; return `<td class="num ${F.margin<0?'cell-neg':'cell-pos'}${hi?' cell-hi':''}">${pct(F.margin)}</td>`;}).join('')}</tr>`).join('')
   }</tbody></table></div></div>`).join('');
 
   // assumptions
@@ -302,14 +306,15 @@ function drawBars(per){
 function start(){
   W=$('engine').contentWindow; G=W.G725;
   G.st.mode='gu'; G.st.tenure='condo'; G.st.bonusSrc='cert'; G.regen();
-  saved={'f-res':BASE_PRICE,'f-land':+inVal('f-land')};
-  $('c-price').value=saved['f-res']; $('c-land').value=saved['f-land'];
-  $('status').textContent=`Proposal assumption: ${psf(BASE_PRICE)}/sf condo. Land and every other input come from the pro forma.`;
+  saved={'f-res':BASE_PRICE,'f-land':+inVal('f-land'),...BASE_COSTS};
+  setControls();
+  $('status').textContent=`Proposal assumptions: ${psf(BASE_PRICE)}/sf condo, $${BASE_COSTS['f-hard']}/gsf hard, ${BASE_COSTS['f-soft']}% soft. Every other input comes from the pro forma.`;
   $('asof').textContent='Computed '+new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
   render();
 }
-['c-price','c-land'].forEach(id=>$(id).addEventListener('input',()=>G&&render()));
-$('c-reset').addEventListener('click',()=>{ if(!G) return; $('c-price').value=saved['f-res']; $('c-land').value=saved['f-land']; render(); });
+function setControls(){ $('c-price').value=saved['f-res']; $('c-land').value=saved['f-land']; $('c-hard').value=saved['f-hard']; $('c-soft').value=saved['f-soft']; }
+['c-price','c-land','c-hard','c-soft'].forEach(id=>$(id).addEventListener('input',()=>G&&render()));
+$('c-reset').addEventListener('click',()=>{ if(!G) return; setControls(); render(); });
 let rT; addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>G&&render(),150); });
 const t0=Date.now();
 (function wait(){
