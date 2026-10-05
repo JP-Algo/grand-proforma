@@ -289,7 +289,7 @@ function slides(){
       ${su('Investor (LP) equity, this raise',r=>mm2(Math.min(inv,r.F.equity)))}
       ${su('Sponsor equity: land + cash',r=>mm2(Math.max(0,r.F.equity-inv)))}
       ${su('Total sources',r=>mm2(r.F.total),'tot')}
-      <tr><td colspan="3" class="note" style="border:0;padding-top:14px">Hard costs: $${iv('f-hard')}/gsf above grade, $${iv('f-cellar')}/sf cellar, $${fmt(+iv('f-story'))} per level for core, terraces, demolition and E-232 remediation, plus ${iv('f-green')}% green premium and ${iv('f-cont')}% contingency. Soft costs ${iv('f-soft')}% of hard, including the development fee.</td></tr>
+      <tr><td colspan="3" class="note" style="border:0;padding-top:14px">Hard costs: ${iv('f-hmethod')==='detail'?`the study's line-by-line estimate, $${fmt(B.F.gsfRate||B.F.hard/B.p.gross)}/gsf (A) and $${fmt(D.F.gsfRate||D.F.hard/D.p.gross)}/gsf (D) all-in`:`$${iv('f-hard')}/gsf above grade plus cellar, core, terraces, demolition and E-232 remediation, ${iv('f-green')}% green premium and ${iv('f-cont')}% contingency`}. Soft costs: ${iv('f-smethod')==='detail'?'line-by-line estimate':iv('f-soft')+'% of hard'}, including the development fee.</td></tr>
     </tbody></table></div>`});
 
   const rr=(l,f,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="n">${f(B)}</td><td class="n">${f(D)}</td></tr>`;
@@ -330,7 +330,7 @@ function slides(){
   S.push({html:`<div class="kicker">Important information</div><h2>Disclaimer</h2>
     <div style="display:grid;gap:12px;font-size:13.5px;line-height:1.55;color:var(--ink-2);max-width:95ch">
     <p>This presentation is for discussion purposes only and is not an offer to sell, or a solicitation of an offer to buy, any security. Any offering would be made only through definitive offering documents.</p>
-    <p>All figures are preliminary feasibility estimates based on assumptions that may prove incorrect, including sales prices, construction and soft costs (modeled here at $${iv('f-hard')}/gsf above grade and ${iv('f-soft')}% soft costs), financing terms, the availability and price of Inclusionary Housing certificates, and the outcome of any zoning lot merger with 727 Grand Street. Zoning conclusions are preliminary and subject to confirmation by land-use counsel and the Department of Buildings. Actual results may differ materially. Projected returns are not a guarantee of future performance.</p>
+    <p>All figures are preliminary feasibility estimates based on assumptions that may prove incorrect, including sales prices, construction and soft costs, financing terms, the availability and price of Inclusionary Housing certificates, and the outcome of any zoning lot merger with 727 Grand Street. Zoning conclusions are preliminary and subject to confirmation by land-use counsel and the Department of Buildings. Actual results may differ materially. Projected returns are not a guarantee of future performance.</p>
     <p>Building drawings are schematic massing studies, not architectural designs.</p>
     <p class="num" style="font-size:12px">Figures computed ${new Date().toLocaleDateString('en-US',{dateStyle:'medium'})} from the 725 Grand Street pro forma, ${SCN?`"Deck" scenario saved ${scnWhen()}`:'study defaults (no "Deck" scenario found)'}.</p></div>`});
   return S;

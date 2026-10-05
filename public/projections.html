@@ -368,10 +368,16 @@ function drawBars(per){
   svg.setAttribute('viewBox',`0 0 ${W0} ${y-grpGap+22}`); svg.setAttribute('width',W0); svg.setAttribute('height',y-grpGap+22); svg.innerHTML=o;
 }
 
+// the study prices hard and soft costs either line by line (F-210 / F-220) or as one rate; say which is in use
+const hDetail=()=>inVal('f-hmethod')==='detail', sDetail=()=>inVal('f-smethod')==='detail';
+const costWords=()=>(hDetail()?"hard costs from the study's line-by-line estimate (F-210)":`$${inVal('f-hard')}/gsf hard`)+', '+(sDetail()?'soft costs from its line-by-line estimate (F-220)':`${inVal('f-soft')}% soft`);
 function start(){
+  // in line-by-line mode the hard $/gsf only prices the above-grade structure and the soft % is not used
+  $('c-hard').previousElementSibling.textContent=hDetail()?'Superstructure $/gsf':'Hard $/gsf above grade';
+  $('c-soft').disabled=sDetail(); $('c-soft').title=sDetail()?'Soft costs are estimated line by line in the study (F-220)':'';
   saved={'f-res':+W.document.getElementById('f-res').value,'f-land':+W.document.getElementById('f-land').value,'f-hard':+W.document.getElementById('f-hard').value,'f-soft':+W.document.getElementById('f-soft').value};
   setControls();
-  $('status').textContent=SCN?`Values from the study's "Deck" scenario, saved ${scnWhen()}: ${psf(saved['f-res'])}/sf average condo price, ${mm(saved['f-land'])} land, $${saved['f-hard']}/gsf hard, ${saved['f-soft']}% soft. Changes here are not saved; update the Deck scenario in the study to change them.`
+  $('status').textContent=SCN?`Values from the study's "Deck" scenario, saved ${scnWhen()}: ${psf(saved['f-res'])}/sf average condo price, ${mm(saved['f-land'])} land, ${costWords()}. Changes here are not saved; update the Deck scenario in the study to change them.`
     :'No "Deck" scenario found, so these are the study defaults. Save a scenario named Deck in the study.';
   $('asof').textContent='Computed '+new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
   render();
